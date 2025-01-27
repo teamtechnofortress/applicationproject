@@ -29,6 +29,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
       e.preventDefault()
       const data = {email, password}
+      console.log('NEXT_PUBLIC_HOST:', `${process.env.NEXT_PUBLIC_HOST}/api/login`);
+
       
       let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
         method: "POST", // or 'PUT'
