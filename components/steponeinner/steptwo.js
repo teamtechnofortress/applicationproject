@@ -91,9 +91,7 @@ const StepTwoInner = ({
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
             onClick={() => {
-              if (validateFields()) {
-              setCurrentStep(0); // Correctly update the step state
-              }
+              setCurrentStep(0); 
           }}
           >
             Zurück

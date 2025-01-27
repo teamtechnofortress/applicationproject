@@ -128,9 +128,9 @@ const StepFourInner = ({
                     <div className="flex justify-between mt-10">
                     <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
                           onClick={() => {
-                            if (validateFields()) {
-                            setCurrentStep(2); // Correctly update the step state
-                            }}}> Zurück 
+                            setCurrentStep(2); 
+                          }}
+                            > Zurück 
                     </button>
                     <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
                           onClick={() => {
