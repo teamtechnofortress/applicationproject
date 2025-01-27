@@ -1,0 +1,45 @@
+.application-h2{
+    color: #000000;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 50px;
+}
+
+.application-h4{
+    color: #000000;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 50px;
+  
+}
+.or-button{
+    font-family: "Montserrat", sans-serif;
+    text-transform: capitalize;
+    background: #E7FC41;
+    color: #ffff;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 20px;
+    padding: 8px 22px;
+
+}
+.application-flex-div{
+    border-bottom: 2px solid rgb(187 187 187 / 42%);
+    margin-bottom: 35px;
+    padding: 20px 0px;
+}
+.application-p{
+    color: #525252;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 50px;
+}
+
+@media (max-width: 600px) {
+    .application-flex-div{
+        display: block;
+    }
+}

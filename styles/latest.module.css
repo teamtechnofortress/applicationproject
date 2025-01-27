@@ -1,0 +1,159 @@
+
+.main-heading{
+    font-family: 'Poppins Bold';
+    font-size: 29px;
+    font-weight: 900;
+}
+.main-heading-2{
+    font-family: 'Poppins Bold';
+    font-size: 50px;
+    padding-top: 15%;
+    padding-bottom: 15%;
+}
+.second-heading{
+    font-family: 'Poppins Bold';
+    font-size: 50px;  
+}
+
+.form-input{
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid #eaeaeb;
+    color:rgba(0, 0, 0, 1);
+    border-radius: 6px;
+    padding: 14px 50px;
+    font-size: 20px;
+    width: 100%;
+}
+.color-circle{
+    width: 28px;
+    height:28px;
+    background-color: #e7fc42;
+    padding: 10px;
+    border: 1px solid #e7fc42;  
+    border-radius: 40px;
+}
+.text-color{
+    color: #e7fc42;
+    font-family: 'Poppins';
+}
+.form-input:hover,.form-input:active,.form-input:focus{
+    border: 1px solid #e7fc42;
+}
+.form-input::placeholder, .form-select,.form-control {
+    font-family: 'Poppins Regular';
+    color:rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    font-size: 20px;
+    text-align: start;
+}
+.prgress-bar{
+    background-color: #e7fc42 !important;
+}
+.next-btn{
+    width: 100%;
+    background: #e7fc42
+}
+.upload-btn{
+    background: transparent;
+}
+.uberspringen-btn{
+    background: transparent;
+    border: 1px solid #9d9d9d;
+}
+.uberspringen-btn:hover{
+    background:#e1e1e1;
+}
+.p-address{
+    font-size: 20px;
+}
+.form-check-input:checked + .form-check-label {
+    color: #fff;
+    background: #9d9d9d;
+    ;
+}
+.radio-btn{
+    background: rgba(255, 255, 255, 1);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    font-family: 'Karla', sans-serif;
+    color:rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    font-size: 20px;
+}
+.black{
+    background: #e7e7e7 !important;
+    color: white !important;
+}
+.form-check-input{
+    display: none;
+    visibility: hidden;
+}
+.color-border,.color-text{
+    border-color: #e7fc42;
+}
+.color-circle-grey{
+    width: 28px;
+    height:28px;
+    background-color: #d1d5e3;
+    padding: 10px;
+    border: 1px solid #d1d5e3;  
+    border-radius: 40px;
+  }
+.calender-svg{
+    border-right: 1px solid #eaeaeb;
+    padding-right: 9px;
+}
+.bg-heading{
+    background: url(/images/baner4.png);
+    background-repeat: no-repeat;
+}
+label.file_up {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: 2px dashed #34998b;
+    border-radius: 10px;
+    padding: 35px;
+    color: #696969;
+    width: 35%;
+}
+.static-section{
+    background-color: #e7fc42;
+    padding: 8%;
+}
+
+.file-upload {
+    display: flex;
+    justify-content: center;
+}
+.file-h4{
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+}
+.file-p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    color: #00000066;
+}
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.custom-file-upload {
+    border: 1px solid #0f91d2b3;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: #0F91D2;
+}
+  

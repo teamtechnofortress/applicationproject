@@ -1,0 +1,292 @@
+@import url('https://fonts.cdnfonts.com/css/helvetica-neue-55');
+/* progress bar */
+.nav-progress{
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 20px;
+}
+a.nav-link{
+    font-family: "Titillium Web", sans-serif;
+    font-weight: 700;
+    /* background: #e1e1e6; */
+    border-radius: 50%;
+    color: rgba(141, 141, 153, 1);
+    padding: 6px 13px;
+}
+
+a.nav-link.active {
+    color: #fff;
+    background: rgba(52, 153, 139, 1) !important;
+} 
+/* progress bar */
+h1.form1-heading{
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 36px;
+}
+.form-input{
+    border: 1px solid rgb(176 176 176 / 51%);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+    width: 100%;
+}
+/* input:focus-visible{
+    outline: none;
+} */
+.form-padding{
+    padding: 3rem;
+}
+.form-input::placeholder, .form-select, .form-input,.form-control {
+    font-family: 'Poppins Regular';
+    color:rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    font-size: 20px;
+    text-align: center;
+}
+/* file input field */
+.file-input-container {
+    position: relative;
+}
+
+.file-label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.file-input-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.file-input2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 1;
+    flex: 1;
+    padding-right: 30px; /* Adjust based on the image width */
+}
+
+.file-icon {
+    position: absolute;
+    /* right: 10px; */
+    left: 12px;
+    top: 69%;
+    transform: translateY(-50%);
+    width: 37px;
+    height: auto;
+}
+/* file input field */
+
+/* radio button styling */
+.radio-btn{
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid #80808040;
+    padding: 31px 16px;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    width: 100%;
+    font-family: 'Karla', sans-serif;
+    color:rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    font-size: 20px;
+}
+.form-check-input:checked + .form-check-label {
+    color: #fff;
+    background: #34998B;
+    ;
+}
+.black{
+    background: #34998B !important;
+    color: white !important;
+}
+.form-check-input{
+    display: none;
+    visibility: hidden;
+}
+/* radio button styling */
+.label-text{
+    text-align: left;
+    padding: 16px 34px;
+}
+/* signature filed */
+input#signature-field {
+    color: rgba(0, 0, 0, 0.5);
+    border: rgba(193, 232, 254, 1);
+    background: rgba(193, 232, 254, 1);
+}
+
+input#submit {
+    background: #34998B;
+    color: #FFFFFF;
+}
+.radio-btn-2 {
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid #80808040;
+    padding: 14px 21px;
+    border-radius: 4px;
+    text-align: center;
+    align-items: center;
+    width: 34%;
+    font-family: 'Karla', sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    font-size: 20px;
+}
+label.file_up {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: 2px dashed #34998b;
+    border-radius: 10px;
+    padding: 35px;
+    color: #696969;
+    width: 35%;
+}
+.file-upload {
+    display: flex;
+    justify-content: center;
+}
+.file-h4{
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+}
+.file-p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    color: #00000066;
+}
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.custom-file-upload {
+    border: 1px solid #0f91d2b3;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: #0F91D2;
+}
+.step5-p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 24px;
+    color: #00000066;
+}
+a.schufa-info-btn {
+    background: rgb(52 153 139);
+    border: 1px solid #80808040;
+    color: #fff;
+    padding: 14px 26px;
+    border-radius: 4px;
+    width: 35%;
+    text-align: center;
+    font-family: 'Karla', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+}
+.alternativ-btn {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 23px;
+    font-weight: 300;
+    color: #00000080;
+    line-height: 25px;
+    border-bottom: 1px solid #00000080;
+}
+.error{
+    color: red;
+}
+.applied-btn {
+    background: rgb(52 153 139 / 0%);
+    border: 1px solid #80808040;
+    color: rgba(0, 0, 0, 0.5);
+    padding: 14px 26px;
+    border-radius: 4px;
+    width: 35%;
+    text-align: center;
+    font-family: 'Karla', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+}
+/* signature filed */
+input#signature-field {
+    color: rgba(0, 0, 0, 0.5);
+    border: rgba(193, 232, 254, 1);
+    background: rgba(193, 232, 254, 1);
+}
+
+input#submit {
+    background: #34998B;
+    color: #FFFFFF;
+}
+
+.sign-div{
+    display: flex;
+    justify-content: center;
+    margin-top: 2.4rem;
+  }
+  .sign-canvas{
+    border: 1px solid #b4b4b4bf;
+    background: #C1E8FE;
+  }
+  .sign-btn{
+    border: 1px solid #b4b4b4bf;
+    padding:4px;
+}
+
+@media screen and (max-width: 600px) {
+    h1.form1-heading {
+        font-size: 20px;
+        text-align: center;
+    }
+    .form-padding {
+        padding: 1.5rem;
+    }
+    .nav-progress{
+        padding:10px;
+    }
+    .form-input::placeholder, .form-select, .form-input,.radio-btn,.form-control,.radio-btn-2,.step5-p{
+        font-size: 14px;
+    }
+    .form-input{
+        padding: 14px;
+    }
+    p.form1-p {
+        font-size: 14px;
+    }
+    .submit-div .text-right{
+        text-align: center;
+    }
+    input#submit {
+        width: 52%;
+    }
+    .radio-btn-2,a.schufa-info-btn,label.file_up,.applied-btn{
+        width: 100%;
+    }
+    .card-img{
+        width: 90%;
+    }
+    .file-filename{
+    padding-left: 16%;
+    }
+    .label-text {
+        text-align: left;
+        padding: 13px 8px;
+        font-size: 11px;
+    }
+    .radio-btn-mobile{
+    padding: 10px 9px;
+    line-height:4.0;
+}
+}

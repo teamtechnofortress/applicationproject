@@ -1,0 +1,34 @@
+.nav-item{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 30px;
+}
+
+.nav-link.get-started{
+    color:#34998B;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 30px;
+}
+.nav-toggle-btn {
+    color: #34998B; 
+    border: 1px solid #34998B;/* Default color */
+    transition: color 0.3s ease;
+}
+
+.nav-toggle-btn.active { 
+      background-color: #34998B ;
+      color: #fff;
+  }
+
+
+  .header-nav-list{
+    background: rgb(52 153 139);
+  }
+
+  .header-nav-list li a,.header-nav-list li button{
+    color: #fff;
+  }

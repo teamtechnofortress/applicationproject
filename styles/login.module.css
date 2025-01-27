@@ -1,0 +1,27 @@
+.register-btn{
+    background: #f4f2f4;
+    padding: 13px 19px;
+    border-radius: 18px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+}
+.label-input {
+    color: #6f6e77;
+    font-size: 13px;
+    font-family: 'DM Sans';
+}
+.forgot-link{
+    color: #e7fc41;
+    font-weight: 600;
+    font-size: 12px;
+}
+.signIn-btn{
+    color: #fff;
+    border-radius: 24px;
+    padding: 9px 24px;
+    background: #e7fc41;
+}
+.logo{
+    width: 60%;
+    }

@@ -1,0 +1,236 @@
+.page {
+    padding: 0;
+  }
+  
+  .section {
+    margin: 10px;
+    padding: 40px;
+    font-size: 15px;
+  }
+  
+  .title,
+  .titleBlue {
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .titleBlue {
+    color: #276aa4;
+  }
+  
+  .titleCenter {
+    margin-top: 50px;
+    margin-bottom: 10px;
+    font-family: 'Montserrat';
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .titlePdf {
+    font-family: 'Montserrat';
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .titlePdfbody {
+    font-family: 'Montserrat';
+    font-weight: bold;
+    margin-top: 40px;
+    margin-bottom: 15px;
+  }
+  
+  .para,
+  .parapdf {
+    color: #9d9d9d;
+    margin-top: 10px;
+  }
+  
+  .paraBlue {
+    color: #276aa4;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  
+  .parapdf {
+    font-family: 'Montserrat';
+    font-weight: 300;
+  }
+  .pdfimg{
+    margin: auto;
+  }
+  
+.image {
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  .pdfImage {
+    margin-top: 20px;
+    padding: 20px;
+    width: 100%;
+    height: auto;
+    border: 1px solid #e2e2e2;
+  }
+  
+  .table {
+    display: table;
+    width: 100%;
+    border: 1px solid #e2e2e2;
+    margin-bottom: 10px;
+    font-family: 'Montserrat';
+    font-weight: medium;
+  }
+  
+  .tableRow {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .tableCol {
+    width: 50%;
+    border-bottom: 1px solid #e2e2e2;
+    border-right: 1px solid #e2e2e2;
+  }
+  
+  .tableCell {
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 15px;
+    text-align: left;
+    color: #5d4e40;
+  }
+  
+  .evenTableCell {
+    background-color: #f6f6f6;
+  }
+  
+  .header {
+    width: 100%;
+    padding: 10px;
+    background-color: #276aa4;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffff;
+  }
+  
+  .headerImage {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 1px solid black;
+    margin-left: 20px;
+  }
+  
+  .headerText {
+    flex: 1;
+    text-align: right;
+    color: #ffff;
+    padding: 10px 0;
+  }
+  
+  .headerName {
+    text-align: right;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    font-size: 12px;
+  }
+  
+  .headerPhone,
+  .headerEmail {
+    text-align: right;
+    font-family: 'Montserrat';
+    font-weight: medium;
+    font-size: 14px;
+  }
+  
+  .evenTableCol {
+    background-color: #f6f6f6;
+  }
+  
+  .oddTableCol {
+    background-color: #ffffff;
+  }
+  
+  .pageNumber {
+    position: absolute;
+    font-size: 15px;
+    bottom: 10px;
+    left: 40px;
+  }
+  
+  .pdfSection {
+    padding: 20px;
+    border: 2px solid #e2e2e2;
+  }
+  
+  .pdfFooter {
+    padding-top: 40px;
+    padding-bottom: 60px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .pfdLeft {
+    flex: 1;
+    text-align: left;
+    color: #000;
+    padding: 10px 0;
+  }
+  
+  .pfdRight {
+    flex: 1;
+    text-align: right;
+    color: #000;
+    padding: 10px 0;
+  }
+  
+  .datePlace {
+    font-family: 'Montserrat';
+    font-weight: 300;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #000;
+    margin-right: 60px;
+  }
+  
+  .imagePlace {
+    position: relative;
+    padding-right: 20px;
+    border-bottom: 1px solid #000;
+  }
+  
+  .signImage {
+    position: absolute;
+    width: 22%;
+  }
+  
+  .signatureContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #000;
+    padding-bottom: 24px;
+    margin-right: 40px;
+  }
+  
+  .signHeader,
+  .dateHeader {
+    font-family: 'Montserrat';
+    font-weight: 300;
+    text-align: left;
+  }
+  

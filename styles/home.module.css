@@ -1,0 +1,321 @@
+/* First Section Div css */
+  .first-sec-h1{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 45px;
+    line-height: 80px;
+  }
+  .first-sec-p{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 42px;
+  }
+  .jetzt-btn{
+    background-color: #34998B;
+    border-radius: 6px;
+    color: white;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 10px;
+    border: none;
+    padding: 25px 25px;
+  }
+  .first-star-p{
+    color:#13254A;
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+  }
+  /* First Section Div css */
+
+  /* Second Section Div css */
+
+  .second-div-h1{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size:30px;
+    line-height: 50px;
+  }
+  .second-div-p{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+  }
+  .imagebox-h1{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 23px;
+  }
+  .imagebox-p{
+    color:#343D48;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 30px;
+    margin-top: 10px;
+  }
+    /* Second Section Div css */
+
+
+  /* Threed Section Div css */
+  .threed-sec-con{
+    background-color: #F9FAFC;
+  }
+  .threed-sec{
+    background-color: #FFFFFF;
+  }
+  .threed-sec-h1{
+    font-family: Helvetica Neue, Arial, sans-serif;
+    color: #02073E;
+    font-size: 35px;
+    line-height: 45px;
+    font-weight: 700;
+  }
+  .threed-sec-p{
+    font-family: "Barlow", sans-serif;
+    color: #13254A;
+    font-size: 19px;
+    line-height: 30px;
+    font-weight: 400;
+  }
+  .starte-btn{
+    font-family: "Barlow", sans-serif;
+    color: #13254A;
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 2.8px;
+    padding: 20px 55px;
+    background-color: #34998B;
+    color: white;
+    border-radius: 6px;
+
+  }
+
+  /* Threed Section Div css */
+
+  /* four Section Div css */
+  .four_sec{
+    background-color:#f0f0f0
+  }
+  .four-div-h1{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 45px;
+  }
+  .four-div-p{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+  }
+  .bewerbe-btn{
+    font-family: "Barlow", sans-serif;
+    color: #13254A;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 2.8px;
+    padding: 20px 55px;
+    background-color: #34998B;
+    color: white;
+    border-radius: 6px;
+  }
+  .four-div-imagsec {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url(/images/video.png);
+}
+
+ 
+  /* four Section Div css */
+  
+  /* five Section Div css */
+  .five-div-h1{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 50px;
+  }
+  .five-div-p{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+  }
+  /* five Section Div css */
+
+  /* six Section Div css */
+
+  .six-div-h1{
+    color:#020248;
+    font-family: "IBM Plex Serif", serif;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 55px;
+  }
+  .six-div-p{
+    color:#13254A;
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    font-size: 23px;
+    line-height: 35px;
+  }
+  .six-div-img-h1{
+    font-family: Helvetica Neue, Arial, sans-serif;
+    color: #31304B  ;
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: 700;
+  }
+
+  /* six Section Div css */
+
+  /* seven Section Div css */
+  .seven-div-h1{
+    color:#020248;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 45px;
+    line-height: 55px;
+  }
+  .seven-div-p{
+    color:#13254A;
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    font-size: 23px;
+    line-height: 35px;
+  }
+
+  .checked {
+    color: white;
+    background-color:#51b27e;
+    padding: 4px;
+    border-radius: 4px;
+  }
+  .testimonialbox-h1{
+    color:black;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
+  }
+  .testimonialbox-p{
+    color:#13254A;
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+  }
+  /* seven Section Div css */
+
+  /* eight Section Div css */
+
+  .eight-div-h1{
+    color:#020248;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 50px;
+  }
+  .eight-div-p{
+    color:#13254A;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 35px;
+  }
+  .eight-faq-sec-h3{
+    color:#13254A;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 30px;
+  }
+  .eight-faq-sec-p{
+    color:#13254A;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 32px;
+  }
+  /* eight Section Accordion  css */
+
+
+  /* @keyframes showContent {
+      from {
+      opacity: 0;
+      height: 0;
+      }
+      to {
+      opacity: 1;
+      height: auto;
+      }
+  }
+  @keyframes slideDown {
+      from {
+      opacity: 0;
+      height: 0;
+      padding: 0;
+      }
+
+      to {
+      opacity: 1;
+      height: auto;
+      }
+  } */
+  /* eight Section Accordion  css */
+
+  @media (max-width: 1100px) {
+ 
+    .mobile-heading-h1{
+      font-size: 25px !important;
+      line-height: 35px !important;
+      margin-top: 0;
+    }
+    .mobile-heading-p{
+      font-size: 16px !important;
+      line-height: 25px !important;
+    }
+  }
+  @media (max-width: 600px) {
+    .first-sec-h1{
+      margin-top: 0;
+    }
+    .first-sec{
+      margin-top: 0;
+    }
+    .mobile-heading-h1{
+      font-size: 20px !important;
+      line-height: 30px !important;
+      margin-top: 0;
+    }
+    .mobile-heading-p{
+      font-size: 18px !important;
+      line-height: 30px !important;
+    }
+   
+  
+    .six-div-img-h1{
+      font-size: 18px !important;
+    }
+    .six-div-img{
+      width: 30% !important;
+    }
+  }

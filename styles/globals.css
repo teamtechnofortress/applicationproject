@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Poppins Regular';
+  src:url('../public/Font/Poppins/Poppins-Regular.ttf') format('truetype');
+   font-weight: normal;
+ font-style: normal;
+}
+@font-face {
+  font-family: 'Poppins Bold';
+  src: url('../public/Font/Poppins/Poppins-Bold.ttf') format('truetype');
+   font-weight: normal;
+ font-style: normal;
+}
+@font-face {
+  font-family: 'Poppins Medium';
+  src:url('../public/Font/Poppins/Poppins-Medium.ttf') format('truetype');
+   font-weight: normal;
+ font-style: normal;
+}
+p{
+  font-family: 'Poppins Regular';
+}
+
+.text-color{
+  color: #E7FC41;
+}
+.color-border,.color-text{
+  border-color: #e7fc42;
+}
+.border-color{
+  --tw-bg-opacity: 1;
+  background-color: #e7fc42;
+}
+.color-circle-grey{
+  width: 28px;
+  height:28px;
+  background-color: #d1d5e3;
+  padding: 10px;
+  border: 1px solid #d1d5e3;  
+  border-radius: 40px;
+}
+.color-circle{
+  width: 28px;
+  height:28px;
+  background-color: #e7fc42;
+  padding: 10px;
+  border: 1px solid #e7fc42;  
+  border-radius: 40px;
+}
+/* CSS in your styles module or a global CSS file */
+.flatpickr-months {
+  background: #e7fc42;
+}
+/* Hide default marker on summary */
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Style for accordion headers */
+.accordion-header {
+  font-family: 'Poppins Medium', sans-serif;
+  font-size: 18px;
+  position: relative;
+  cursor: pointer;
+  padding-left: 2.5rem;
+}
+
+/* Custom plus icon */
+.accordion-header::before {
+  content: url('/images/plusicon.png');
+  position: absolute;
+  left: 0.5rem;
+  top: 0.7rem;
+  transition: transform 0.3s ease;
+}
+
+/* Custom minus icon for open state */
+details[open] .accordion-header::before {
+  content: url('/images/minusicon.png');
+  transform: rotate(180deg);
+}
+
+/* Slide-down animation */
+.accordion-content {
+  font-family: 'Poppins Regular', sans-serif;
+  font-size: 16px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Expanded content with smooth transition */
+details[open] .accordion-content {
+  max-height: 100vh;
+  opacity: 1;
+}
+
+  .footer-site{
+    background-color: #E7FC41;
+  }
+  input:focus-visible{
+      outline: none;
+  }
+  .read_only_field{
+      background-color: #f4f2f4;
+  }
+.slider-container {
+  width: 100%;  
+}
+
+.slider-image {
+  object-fit: cover; 
+  box-shadow:17px 13px 0px #E7FC41;
+  border-radius: 10px; 
+}
+
+.slide {
+  padding: 20px; 
+}
+
+@media screen and (max-width: 600px) {
+  .slider-img .slick-slide[data-index="0"] {
+    display: none;
+  }
+  .slide {
+    padding: 40px; 
+  }
+  /* .slider-div {
+    padding-left: 15px;
+} */
+.slider-div .slick-dots{
+  display: none !important;
+}
+.slider-div .controls {
+  width: 93%;
+}
+
+}

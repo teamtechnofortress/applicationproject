@@ -1,0 +1,119 @@
+/* form dashboard */
+.nav-form {
+    position: relative;
+    border-bottom: 2px solid #8383835e; /* Black border under ul */
+  }
+  
+  .nav-form-li {
+    position: relative;
+  }
+  
+  .nav-form-li a {
+    display: inline-block;
+  }
+  
+  .nav-form-li.active a {
+    position: relative;
+    z-index: 1; /* Ensures the red border appears above the ul border */
+    border-bottom: 2px solid #34998B;; /* Red border for active li */
+    margin-bottom: -2px; /* Adjusts the position of the border to overlap ul border */
+  }
+  .two-third,.one-third{
+    background: #ffff;
+    border-radius: 6px;
+    box-shadow: 0 0 32px #00000014;
+  }
+  .heading-personl{
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 1.37rem;
+    line-height: 30px;
+    word-spacing: 0.2rem;
+  }
+
+  .input-field{
+  padding: 10px;
+  border: 1px solid #dcdbdd;
+  border-radius: 5px;
+  }
+  .form-input{
+    width: 100%;
+  }
+  .loginform-label{
+    font-family: "Montserrat", sans-serif;
+    font-size: 13px;
+    color: #6f6e77;
+    font-weight: 500;
+  }
+
+  .update-btn{
+    font-family: "Montserrat", sans-serif;
+    text-transform: capitalize;
+    background: #34998B;
+    color: #ffff;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 20px;
+    padding: 8px 22px;
+  }
+  .p-login {
+    font-family: "Montserrat", sans-serif;
+    color: #6f6e77;
+    line-height: 20px;
+    font-size: 14px;
+  }
+   /* form dashboard */
+
+   .tooltipOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 31% !important;
+    height: 100%;
+    pointer-events: none; /* Ensure only the modal or button can be clicked */
+  }
+  
+  .tooltipModal {
+    position: absolute;
+    background-color: #000;
+    color: #ffff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    pointer-events: auto; /* Allow interaction with the tooltip */
+    border-radius: 10px;
+  }
+  
+  .tooltipContent {
+    padding: 20px;
+  }
+  
+  .closeButton {
+    margin-top: 10px;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .email-label{
+    display: flex;
+  }
+  .tooltip-btn{
+    margin-left: 8px;
+    border: 2px solid grey;
+    border-radius: 52%;
+    padding: 0px 6px;
+  }
+  .popup-btn{
+    padding: 3px 14px;
+    background: #bfbfbf;
+    margin-left: 20px;
+    border-radius: 50%;
+}
+.PdfTooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100%;
+  pointer-events: none; /* Ensure only the modal or button can be clicked */
+}

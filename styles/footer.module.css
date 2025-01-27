@@ -1,0 +1,22 @@
+  .footer-sec-h3{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 30px;
+  }
+  .footer-sec-p{
+    color:#02073E;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 35px;
+  }
+  .footer-copy-p{
+    color:#0F2137;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    display: contents;
+  }
