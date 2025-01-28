@@ -47,10 +47,11 @@ const StepOneInner = ({
          <button
            type="button"
            onClick={() => (setCurrentStep(12))} 
-           className={`${styles["next-btn"]} bg-blue-500 text-white px-6 py-3 rounded-lg`}
+           className={`${styles["next-btn"]} bg-blue-500 text-white px-6 py-3 rounded-lg mx-auto block flex items-center justify-between`}
            style={{ width: '90%' }} // Assign 90% width
          >
            Weiter
+           <span className="text-2xl font-bold">&rarr;</span>
          </button>
        </div>
      </div>

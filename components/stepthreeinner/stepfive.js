@@ -9,6 +9,15 @@ const StepFiveInner = ({
   setCurrentStep,
 }) => {
   const [errors, setErrors] = useState({});
+  const validateFields = () => {
+    const newErrors = {};
+    const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
+
+    if (!safeTrim(mietschuldenfreiheit)) newErrors.pets = "Mietschuldenfreiheit is required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
+  };
 
   setCurrentStep(15);
 
@@ -59,7 +68,7 @@ const StepFiveInner = ({
                           value="Nein"
                           onChange={handleChange}
                           checked={mietschuldenfreiheit === "Nein"}
-                          onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
+                          onClick={() => setCurrentStep((prevStep) => prevStep + 2)}
                         />
                         <label
                           className={`${styles["form-check-label"]} ${styles["radio-btn"]} ${
@@ -69,6 +78,7 @@ const StepFiveInner = ({
                         >
                           Nein
                         </label>
+                        {errors.mietschuldenfreiheit && <p className="text-red-500 text-sm">{errors.mietschuldenfreiheit}</p>}
                     </div>
               </div>
                   
@@ -86,7 +96,11 @@ const StepFiveInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(16)}
+              onClick={() => {
+                if (validateFields()) {
+                  setCurrentStep(16);
+                }
+              }}
             >
               Weiter
             </button>

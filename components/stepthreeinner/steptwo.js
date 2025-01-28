@@ -44,7 +44,7 @@ const StepTwoInner = ({
                     className={`${styles["form-input"]} form-input`}
                     id="fläche"
                     name="fläche"
-                    placeholder="fläche"
+                    placeholder="Fläche (qm)"
                     value={fläche}
                     onChange={handleChange}
                   />

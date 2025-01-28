@@ -36,7 +36,7 @@ const StepFourInner = ({
                         <div className="input-field">
                           <input
                             type="text"
-                            className={`${styles["form-input"]} form-input `}
+                            className={`${styles["ausgeubterBeruf"]} form-input `}
                             id="ausgeubterBeruf"
                             name="ausgeubterBeruf"
                             placeholder="Ausgeübter Beruf"

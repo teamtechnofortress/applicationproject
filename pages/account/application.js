@@ -254,12 +254,12 @@ const application = () => {
       if (name === "anzahlderzimmer") setAnzahlderzimmer(value);
       if (name === "fläche") setFläche(value);
       if (name === "zimerzahl") setZimerzahl(value);
-   
+      if (name === "mietschuldenfreiheit") setMietschuldenfreiheit(value);
+      
     }
     
   };
  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -383,7 +383,7 @@ const application = () => {
                 components >= 1 ?  "text-color" : "text-gray-500"
               }`}
               >
-                Step 1
+                Persönliches
               </p>
             </li>
 
@@ -425,7 +425,7 @@ const application = () => {
                   components >= 2 ? "text-color" : "text-gray-500"
                 }`}
               >
-                Step 2
+              Anschreiben
               </p>
             </li>
 
@@ -464,10 +464,10 @@ const application = () => {
               </div>
               <p
                 className={`mt-2  text-sm ${
-                  components >= 2 ? "text-color" : "text-gray-500"
+                  components >= 3 ? "text-color" : "text-gray-500"
                 }`}
               >
-                Step 3
+                Uploads
               </p>
             </li>
           </ul>

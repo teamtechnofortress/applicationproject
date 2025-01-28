@@ -62,6 +62,9 @@ const StepFourInner = ({
             </div>
           ))}
         </div>
+        <a href="" className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg text-center`} >
+        Hier Schufaauskunft erhalten
+        </a>
       </div>
 
         <div className="flex justify-between mt-10">

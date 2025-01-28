@@ -29,7 +29,7 @@ const StepEightInner = ({
               Sehr Geehrte Hausverwaltung XY, 
             </p>
             <p className={`${styles["p-address"]} mt-2 w-[80%]`}>
-              hiermit bitte ich um eine aktuelle Mietschuldenfreiheitsbescheinigung aus dem bestehenden Mietverhältnis der folgenden Adresse: Name, Straße, PLZ, Lage der Wohnung( zB: 4 OG links und Mieternummer).  Bitte nehmen Sie folgende Stichpunkte mit auf: Daten des Vermieters, Daten des Mieters, Dauer des Mietverhältnis, Bestätigung der Pünktlichen Mietzahlung oder eventuelle Rückstände, Ort Datum Unterschrift und Stempel der Vermieter/Verwaltung.  
+              hiermit bitte ich um eine aktuelle Mietschuldenfreiheitsbescheinigung aus dem bestehenden Mietverhältnis der folgenden Adresse: Name, Straße, PLZ, Lage der Wohnung( zB: 4 OG links und Mieternummer). Bitte nehmen Sie folgende Stichpunkte mit auf: Daten des Vermieters, Daten des Mieters, Dauer des Mietverhältnis, Bestätigung der Pünktlichen Mietzahlung oder eventuelle Rückstände, Ort Datum Unterschrift und Stempel der Vermieter/Verwaltung.  
             </p>
             <p className={`${styles["p-address"]} mt-2`}>
                Mit freundlichen Grüßen 
@@ -53,16 +53,16 @@ const StepEightInner = ({
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
             onClick={() => setCurrentStep(16)}
           >
-           Die Bescheinigung liegt nun vor.
+           Zurück
           </button>
 
           <div className="col-span-2">
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(19)}
+              onClick={() => setCurrentStep(20)}
             >
-              Überspringen
+             Weiter
             </button>
           </div>
         </div>

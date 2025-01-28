@@ -50,7 +50,7 @@ const StepNineInner = ({
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
             onClick={() => setCurrentStep(16)}
           >
-           Die Bescheinigung liegt nun vor.
+            Zurück
           </button>
 
           <div className="col-span-2">
@@ -59,7 +59,7 @@ const StepNineInner = ({
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
               onClick={() => setCurrentStep(20)}
             >
-              Überspringen
+             Weiter
             </button>
           </div>
         </div>

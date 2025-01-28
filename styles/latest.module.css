@@ -156,4 +156,20 @@ label.file_up {
     cursor: pointer;
     color: #0F91D2;
 }
-  
+.submit-btn{
+    background-color: #777777;
+    color: #ffff;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+} 
+.ausgeubterBeruf{
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid #EAEAEB;
+    color:rgba(0, 0, 0, 1);
+    border-radius: 6px;
+    padding: 14px 20px 14px 50px;
+    font-size: 20px;
+    width: 100%;
+}

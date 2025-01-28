@@ -29,6 +29,14 @@ const StepThreeInner = ({
         <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
         Bitte lade nun einen Kopie deines Personalausweises hoch. In dem Beispiel siehst du, welche Stellen du schwärzen darfst.
         </p>
+        <div className="grid grid-cols-2 mt-5 gap-10 mt-3 mb-3">
+            <div className="col-span-1 flex items-center justify-end">
+               <img src="/idfront.png" alt="ID Front" className="w-[53%] h-auto" />
+            </div>
+            <div className="col-span-1 flex items-center">
+              <img src="/idback.png" alt="ID Front" className="w-[55%] h-auto" />
+            </div>
+         </div>
 
         <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
         <label

@@ -30,7 +30,10 @@ const StepFiveInner = ({
   return (
     <div>
       <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
-        Dein Beschäftigungsverhältnis besteht länger, als 6 Monate.
+      {employment === "Ja"
+            ? "Dein Beschäftigungsverhältnis besteht länger als 6 Monate."
+            : "Dein Beschäftigungsverhältnis besteht kürzer als 6 Monate."}
+        
       </p>
 
       <div className="flex flex-col items-center justify-center w-[40%] mx-auto">
