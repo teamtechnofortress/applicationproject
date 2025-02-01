@@ -29,8 +29,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
       e.preventDefault()
       const data = {email, password}
-      console.log('NEXT_PUBLIC_HOST:', `${process.env.NEXT_PUBLIC_HOST}/api/login`);
-
       
       let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
         method: "POST", // or 'PUT'
@@ -89,7 +87,7 @@ const Login = () => {
       <section className="p-4 mx-auto">
         <nav className="bg-white border-gray-200">
             <div className="flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="" className={`${styles['a-tag']} flex items-center space-x-3 rtl:space-x-reverse`}>
+            <a href="/" className={`${styles['a-tag']} flex items-center space-x-3 rtl:space-x-reverse`}>
                        <img src="/images/logo.png" className={`${styles['logo']}`}  alt="Flowbite Logo" />
                    </a>
             {/* <Link href="/" legacyBehavior>

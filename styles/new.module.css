@@ -224,7 +224,9 @@ animation: spin 0.8s linear infinite;
 }
 }
 
-
+.btn-login{
+  cursor: pointer;
+}
 .last-section .heading-sub,.last-section .appartment-sec-p{
 text-align: left;
 margin: 0px;

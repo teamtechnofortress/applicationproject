@@ -24,6 +24,7 @@
     font-size: 20px;
     width: 100%;
 }
+
 .color-circle{
     width: 28px;
     height:28px;
@@ -39,7 +40,7 @@
 .form-input:hover,.form-input:active,.form-input:focus{
     border: 1px solid #e7fc42;
 }
-.form-input::placeholder, .form-select,.form-control {
+.form-input::placeholder, .form-select,.form-control,.ausgeubterBeruf::placeholder {
     font-family: 'Poppins Regular';
     color:rgba(0, 0, 0, 0.5);
     font-weight: 400;
@@ -156,6 +157,15 @@ label.file_up {
     cursor: pointer;
     color: #0F91D2;
 }
+.ausgeubterBeruf{
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid #eaeaeb;
+    color:rgba(0, 0, 0, 1);
+    border-radius: 6px;
+    padding: 14px 20px 14px 50px;
+    font-size: 20px;
+    width: 100%;
+}
 .submit-btn{
     background-color: #777777;
     color: #ffff;
@@ -163,13 +173,5 @@ label.file_up {
     display: flex;
     justify-content: space-between;
     font-weight: 600;
-} 
-.ausgeubterBeruf{
-    background: rgba(0, 0, 0, 0.01);
-    border: 1px solid #EAEAEB;
-    color:rgba(0, 0, 0, 1);
-    border-radius: 6px;
-    padding: 14px 20px 14px 50px;
-    font-size: 20px;
-    width: 100%;
 }
+  

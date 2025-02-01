@@ -7,7 +7,7 @@ import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
 import "react-phone-input-2/lib/style.css";
 import styles from "../../styles/latest.module.css";
-import UserNav from "@/components/UserNav";
+import DashboardHeader from '@/components/DashboardHeader';
 import Steptwo from "@/components/steptwo";
 import StepOne from "@/components/stepone";
 import Stepthree from "@/components/stepthree";
@@ -256,10 +256,12 @@ const application = () => {
       if (name === "zimerzahl") setZimerzahl(value);
       if (name === "mietschuldenfreiheit") setMietschuldenfreiheit(value);
       
+   
     }
     
   };
  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -357,122 +359,125 @@ const application = () => {
         </>
       )}
       <div className="min-h-full">
-        <UserNav />
+        <DashboardHeader />
         <ToastContainer />
-        <div className="mt-7">
-        <ul className="flex justify-around items-center max-w-7xl mx-auto">
-            {/* Step 1 */}
-            <li className="flex flex-col items-center">
-              <div
-                className={`${styles["color-border"]} rounded-full w-10 h-10 flex items-center justify-center ${
-                  components >= 1
-                    ? "border-2 border-yellow-500 p-1"
-                    : "bg-gray-300 border-2 border-gray-400 p-1"
-                }`}
-              >
-                <div className={`${styles["color-circle"]} flex items-center justify-center`}>
-                  {components >= 1 ? (
-                    <span className="text-white font-bold">&#10003;</span> // Checkmark icon
-                  ) : (
-                    <span className="text-gray-500 font-bold">1</span>
-                  )}
-                </div>
-              </div>
-              <p
-               className={`mt-2 text-sm ${
-                components >= 1 ?  "text-color" : "text-gray-500"
-              }`}
-              >
-                Persönliches
-              </p>
-            </li>
+        <div className="flex">
+     
+        <div className="flex-1 ml-64">
+          <div className="mt-7">
+            <ul className="flex justify-around items-center max-w-7xl mx-auto p-10">
+                {/* Step 1 */}
+                <li className="flex flex-col items-center">
+                  <div
+                    className={`${styles["color-border"]} rounded-full w-10 h-10 flex items-center justify-center ${
+                      components >= 1
+                        ? "border-2 border-yellow-500 p-1"
+                        : "bg-gray-300 border-2 border-gray-400 p-1"
+                    }`}
+                  >
+                    <div className={`${styles["color-circle"]} flex items-center justify-center`}>
+                      {components >= 1 ? (
+                        <span className="text-white font-bold">&#10003;</span> // Checkmark icon
+                      ) : (
+                        <span className="text-gray-500 font-bold">1</span>
+                      )}
+                    </div>
+                  </div>
+                  <p
+                  className={`mt-2 text-sm ${
+                    components >= 1 ?  "text-color" : "text-gray-500"
+                  }`}
+                  >
+                    Persönliches
+                  </p>
+                </li>
 
-            {/* Line Between Steps */}
-            <li className="flex-1">
-              <div
-                className={`h-[2px] mb-6 ${
-                  components >= 2 ? "border-color" : "bg-gray-300"
-                }`}
-              ></div>
-            </li>
+                {/* Line Between Steps */}
+                <li className="flex-1">
+                  <div
+                    className={`h-[2px] mb-6 ${
+                      components >= 2 ? "border-color" : "bg-gray-300"
+                    }`}
+                  ></div>
+                </li>
 
-            {/* Step 2 */}
-            <li className="flex flex-col items-center">
-            <div
-                className={`rounded-full w-10 h-10 flex items-center justify-center ${
-                  components >= 2
-                    ? "color-border border-2 border-yellow-500 p-1"
-                    : "p-1"
-                }`}
-              >
+                {/* Step 2 */}
+                <li className="flex flex-col items-center">
+                <div
+                    className={`rounded-full w-10 h-10 flex items-center justify-center ${
+                      components >= 2
+                        ? "color-border border-2 border-yellow-500 p-1"
+                        : "p-1"
+                    }`}
+                  >
 
-              <div
-                className={`${
-                  components >= 2 ? "color-circle" : "color-circle-grey"
-                } flex items-center justify-center`}
-              >
-                {components >= 2 ? (
-                  <span className="text-white font-bold">&#10003;</span> // Checkmark icon
-                ) : (
-                  <span className="text-gray-500 font-bold"></span> // Fallback number
-                )}
-              </div>
+                  <div
+                    className={`${
+                      components >= 2 ? "color-circle" : "color-circle-grey"
+                    } flex items-center justify-center`}
+                  >
+                    {components >= 2 ? (
+                      <span className="text-white font-bold">&#10003;</span> // Checkmark icon
+                    ) : (
+                      <span className="text-gray-500 font-bold"></span> // Fallback number
+                    )}
+                  </div>
 
-              
-              </div>
-              <p
-                className={`mt-2  text-sm ${
-                  components >= 2 ? "text-color" : "text-gray-500"
-                }`}
-              >
-              Anschreiben
-              </p>
-            </li>
+                  
+                  </div>
+                  <p
+                    className={`mt-2  text-sm ${
+                      components >= 2 ? "text-color" : "text-gray-500"
+                    }`}
+                  >
+                  Anschreiben
+                  </p>
+                </li>
 
-            {/* Line Between Steps */}
-            <li className="flex-1">
-              <div
-                className={`h-[2px] mb-6 ${
-                  components >= 3 ? "border-color" : "bg-gray-300"
-                }`}
-              ></div>
-            </li>
+                {/* Line Between Steps */}
+                <li className="flex-1">
+                  <div
+                    className={`h-[2px] mb-6 ${
+                      components >= 3 ? "border-color" : "bg-gray-300"
+                    }`}
+                  ></div>
+                </li>
 
-            {/* Step 3 */}
-            <li className="flex flex-col items-center">
-            <div
-                className={`rounded-full w-10 h-10 flex items-center justify-center ${
-                  components >= 3
-                    ? "color-border border-2 border-yellow-500 p-1"
-                    : "p-1"
-                }`}
-              >
+                {/* Step 3 */}
+                <li className="flex flex-col items-center">
+                <div
+                    className={`rounded-full w-10 h-10 flex items-center justify-center ${
+                      components >= 3
+                        ? "color-border border-2 border-yellow-500 p-1"
+                        : "p-1"
+                    }`}
+                  >
 
-              <div
-                className={`${
-                  components >= 3 ? "color-circle" : "color-circle-grey"
-                } flex items-center justify-center`}
-              >
-                {components >= 3 ? (
-                  <span className="text-white font-bold">&#10003;</span> // Checkmark icon
-                ) : (
-                  <span className="text-gray-500 font-bold"></span> // Fallback number
-                )}
-              </div>
+                  <div
+                    className={`${
+                      components >= 3 ? "color-circle" : "color-circle-grey"
+                    } flex items-center justify-center`}
+                  >
+                    {components >= 3 ? (
+                      <span className="text-white font-bold">&#10003;</span> // Checkmark icon
+                    ) : (
+                      <span className="text-gray-500 font-bold"></span> // Fallback number
+                    )}
+                  </div>
 
-              
-              </div>
-              <p
-                className={`mt-2  text-sm ${
-                  components >= 3 ? "text-color" : "text-gray-500"
-                }`}
-              >
-                Uploads
-              </p>
-            </li>
-          </ul>
+                  
+                  </div>
+                  <p
+                    className={`mt-2  text-sm ${
+                      components >= 3 ? "text-color" : "text-gray-500"
+                    }`}
+                  >
+                    Uploads
+                  </p>
+                </li>
+            </ul>
 
-        </div>
+          </div>
 
         <div className="py-8">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -491,6 +496,7 @@ const application = () => {
                   ort={ort}
                   email={email}
                   phonenumber={phonenumber}
+                  setPhoneNumber={setPhoneNumber}
                   geburtsdatum={geburtsdatum}
                   ausgeubterBeruf={ausgeubterBeruf}
                   arbeitgeber={arbeitgeber}
@@ -543,6 +549,8 @@ const application = () => {
               )}
              
             </form>
+          </div>
+          </div>
           </div>
         </div>
       </div>

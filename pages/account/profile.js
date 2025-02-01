@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import UserNav from '@/components/UserNav';
+import DashboardHeader from '@/components/DashboardHeader';
 import Link from 'next/link';
 import styles from '../../styles/profile.module.css';
 import { toast, ToastContainer } from 'react-toastify';
@@ -182,12 +182,16 @@ const Profile = () => {
   
   return (
     <>
-      <UserNav key={refresh} />
+      <DashboardHeader key={refresh} />
       <ToastContainer />
-      <div className="py-8 p-12">
+      <div className="flex">
+     
+      <div className="flex-1 ml-64"></div>
+      <div className="bg-gray-100 py-8 p-12">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
-          <nav className="bg-white">
-            <div className="w-full md:block md:w-auto" id="navbar-default">
+          <nav className="">
+            <h1 className={`${styles['heading-dash']}`}>Einstellungen</h1>
+            <div  id="navbar-default">
               <ul className={`${styles['nav-form']} flex flex-wrap items-center`}>
                 <li className={`${styles['nav-form-li']} ${styles['active']}`}>
                   <Link href="/account/profile" legacyBehavior>
@@ -203,11 +207,19 @@ const Profile = () => {
                     </a>
                   </Link>
                 </li>
+                <li className={`${styles['nav-form-li']}`}>
+                  <Link href="/account/subscription" legacyBehavior>
+                    <a href="#" className="block py-2 px-3">
+                    Abonnement
+                    </a>
+                  </Link>
+                </li>
               </ul>
             </div>
           </nav>
           <div className="flex gap-4 mt-4">
-            <div className={`${styles['two-third']} w-2/3 p-10`}>
+            <div className=" w-2/3">
+              <div className={`${styles['two-third']} p-10`}>
               <h3 className={`${styles['heading-personl']}`}>Persönliche Daten</h3>
               <form className= "mt-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-2 gap-4 mt-3 mb-3">
@@ -259,12 +271,108 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
+                <div className="grid grid-cols-1 gap-4 mt-5">
+                  <div>
+                  <label className={`${styles['loginform-label']} ${styles['email-label']} mt-1`}>
+                     Telefonnummer 
+                    </label>
+
+                    <div className={`${styles['input-field']} read_only_field mt-1`}>
+                      <input
+                        type="tel"
+                        className={`${styles['form-input']} read_only_field form-control`}
+                        id="phone"
+                        name="phone"
+                        value={user.phone}
+                        readOnly
+                        placeholder="Telefonnummer"
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div className="text-end mt-3">
                   <button type="submit" className={`${styles['update-btn']} leading-6 shadow-sm px-3 py-1.5`}>
                     Update now
                   </button>
                 </div>
               </form>
+              </div>
+              <div className={`${styles['two-third']} mt-6 p-10`}>
+              <h3 className={`${styles['heading-personl']}`}>Adresse</h3>
+              <form className= "mt-4" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-2 gap-4 mt-3 mb-3">
+                  <div>
+                    <label className={`${styles['loginform-label']}`}>Straße</label>
+                    <div className={`${styles['input-field']} mt-1`}>
+                      <input
+                        type="text"
+                        className={`${styles['form-input']} form-input`}
+                        id="strabe"
+                        name="strabe"
+                        value={user.strabe}
+                        onChange={handleChange}
+                        placeholder="Straße"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className={`${styles['loginform-label']}`}>Stadt</label>
+                    <div className={`${styles['input-field']} mt-1`}>
+                      <input
+                        type="text"
+                        className={`${styles['form-input']} form-input`}
+                        id="stadt"
+                        name="stadt"
+                        value={user.stadt}
+                        onChange={handleChange}
+                        placeholder="Stadt"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-4 mt-5">
+                  <div>
+                  <label className={`${styles['loginform-label']} ${styles['email-label']} mt-1`}>
+                    Postleitzahl 
+                  </label>
+
+                    <div className={`${styles['input-field']} read_only_field mt-1`}>
+                      <input
+                        type="text"
+                        className={`${styles['form-input']} read_only_field form-control`}
+                        id="postleitzahl"
+                        name="postleitzahl"
+                        value={user.postleitzahl}
+                        placeholder="Postleitzahl"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-4 mt-5">
+                  <div>
+                  <label className={`${styles['loginform-label']} ${styles['email-label']} mt-1`}>
+                  Land 
+                    </label>
+
+                    <div className={`${styles['input-field']} read_only_field mt-1`}>
+                      <input
+                        type="text"
+                        className={`${styles['form-input']} read_only_field form-control`}
+                        id="land"
+                        name="land"
+                        value={user.land}
+                        placeholder="Land"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="text-end mt-3">
+                  <button type="submit" className={`${styles['update-btn']} leading-6 shadow-sm px-3 py-1.5`}>
+                    Update now
+                  </button>
+                </div>
+              </form>
+              </div>
             </div>
             <div className={`${styles['one-third']} w-1/3 p-10`}>
               <h3 className={`${styles['heading-personl']}`}>Profilbild</h3>
@@ -274,7 +382,7 @@ const Profile = () => {
               <div className="mt-5 flex flex-col justify-center items-center">
               {user !== null ? (
                   <img
-                  className="h-72 w-72 rounded-full"
+                  className="w-72 rounded-full"
                   src={user && user.profileimg ? user.profileimg : "/avatar.png"}
                   alt=""
                 />
@@ -292,13 +400,16 @@ const Profile = () => {
                 />
                 {/* Button to trigger file input */}
               </div>
-              <div className='mt-5 flex justify-center items-center gap-x-24'>
-                <button className={`${styles['update-btn']} leading-6 shadow-sm px-3 py-1.5`} onClick={handleButtonClick}>Change</button>
-                <button className={`${styles['update-btn']} leading-6 shadow-sm px-3 py-1.5`} onClick={deleteProfile}>Delete</button>
+              <div className='mt-5 flex justify-center items-center gap-10'>
+                <button className={`${styles['update-btn']} leading-6 shadow-sm px-3 py-1.5`} onClick={handleButtonClick}>Ändern</button>
+                <button className={`${styles['delete-btn']} leading-6 shadow-sm px-3 py-1.5`} onClick={deleteProfile}>Löschen</button>
               </div>
             </div>
           </div>
+          
+          
         </div>
+      </div>
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import styles from "../styles/latest.module.css";
 import StepOneInner from "@/components/steptwoinner/stepone";
 import StepTwoInner from "@/components/steptwoinner/steptwo";
@@ -7,6 +7,26 @@ const SecondStep = ({ coverletter, setComponents, handleChange,currentStep,setCu
   // const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
   const totalSteps = 2;
+  useEffect(() => {
+    // Push the current step into the browser history
+    history.pushState({ step: currentStep }, "", window.location.href);
+
+    // Listen for the back button (popstate event)
+    const handlePopState = (event) => {
+      const step = event.state?.step;
+      if (step !== undefined && step !== currentStep) {
+        setCurrentStep(step); // Go to the last valid step
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      // Clean up the event listener when the component unmounts
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [currentStep]);
+ 
   const showStep = (stepIndex) => {
     if (validateStep(currentStep)) {
       setCurrentStep(stepIndex);

@@ -4,11 +4,11 @@ import PhoneInput from "react-phone-input-2";
 
 const StepThreeInner = ({
   email,
-  phonenumber:phonenumberini,
+  phonenumber,
+  setPhoneNumber,
   setCurrentStep,
   handleChange,
 }) => {
-  const [phonenumber, setPhoneNumber] = useState(phonenumberini || "");
   const [errors, setErrors] = useState({});
   const validateFields = () => {
     const newErrors = {};

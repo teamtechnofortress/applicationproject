@@ -20,6 +20,12 @@
    font-weight: normal;
  font-style: normal;
 }
+body{
+  background: #f3f4f6;
+}
+.custom-body-class{
+  background: #ffff;
+}
 p{
   font-family: 'Poppins Regular';
 }

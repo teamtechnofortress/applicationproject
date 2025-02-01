@@ -20,6 +20,7 @@ const FirstStep = ({
   ort,
   email,
   phonenumber,
+  setPhoneNumber,
   geburtsdatum,
   ausgeubterBeruf,
   arbeitgeber,
@@ -40,11 +41,33 @@ const FirstStep = ({
   // const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
   const totalSteps = 9;
+ 
+  useEffect(() => {
+    // Push the current step into the browser history
+    history.pushState({ step: currentStep }, "", window.location.href);
+
+    // Listen for the back button (popstate event)
+    const handlePopState = (event) => {
+      const step = event.state?.step;
+      if (step !== undefined && step !== currentStep) {
+        setCurrentStep(step); // Go to the last valid step
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      // Clean up the event listener when the component unmounts
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [currentStep]);
+
   const showStep = (stepIndex) => {
     if (validateStep(currentStep)) {
       setCurrentStep(stepIndex);
     }
   };
+
   const validateStep = (step) => {
     const newErrors = {};
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
@@ -84,12 +107,10 @@ const FirstStep = ({
       if (!apartment) newErrors.apartment = "Apartment status is required.";  
     }
 
-    
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
   };
-
   return (
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
@@ -138,6 +159,7 @@ const FirstStep = ({
             <StepThreeInner                 
             email={email}
             phonenumber={phonenumber}
+            setPhoneNumber={setPhoneNumber}
             setComponents={setComponents}
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}

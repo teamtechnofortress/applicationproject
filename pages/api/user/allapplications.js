@@ -32,7 +32,8 @@ const handler = async (req, res) => {
       const profile = await Application.find({ userId: user._id });
 
       if (!profile || profile.length === 0) {
-        return res.status(404).json({ success: false, message: 'Application not found' });
+        console.log('testing')
+        return res.status(200).json({ success: false, message: 'Application not found' });
       }
 
       // Send the profile data

@@ -34,6 +34,25 @@ const ThirdStep = ({
   const [thirdStepComponent, setThirdStepComponent] = useState(currentStep);
   const [errors, setErrors] = useState({});
   const totalSteps = 9;
+  useEffect(() => {
+    // Push the current step into the browser history
+    history.pushState({ step: currentStep }, "", window.location.href);
+
+    // Listen for the back button (popstate event)
+    const handlePopState = (event) => {
+      const step = event.state?.step;
+      if (step !== undefined && step !== currentStep) {
+        setCurrentStep(step); // Go to the last valid step
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      // Clean up the event listener when the component unmounts
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [currentStep]);
   const showStep = (stepIndex) => {
     if (validateStep(currentStep)) {
       setCurrentStep(stepIndex);

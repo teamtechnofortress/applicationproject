@@ -25,3 +25,35 @@
 .logo{
     width: 60%;
     }
+    .sidebar-h1{
+        padding-left: 15px;
+        font-size: 11px;
+        font-family: 'Poppins Bold';
+    }
+    .progress-circle{
+        border-radius: 18px;
+        padding: 35px;
+        background-color: #e7fc41;
+        margin-top: 15%;
+    }
+    .progress-p{
+        font-size: 15px;
+        font-family: 'Poppins Bold'; 
+    }
+    .btn-tip{
+        padding: 9px;
+        font-weight: 700;
+        border-radius: 20px;
+        margin-top: 20px;
+        width: 100%;
+        background-color: #e7fc41;
+    }
+    .bell-dot{
+        background-color: #e7fc41;
+    }
+    .btn-plan{
+        background-color: #e7fc41; 
+        padding: 8px 25px;
+        font-weight: 700;
+        border-radius: 20px;
+    }

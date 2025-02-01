@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import Signup from "@/components/Signup";
 import Link from "next/link";
 import styles from '../styles/new.module.css';
 
 const Nav = () => {
+    const [currentUser, setCurrentUser] = useState(null);
    const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -14,6 +15,22 @@ const Nav = () => {
    const toggleMobileMenu = () => {
        setIsMobileMenuOpen(!isMobileMenuOpen);
    };
+   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/user/get"); // Adjust your API endpoint
+        const data = await res.json();
+        if (res.ok && data.user) {
+          setCurrentUser(data.user);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
 
    return (
        <section className="container mx-auto">
@@ -43,7 +60,7 @@ const Nav = () => {
                            <li className="p-2 border-b-2 border-white">
                                <a href="#" className={`${styles['nav-item']} block`}>Layouts</a>
                            </li>
-                           <li className="p-2 border-b-2 border-white">
+                           <li className={`${styles['btn-login']} p-2 border-b-2 border-white`}>
                                <Link href="/login" legacyBehavior>
                                    <div>
                                        <a className={`${styles['nav-item']} block`}>Login</a>
@@ -61,7 +78,7 @@ const Nav = () => {
                            <li className="p-2 border-b-2 border-white">
                                <a href="#" className={`${styles['nav-item']} block text-center`}>Layouts</a>
                            </li>
-                           <li className="p-2 border-b-2 border-white">
+                           <li className={`${styles['btn-login']} p-2 border-b-2 border-white`}>
                                <Link href="/login" legacyBehavior>
                                    <div>
                                        <a className={`${styles['nav-item']} block text-center`}>Login</a>

@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import axios from 'axios';
 import MyDocument from '@/components/MyDocument';
 import Image from 'next/image';
-import UserNav from '@/components/UserNav';
+import DashboardHeader from '@/components/DashboardHeader';
 import styles from '../../styles/applications.module.css'
 import Link from 'next/link';
 import Pdfpopup from '@/components/Pdfsettings';
@@ -73,12 +73,12 @@ const allapplications = () => {
   }, []);
   
 // Filter cvdata by unique familyid
-const uniqueFamilyEntries = cvdata
-? cvdata.filter(
-    (entry, index, self) =>
-      index === self.findIndex((e) => e.familyid === entry.familyid)
-  )
-: [];
+// const uniqueFamilyEntries = cvdata
+// ? cvdata.filter(
+//     (entry, index, self) =>
+//       index === self.findIndex((e) => e.familyid === entry.familyid)
+//   )
+// : [];
   const documentRef = useRef(null);
 
   const captureImage = async () => {
@@ -95,9 +95,10 @@ const uniqueFamilyEntries = cvdata
 return (
   <>
    
-    <UserNav />
-    <div className="py-8 p-12">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <DashboardHeader />
+    <div className="flex-1 ml-64">
+     <div className="bg-gray-100 py-8 p-12">
+       <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
         <div>
           <h2 className={`${styles['application-h2']} mt-7`}>Hello {user.firstname}!</h2>
           <div className={`${styles['application-flex-div']}  flex items-center justify-between`}>
@@ -106,64 +107,10 @@ return (
               <button className={`${styles['or-button']}`}> New Application</button>
             </Link> */}
             <div className="flex items-center space-x-4">
-                {/* Toggle Button */}
-                <div ref={menuRef}>  {/* Reference added to the dropdown container */}
-                  <button
-                    onClick={toggleMenu}
-                    type="button"
-                    className={`${styles['or-button']}`}
-                    id="user-menu-button"
-                    aria-expanded={isMenuVisible}
-                    aria-haspopup="true"
-                  >
-                    <span className="ml-3">New Application</span>
-                    <i className="fa fa-chevron-down ml-3 text-xs"></i>
-                  </button>
-                   {/* Dropdown menu */}
-                   {isMenuVisible && (
-                     <div
-                       className="absolute z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                       role="menu"
-                       aria-orientation="vertical"
-                       aria-labelledby="user-menu-button"
-                       tabIndex="-1"
-                     >
-                       <Link href="/account/application" legacyBehavior>
-                         <a
-                           href="#"
-                           className="block px-4 py-2 text-sm text-gray-700"
-                           role="menuitem"
-                           tabIndex="-1"
-                           id="user-menu-item-1"
-                         >
-                           For 1 person
-                         </a>
-                       </Link>
-                       <Link href="/account/applicationtwo" legacyBehavior>
-                         <a
-                           href="#"
-                           className="block px-4 py-2 text-sm text-gray-700"
-                           role="menuitem"
-                           tabIndex="-1"
-                           id="user-menu-item-0"
-                         >
-                           For 2 persons
-                         </a>
-                       </Link>
-                       <Link href="#" legacyBehavior>
-                         <a
-                           href="#"
-                           className="block px-4 py-2 text-sm text-gray-700"
-                           role="menuitem"
-                           tabIndex="-1"
-                           id="user-menu-item-1"
-                         >
-                           For 3 persons
-                         </a>
-                       </Link>
-                     </div>
-                   )}
-                </div>
+                  <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['or-button']}`}> New Application</button>
+                  </Link>
+               
               </div>
           </div>
         </div>
@@ -171,10 +118,10 @@ return (
           {isEmpty ? (
             <div>No data available</div>
           ) : (
-            // Array.isArray(cvdata) && cvdata.length > 0 ? (
-            //   cvdata.map(profile => (
-              Array.isArray(uniqueFamilyEntries) && uniqueFamilyEntries.length > 0 ? (
-                uniqueFamilyEntries.map((profile) => (
+            Array.isArray(cvdata) && cvdata.length > 0 ? (
+              cvdata.map(profile => (
+              // Array.isArray(uniqueFamilyEntries) && uniqueFamilyEntries.length > 0 ? (
+              //   uniqueFamilyEntries.map((profile) => (
                 <div key={profile._id} className="profile">
                  <PDFDownloadLink document={<MyDocument profileData={profile} />} fileName="profile.pdf">
                   {({ loading }) => (
@@ -209,6 +156,7 @@ return (
         </div>
           {/* <button onClick={() => deleteApplication('665b11e9ddc7c4e620e757be')}>Delete</button> */}
         </div>
+      </div>
       </div>
     </div>
   </>

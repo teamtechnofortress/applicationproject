@@ -6,7 +6,7 @@ import router from "next/router";
 import Image from "next/image";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../../styles/form.module.css";
-import UserNav from "@/components/UserNav";
+import DashboardHeader from '@/components/DashboardHeader';
 import StepOne from "@/components/Applicationtwo/stepone";
 import Steptwo from "@/components/Applicationtwo/steptwo";
 import Stepthree from "@/components/Applicationtwo/stepthree";
@@ -555,7 +555,7 @@ const application = () => {
 
       
       <div className="min-h-full">
-        <UserNav />
+        <DashboardHeader />
         <ToastContainer />
         <div className="mt-7">
           <ul

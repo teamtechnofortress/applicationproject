@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import UserNav from '@/components/UserNav';
+import DashboardHeader from '@/components/DashboardHeader';
 import styles from '../../styles/profile.module.css';
 import Link from "next/link";
 import { useRouter } from 'next/router';
@@ -36,7 +36,7 @@ const VerifyOtp = () => {
 
   return (
     <div>
-      <UserNav />
+      <DashboardHeader />
       <ToastContainer />
         <div className="py-8 p-10">
         <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
