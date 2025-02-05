@@ -31,6 +31,8 @@ const FirstStep = ({
   proceedings,
   apartment,
   images,
+  arbeitsvertrag,
+  setarbeitsvertrag,
   setImages,
   setComponents,
   handleChange,
@@ -143,7 +145,9 @@ const FirstStep = ({
 
         {/* Step 2 */}
          {currentStep === 1 && (
-            <StepTwoInner                 
+            <StepTwoInner  
+            vorname={vorname}
+            nachname={nachname}               
             strabe={strabe}
             postleitzahl={postleitzahl}
             hausnummer={hausnummer}
@@ -186,6 +190,8 @@ const FirstStep = ({
            <StepFiveInner            
            employment={employment}
            images={images}
+           arbeitsvertrag={arbeitsvertrag}
+           setarbeitsvertrag={setarbeitsvertrag}
            setImages={setImages}
            setComponents={setComponents}
            currentStep={currentStep}

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DashboardHeader from '@/components/DashboardHeader';
+import SidebarHeader from '@/components/SidebarHeader';
 import styles from '../../styles/profile.module.css';
 import Link from "next/link";
 import { useRouter } from 'next/router';
 
 
 const Account = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMailOpen, setisMailOpen] = useState(false);
+  const [isPasswordOpen, setisPasswordOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -89,7 +90,7 @@ const Account = () => {
 
   return (
     <>
-      <DashboardHeader />
+      <SidebarHeader />
       <ToastContainer />
       <div className="flex">
      
@@ -133,18 +134,18 @@ const Account = () => {
                   <div className="flex justify-between items-center">
                     <p className={`${styles['old-email']}`}>Ihre E-Mai-Adresse lautet <span className={`${styles['span-email']}`}>{currentUser ? currentUser.email : ''}</span></p>
                     <button
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => setisMailOpen(true)}
                       className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}
                     >
                       E-Mail-Adresse ändern
                     </button>
                     {/* Popup Overlay */}
-                    {isOpen && (
+                    {isMailOpen && (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                           <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
                             {/* Close Button (X) */}
                             <button 
-                              onClick={() => setIsOpen(false)} 
+                              onClick={() => setisMailOpen(false)} 
                               className={`absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl`}
                             >
                               &times;
@@ -181,18 +182,18 @@ const Account = () => {
                 <div className="flex justify-between items-center">
                     <h3 className={`${styles['heading-personl']}`}>Passwort</h3>
                     <button
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => setisPasswordOpen(true)}
                       className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}
                     >
                       Passwort ändern
                     </button>
                     {/* Popup Overlay */}
-                    {isOpen && (
+                    {isPasswordOpen && (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                           <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
                             {/* Close Button (X) */}
                             <button 
-                              onClick={() => setIsOpen(false)} 
+                              onClick={() => setisPasswordOpen(false)} 
                               className={`absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl`}
                             >
                               &times;

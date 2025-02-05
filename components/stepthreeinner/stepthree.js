@@ -52,7 +52,7 @@ const StepThreeInner = ({
           id="image-upload"
           className="hidden"
           multiple
-          accept="image/*"
+          accept="image/*, application/pdf"
           onChange={handleChange}
         />
         <div className="mt-4 grid grid-cols-3 gap-4">

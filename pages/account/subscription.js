@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DashboardHeader from '@/components/DashboardHeader';
+import SidebarHeader from '@/components/SidebarHeader';
 import styles from '../../styles/profile.module.css';
 import Link from "next/link";
 import { useRouter } from 'next/router';
@@ -89,7 +89,7 @@ const Account = () => {
 
   return (
     <>
-      <DashboardHeader />
+      <SidebarHeader />
       <ToastContainer />
       <div className="flex">
      

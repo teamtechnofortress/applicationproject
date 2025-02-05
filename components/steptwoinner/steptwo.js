@@ -42,6 +42,7 @@ const StepTwoInner = ({
                 onChange={handleChange}
                 name="coverletter"
                 value={coverletter}
+                placeholder="Sehr geehrte Hausverwaltung…"
               />
               {errors.coverletter && (
                 <p className="text-red-500 text-sm">{errors.coverletter}</p>

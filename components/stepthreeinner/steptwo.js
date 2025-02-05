@@ -29,7 +29,7 @@ const StepTwoInner = ({
           Wohnberechtigungsschein
         </p>
         <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
-          Subheadline
+          falls erforderlich
         </p>
         <div className="grid grid-cols-1 gap-4 mt-3 mb-3 w-[40%] mx-auto">
           <div>
@@ -73,7 +73,7 @@ const StepTwoInner = ({
           className={`${styles["upload-btn"]} ${styles["form-input"]}  w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
         >
           <i className="fa fa-upload mr-2"></i>
-          Uploads WBS
+          Upload WBS
         </label>
         <input
           name="imageswbs"
@@ -81,7 +81,7 @@ const StepTwoInner = ({
           id="image-upload"
           className="hidden"
           multiple
-          accept="image/*"
+          accept="image/*, application/pdf"
           onChange={handleChange}
         />
         <div className="mt-4 grid grid-cols-3 gap-4">

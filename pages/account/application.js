@@ -38,6 +38,7 @@ const application = () => {
   const [mietschuldenfreiheit, setMietschuldenfreiheit] = useState("");
   const [mietverhaltnis, setMietverhaltnis] = useState("");
   const [images, setImages] = useState([]);
+  const [arbeitsvertrag, setarbeitsvertrag] = useState([]);
   const [personal, setPersonal] = useState([]);
   const [schufa, setSchufa] = useState([]);
   const [imageswbs, setImageswbs] = useState([]);
@@ -89,6 +90,11 @@ const application = () => {
     const newErrors = {};
 
     if(name === "images"){
+      const files = Array.from(e.target.files);
+      const imageUrls = files.map((file) => URL.createObjectURL(file));
+      setImages((prevImages) => [...prevImages, ...imageUrls]);
+    }
+    if(name === "arbeitsvertrag"){
       const files = Array.from(e.target.files);
       const imageUrls = files.map((file) => URL.createObjectURL(file));
       setImages((prevImages) => [...prevImages, ...imageUrls]);
@@ -361,9 +367,8 @@ const application = () => {
       <div className="min-h-full">
         <DashboardHeader />
         <ToastContainer />
-        <div className="flex">
      
-        <div className="flex-1 ml-64">
+   
           <div className="mt-7">
             <ul className="flex justify-around items-center max-w-7xl mx-auto p-10">
                 {/* Step 1 */}
@@ -507,12 +512,13 @@ const application = () => {
                   proceedings={proceedings}
                   apartment={apartment}
                   images={images}
+                  arbeitsvertrag={arbeitsvertrag}
+                  setarbeitsvertrag={setarbeitsvertrag}
                   setImages={setImages}
                   setComponents={setComponents}
                   handleChange={handleChange}
                   currentStep={currentStep}
                   setCurrentStep={setCurrentStep}
-
                 />
               )}
               {components === 2 && (
@@ -552,8 +558,8 @@ const application = () => {
           </div>
           </div>
           </div>
-        </div>
-      </div>
+      
+      
     </>
   );
 };

@@ -119,7 +119,7 @@ const StepOneInner = ({
 
         <button
           type="button"
-          className={`${styles["next-btn"]} mt-10 text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block flex items-center justify-between`}
+          className={`${styles["next-btn"]} mt-10 px-6 py-3 rounded-lg bg-blue-500 mx-auto block flex items-center justify-between`}
           onClick={() => {
             if (validateFields()) {
               setCurrentStep(1);

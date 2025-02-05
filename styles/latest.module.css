@@ -50,9 +50,13 @@
 .prgress-bar{
     background-color: #e7fc42 !important;
 }
+.color-circle span{
+    color: #333333;
+}
 .next-btn{
     width: 100%;
-    background: #e7fc42
+    background: #e7fc42;
+    color: #333333;
 }
 .upload-btn{
     background: transparent;

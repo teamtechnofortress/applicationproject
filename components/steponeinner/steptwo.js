@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import styles from "@/styles/latest.module.css";
 
 const StepTwoInner = ({
+  vorname,
+  nachname,
   strabe,
   postleitzahl,
   hausnummer,
@@ -30,7 +32,8 @@ const StepTwoInner = ({
       <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
         <div>
         <p className={`${styles["main-heading"]} mt-10 mb-4 text-center`}>
-        Hallo..., schön dich kennenzulernen
+         
+        Hallo {vorname} {nachname}, schön dich kennenzulernen
         </p>   
         <p className={`${styles["p-address"]} mb-10 text-center`}>
           Wie lautet deine aktuelle Adresse?

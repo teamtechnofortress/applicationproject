@@ -96,7 +96,6 @@ return (
   <>
    
     <DashboardHeader />
-    <div className="flex-1 ml-64">
      <div className="bg-gray-100 py-8 p-12">
        <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
         <div>
@@ -158,7 +157,6 @@ return (
         </div>
       </div>
       </div>
-    </div>
   </>
 );
 
