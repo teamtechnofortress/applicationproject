@@ -15,20 +15,54 @@
   
 }
 .or-button{
+    display: flex;
+    justify-content: space-between;
     font-family: "Montserrat", sans-serif;
     text-transform: capitalize;
     background: #E7FC41;
     color: #333333;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     border-radius: 20px;
-    padding: 8px 22px;
+    padding: 11px 34px 11px 53px;
 
 }
+.pdf-person{
+    display: flex;
+    justify-content: space-between;
+    font-family: "Montserrat", sans-serif;
+    text-transform: capitalize;
+    background: #E7FC41;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 11px 15px;
+}
+.img-button{
+    margin-left: 10px;
+}
+.pdf-btn-grp{
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+    position: absolute;
+    top: -22px;
+    right: -6px; 
+}
 .application-flex-div{
-    border-bottom: 2px solid rgb(187 187 187 / 42%);
+    /* border-bottom: 2px solid rgb(187 187 187 / 42%); */
     margin-bottom: 35px;
     padding: 20px 0px;
+}
+.img-pdf{
+    box-shadow: 17px 13px 0px #E7FC41;
+    border-radius: 10px;
+}
+.pdf-btn{
+    background: #E7FC41;
+    padding: 13px;
+    border-radius: 50%;
 }
 .application-p{
     color: #525252;
@@ -41,5 +75,8 @@
 @media (max-width: 600px) {
     .application-flex-div{
         display: block;
+    }
+    .pdf-person{
+        font-size: 11px;
     }
 }

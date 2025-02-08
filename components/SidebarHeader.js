@@ -103,6 +103,13 @@ export const DashboardHeader = () => {
           </div>
           <button className={`${styles['btn-tip']}`}>Tipps</button>
         </div>
+        <div className={`${styles['faq-sec']} absolute bottom-0 left-0 w-full pt-5 p-5`}>
+        <Link href="/account/faq" legacyBehavior>
+          <button className={`${styles['faq-btn']} w-full`}>
+            FAQ
+          </button>
+        </Link>
+      </div>
       </div>
 
       <div className="flex-1 ml-64">

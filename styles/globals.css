@@ -29,9 +29,12 @@ body{
 p{
   font-family: 'Poppins Regular';
 }
+.true{
+  border-bottom: 3px solid #F2614B;
+}
 
 .text-color{
-  color: #E7FC41;
+  color: #333333;
 }
 .color-border,.color-text{
   border-color: #e7fc42;

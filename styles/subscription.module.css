@@ -1,0 +1,132 @@
+.subscription-h1{
+    font-family: 'Poppins Bold';
+    font-size: 26px;
+    color: #333333;
+    text-align: center;
+}
+.subscription-h2{
+    font-family: 'Poppins Bold';
+    font-size: 20px;
+    color: #333333;
+    text-align: center;
+}
+.card-1{
+    border-radius: 10px;
+    padding: 14px 20px;
+    border: 2px solid #333333;
+}
+.card-2{
+    border-radius: 10px;
+    padding: 14px 20px;
+    border: 2px solid #E7FC41;
+}
+.beliebt{
+    font-family: 'Poppins Medium';
+    font-size: 15px;
+    top: -15px;
+    background: #e7fc42;
+    padding: 1px 30px;
+    border-radius: 20px;
+    right: 10px;
+}
+.monate{
+    font-family: 'Poppins Medium';
+    font-size: 18px; 
+    color: #333333;
+}
+.grey-text{
+    font-family: 'Poppins Regular';
+    font-size: 10px; 
+    color: #979797;
+}
+.price{
+    font-family: 'Poppins Medium';
+    font-size: 32px; 
+    color: #333333;
+}
+.subscription-p{
+    font-size: 20px;  
+}
+.review-p{
+    font-family: 'Poppins Regular';
+    font-size: 10px;    
+}
+.btn-mehr{
+    font-size: 12px;
+}
+.review{
+    border-radius: 8px;
+    background: #F8F8F8;
+}
+.btn-tip{
+    padding: 9px;
+    font-weight: 700;
+    border-radius: 20px;
+    margin-top: 20px;
+    width: 18%;
+    background-color: #e7fc41;
+}
+.deine{
+    color: #333333;
+    font-family: 'Poppins Medium';
+    font-size: 15px; 
+}
+.wohnungmappe{
+    font-family: 'Poppins Medium';
+    font-size: 13px; 
+    color: #797979;
+}
+.text-sec .price,.p-vorteile{
+    color: #333333;
+    font-family: 'Poppins Medium';
+    font-size: 24px; 
+}
+.text-sec .price span{
+    font-size: 18px; 
+    color: #797979;
+}
+.payment-card{
+    border-radius: 10px;
+}
+.form-input{
+    border: 1px solid #eaeaeb;
+    color:rgba(0, 0, 0, 1);
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 12px;
+    width: 100%;
+}
+.form-input:hover,.form-input:active,.form-input:focus{
+    border: 1px solid #e7fc42;
+}
+.form-input::placeholder, .form-select,.form-control,.ausgeubterBeruf::placeholder {
+    font-family: 'Poppins Regular';
+    color:rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+    font-size: 12px;
+    text-align: start;
+}
+.label{
+    font-family: 'Poppins Regular';
+    color:#333333;
+    font-weight: 400;
+    font-size: 12px;
+}
+.jetzt-tip{
+    padding: 9px;
+    font-weight: 700;
+    border-radius: 20px;
+    margin-top: 20px;
+    width: 100%;
+    background-color: #e7fc41;
+}
+.p-text{
+    color: #333333;
+    font-family: 'Poppins Medium';
+    font-size: 13px; 
+}
+@media (max-width: 600px) {
+    .label{
+        font-size: 8px; 
+    }  
+}

@@ -1,0 +1,46 @@
+.faq-h1{
+    font-family: 'Poppins Bold';
+    font-size: 43px;
+    color: #333333;
+    line-height: 60px;
+    letter-spacing: -1px;
+}
+.faq-item {
+    background: #fff;
+    border-radius: 10px;
+}
+.faq-item button{
+    font-family: 'Poppins bold';
+    font-size: 17px;
+}
+.faq-item button p{
+    font-family: 'Poppins Regular';
+    font-size: 16px;
+}
+.open{
+    font-family: 'Poppins Regular';
+    font-weight: 100;
+    font-size: 22px;
+}
+.second-sec{
+    background: #fff;
+    border-radius: 10px;
+    text-align: center;
+}
+.heading-faq{
+    font-family: 'Poppins Medium';
+    font-size: 17px;
+}
+.p-faq{
+    font-family: 'Poppins Medium';
+    font-size: 13px;
+}
+.btn-tip{
+    padding: 9px;
+    font-weight: 500;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-top: 40px;
+    width: 100%;
+    background-color: #e7fc41;
+}

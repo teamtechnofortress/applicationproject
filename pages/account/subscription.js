@@ -138,41 +138,14 @@ const Account = () => {
                         Ihr Konto erneut, um die Pro-Funktionen weiterhin nutzen zu können.
                        </p>
                     </div>
+                    <Link href="/account/subscriptiondetail">
                     <button
-                      onClick={() => setIsOpen(true)}
                       className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}
                     >
                       Verlängern
                     </button>
-                    {/* Popup Overlay */}
-                    {isOpen && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                          <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-                            {/* Close Button (X) */}
-                            <button 
-                              onClick={() => setIsOpen(false)} 
-                              className={`absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-xl`}
-                            >
-                              &times;
-                            </button>
-
-                            <h2 className="text-lg font-bold mb-4">Verlängern</h2>
-                            <input
-                              type="email"
-                              placeholder="Verlängern E-Mail-Adresse"
-                              value={newEmail}
-                              onChange={(e) => setNewEmail(e.target.value)}
-                              className="w-full p-2 border border-gray-300 rounded mb-4"
-                              required
-                            />
-                            <div className="flex justify-end space-x-2">
-                              <button type="submit" className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}>
-                                Speichern
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                    </Link>
+                  
                     
                   </div>
                 </div>

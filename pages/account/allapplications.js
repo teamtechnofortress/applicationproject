@@ -96,21 +96,46 @@ return (
   <>
    
     <DashboardHeader />
-     <div className="bg-gray-100 py-8 p-12">
+     <div className="bg-gray-100 py-8 sm:p-4 lg:p-12 p-4">
        <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
         <div>
-          <h2 className={`${styles['application-h2']} mt-7`}>Hello {user.firstname}!</h2>
-          <div className={`${styles['application-flex-div']}  flex items-center justify-between`}>
-            <h2 className={`${styles['application-h4']}`}>Your documents</h2>
+          <h2 className={`${styles['application-h2']} mt-7`}>Hello {user.firstname}, {user.lastname}</h2>
+          <div className={`${styles['application-flex-div']}`}>
+            <h2 className={`${styles['application-h4']}`}>Your apartment application</h2>
             {/* <Link href="/account/application" legacyBehavior>
               <button className={`${styles['or-button']}`}> New Application</button>
             </Link> */}
-            <div className="flex items-center space-x-4">
                   <Link href="/account/application" legacyBehavior>
-                    <button className={`${styles['or-button']}`}> New Application</button>
+                    <button className={`${styles['or-button']} mt-10`}> New <img className={`${styles['img-button']}`} src="/images/plus.svg"/> </button>
                   </Link>
                
+          </div>
+        </div>
+        <div className="flex grid-cols-3 gap-8">
+          <div className={`${styles['pdf-sec']} relative`}>
+            <div className={`${styles['pdf-btn-grp']}`}>
+                 <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['pdf-person']}`}> Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg"/> </button>
+                  </Link>
+                  <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['pdf-btn']} `}> <img src="/images/write.svg"/> </button>
+                  </Link>
+                  <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['pdf-btn']} `}> <img src="/images/view.svg"/> </button>
+                  </Link>
+            </div>
+             <img className={`${styles['img-pdf']}`} src="/images/img1.png"/> 
+          </div>
+          <div className={`${styles['pdf-sec']} relative`}>
+            <div className={`${styles['pdf-btn-grp']}`}>
+                    <Link href="/account/application" legacyBehavior>
+                      <button className={`${styles['pdf-btn']} `}> <img src="/images/write.svg"/> </button>
+                    </Link>
+                    <Link href="/account/application" legacyBehavior>
+                      <button className={`${styles['pdf-btn']} `}> <img src="/images/view.svg"/> </button>
+                    </Link>
               </div>
+             <img className={`${styles['img-pdf']}`} src="/images/img2.png"/> 
           </div>
         </div>
         <div className="flex">

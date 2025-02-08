@@ -81,7 +81,7 @@ export const DashboardHeader = () => {
           </a>
       </div>
 
-      <div className="flex-1 ml-64">
+      <div className="flex-1">
         <nav className="bg-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">

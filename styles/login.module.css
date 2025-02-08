@@ -22,6 +22,17 @@
     padding: 9px 24px;
     background: #e7fc41;
 }
+.faq-sec{
+    bottom: 10px;
+}
+.faq-btn{
+    background-color: #F8F8F8;
+    color: #333333;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 28px;  
+}
 .logo{
     width: 60%;
     }
