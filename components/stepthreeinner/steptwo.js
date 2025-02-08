@@ -12,6 +12,8 @@ const StepTwoInner = ({
   setCurrentStep,
 }) => {
   const [errors, setErrors] = useState({});
+  const [isTipModal, setisTipModal] = useState(false);
+
 
   const removeImage = (index) => {
     setImageswbs((prevImages) => (prevImages || []).filter((_, i) => i !== index)); // Safeguard against undefined
@@ -31,6 +33,13 @@ const StepTwoInner = ({
         <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
           falls erforderlich
         </p>
+        <button
+        type="button" 
+        className={`${styles["tips"]} mx-auto`}
+        id="tip_btn"
+        onClick={() => setisTipModal(true)}>
+        <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
+      </button>
         <div className="grid grid-cols-1 gap-4 mt-3 mb-3 w-[40%] mx-auto">
           <div>
             <p className={`${styles["p-address"]} mt-10 mb-10 text-center`}>
@@ -124,6 +133,41 @@ const StepTwoInner = ({
           </div>
         </div>
       </div>
+      {/* Modal - Conditional Rendering */}
+      {isTipModal && (
+          <div
+            id="tip-modal"
+            className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
+            onClick={() => setisTipModal(false)} 
+          >
+            
+            <div
+              className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
+              <button
+                  type="button"
+                  className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
+                  onClick={() => setisTipModal(false)}
+                >
+                  ✖
+                </button>
+                <h3 className={`${styles["modal-h3"]}`}>
+                  <div className="flex gap-4 justify-center">
+                  <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
+                  </div>
+              
+                </h3>
+              
+              </div>
+
+              <div className="p-4 md:p-5 space-y-4">
+                <div>Achte darauf, dass die Adresse die du hier angibst die selbe ist wie auf deinem Ausweis und deiner Schufa sowie auf deinen Gehaltsnachweisen. Sollten es bei den Adressen Abweichungen geben erkläre diese Unbedingt in deinem Anschreiben !!!</div>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

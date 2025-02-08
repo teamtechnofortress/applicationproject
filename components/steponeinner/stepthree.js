@@ -10,6 +10,7 @@ const StepThreeInner = ({
   handleChange,
 }) => {
   const [errors, setErrors] = useState({});
+ 
   const validateFields = () => {
     const newErrors = {};
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");

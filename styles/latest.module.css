@@ -178,4 +178,28 @@ label.file_up {
     justify-content: space-between;
     font-weight: 600;
 }
-  
+.tips {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    cursor: pointer;
+}
+.tip_bg{
+    background-color: #F8F8F8;
+}
+.faq-txt{
+    margin-left: 20px;
+}
+.faq-title, .faq-txt p{
+    color: #333333;
+    font-size: 16px;
+}
+.open_faq{
+    border: 1px solid #E7FC41;
+    border-radius: 50px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
