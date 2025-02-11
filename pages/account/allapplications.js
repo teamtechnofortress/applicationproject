@@ -3,8 +3,10 @@ import dynamic from 'next/dynamic';
 import axios from 'axios';
 import MyDocument from '@/components/MyDocument';
 import Image from 'next/image';
-import DashboardHeader from '@/components/DashboardHeader';
-import styles from '../../styles/applications.module.css'
+import SidebarHeader from '@/components/SidebarHeader';
+import styles from '../../styles/applications.module.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import Pdfpopup from '@/components/Pdfsettings';
 
@@ -72,13 +74,6 @@ const allapplications = () => {
     fetchUserData();
   }, []);
   
-// Filter cvdata by unique familyid
-// const uniqueFamilyEntries = cvdata
-// ? cvdata.filter(
-//     (entry, index, self) =>
-//       index === self.findIndex((e) => e.familyid === entry.familyid)
-//   )
-// : [];
   const documentRef = useRef(null);
 
   const captureImage = async () => {
@@ -94,10 +89,12 @@ const allapplications = () => {
   };
 return (
   <>
-   
-    <DashboardHeader />
+   <SidebarHeader />
+      <ToastContainer /> 
+      <div className="flex">
+        <div className="flex-1 ml-64">
      <div className="bg-gray-100 py-8 sm:p-4 lg:p-12 p-4">
-       <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
+       <div className="mx-auto px-4">
         <div>
           <h2 className={`${styles['application-h2']} mt-7`}>Hello {user.firstname}, {user.lastname}</h2>
           <div className={`${styles['application-flex-div']}`}>
@@ -118,6 +115,20 @@ return (
                     <button className={`${styles['pdf-person']}`}> Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg"/> </button>
                   </Link>
                   <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['pdf-btn']} `}> <img src="/images/write.svg" className={`${styles['img-pdf']}`}/> </button>
+                  </Link>
+                  <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['pdf-btn']} `}> <img src="/images/view.svg" className={`${styles['img-pdf']}`}/> </button>
+                  </Link>
+            </div>
+             <img className={`${styles['img-pdf']}`} src="/images/img1.png"/> 
+          </div>
+          <div className={`${styles['pdf-sec']} relative`}>
+            <div className={`${styles['pdf-btn-grp']}`}>
+                 <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['pdf-person']}`}> Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg"/> </button>
+                  </Link>
+                  <Link href="/account/application" legacyBehavior>
                     <button className={`${styles['pdf-btn']} `}> <img src="/images/write.svg"/> </button>
                   </Link>
                   <Link href="/account/application" legacyBehavior>
@@ -126,19 +137,8 @@ return (
             </div>
              <img className={`${styles['img-pdf']}`} src="/images/img1.png"/> 
           </div>
-          <div className={`${styles['pdf-sec']} relative`}>
-            <div className={`${styles['pdf-btn-grp']}`}>
-                    <Link href="/account/application" legacyBehavior>
-                      <button className={`${styles['pdf-btn']} `}> <img src="/images/write.svg"/> </button>
-                    </Link>
-                    <Link href="/account/application" legacyBehavior>
-                      <button className={`${styles['pdf-btn']} `}> <img src="/images/view.svg"/> </button>
-                    </Link>
-              </div>
-             <img className={`${styles['img-pdf']}`} src="/images/img2.png"/> 
-          </div>
         </div>
-        <div className="flex">
+        <div className="flex hidden" >
           {isEmpty ? (
             <div>No data available</div>
           ) : (
@@ -180,6 +180,8 @@ return (
         </div>
           {/* <button onClick={() => deleteApplication('665b11e9ddc7c4e620e757be')}>Delete</button> */}
         </div>
+      </div>
+      </div>
       </div>
       </div>
   </>

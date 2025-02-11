@@ -19,8 +19,8 @@ const StepTwoInner = ({
     setImageswbs((prevImages) => (prevImages || []).filter((_, i) => i !== index)); // Safeguard against undefined
   };
 
-  setCurrentStep(12);
-  if(setCurrentStep(12)){
+  setCurrentStep(15);
+  if(setCurrentStep(15)){
     thirdStepComponent=0;
   }
 
@@ -117,7 +117,7 @@ const StepTwoInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(11)}
+            onClick={() => setCurrentStep(14)}
           >
             Zurück
           </button>
@@ -126,7 +126,7 @@ const StepTwoInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(13)}
+              onClick={() => setCurrentStep(16)}
             >
               Weiter
             </button>

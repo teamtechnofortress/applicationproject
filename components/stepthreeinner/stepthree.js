@@ -22,8 +22,8 @@ const StepThreeInner = ({
     setPersonal((prevImages) => (prevImages || []).filter((_, i) => i !== index)); // Safeguard against undefined
   };
 
-  setCurrentStep(13);
-  if(setCurrentStep(13)){
+  setCurrentStep(16);
+  if(setCurrentStep(16)){
     thirdStepComponent=1;
   }
 
@@ -93,7 +93,7 @@ const StepThreeInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(12)}
+            onClick={() => setCurrentStep(15)}
           >
             Zurück
           </button>
@@ -102,7 +102,7 @@ const StepThreeInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(14)}
+              onClick={() => setCurrentStep(17)}
             >
               Weiter
             </button>

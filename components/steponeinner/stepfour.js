@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "@/styles/latest.module.css";
 
 const StepFourInner = ({
-  ausgeubterBeruf,
-  arbeitgeber,
-  employment,
-  income,
+  profession,
   setCurrentStep,
   handleChange,
 }) => {
@@ -14,9 +11,7 @@ const StepFourInner = ({
     const newErrors = {};
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
 
-    if (!safeTrim(ausgeubterBeruf)) newErrors.ausgeubterBeruf = "Ausgeübter Beruf is required.";
-    if (!safeTrim(arbeitgeber)) newErrors.arbeitgeber = "Arbeitgeber is required.";
-    if (!safeTrim(income)) newErrors.income = "Monatliches is required.";
+    if (!safeTrim(profession)) newErrors.profession = "profession is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors
@@ -29,117 +24,70 @@ const StepFourInner = ({
               <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
                 <div>
                     <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
-                      Wo arbeitest du?
-                    </p>      
-                    <div className="grid grid-cols-2 gap-4 mt-5">
-                      <div className="...">
-                        <div className="input-field">
-                          <input
-                            type="text"
-                            className={`${styles["ausgeubterBeruf"]} form-input `}
-                            id="ausgeubterBeruf"
-                            name="ausgeubterBeruf"
-                            placeholder="Ausgeübter Beruf"
-                            value={ausgeubterBeruf}
-                            onChange={handleChange}
-                          />
-                          {/* Error Message */}
-                          {errors.ausgeubterBeruf && <p className="text-red-500 text-sm">{errors.ausgeubterBeruf}</p>}
-                        </div>
-                      </div>
-                      <div className="...">
-                        <div className="input-field">
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input `}
-                            id="arbeitgeber"
-                            name="arbeitgeber"
-                            placeholder="Arbeitgeber"
-                            value={arbeitgeber}
-                            onChange={handleChange}
-                          />
-                          {/* Error Message */}
-                          {errors.arbeitgeber && <p className="text-red-500 text-sm">{errors.arbeitgeber}</p>}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="input-field mt-10">
-                      <input
-                            type="text"
-                            className={`${styles["form-input"]} form-control `}
-                            id="income"
-                            name="income"
-                            placeholder="monatliches Nettogehalt (€)"
-                            value={income}
-                            onChange={handleChange}
-                          />
-                           {errors.income && <p className="text-red-500 text-sm">{errors.income}</p>}
-                    </div>
-
-                    <p className={`${styles["p-address"]} mt-20 mb-10 text-center`}>
-                    Besteht das Beschäftigungsverhältnis länger, als 6 Monate?
+                     Wie ist deine Berufliche Situation
+                    </p>    
+                    <p className={`${styles["p-address"]} mb-10 text-center`}>
+                      Bitte walhle enie
                     </p> 
-                    <div className="grid grid-cols-2 mt-5 gap-10 w-[60%] mx-auto">
+
+                    <div className="grid grid-cols-2 mt-5 gap-10 w-[80%] mx-auto">
                         <div className="col-span-1 flex items-center">
                         <input
-                              className={`${styles["form-check-input"]} mr-2`}
+                              className={`${styles["form-check-input"]}  mr-2`}
                               type="radio"
-                              name="employment"
-                              id="employment1"
+                              name="profession"
+                              id="profession1"
                               value="Ja"
                               onChange={handleChange}
-                              checked={employment === "Ja"}
+                              checked={profession === "Ja"}
                               onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
                             />
                             <label
-                              className={`${styles["form-check-label"]} ${styles["radio-btn"]} ${
-                                employment === "Ja" ? styles["black"] : ""
-                              }`}
-                              htmlFor="employment1"
+                              className={`${styles["form-check-label"]} ${styles["profession-btn"]} ${styles["radio-btn"]} ${
+                                profession === "Ja" ? styles["black"] : ""
+                              } flex flex-col items-center justify-center text-center gap-2`}
+                              htmlFor="profession1"
                             >
-                              Ja
+                             <img src="/images/Star.svg" alt="icon" className="w-1/5" />
+                              <p>Angestellt</p>
                             </label>
                           </div>
                           <div className="col-span-1 flex items-center">
                             <input
-                              className={`${styles["form-check-input"]} mr-2`}
+                              className={`${styles["form-check-input"]} ${styles["profession-btn"]} mr-2`}
                               type="radio"
-                              name="employment"
-                              id="employment2"
+                              name="profession"
+                              id="profession2"
                               value="Nein"
                               onChange={handleChange}
-                              checked={employment === "Nein"}
+                              checked={profession === "Nein"}
                               onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
                             />
                             <label
-                              className={`${styles["form-check-label"]} ${styles["radio-btn"]} ${
-                                employment === "Nein" ? styles["black"] : ""
-                              }`}
-                              htmlFor="employment2"
+                              className={`${styles["form-check-label"]} ${styles["profession-btn"]} ${styles["radio-btn"]} ${
+                                profession === "Nein" ? styles["black"] : ""
+                              } flex flex-col items-center justify-center text-center gap-2`}
+                              htmlFor="profession2"
                             >
-                              Nein
+                              <img src="/images/Star.svg" alt="icon" className="w-1/5" />
+                              <p>Selbstsändig</p>
+                              
                             </label>
-
-                          {errors.employment && <p className="text-red-500 text-sm">{errors.employment}</p>}
+                            
                         </div>
+                        {errors.profession && <p className="text-red-500 text-sm">{errors.profession}</p>}
                     </div>
                   
 
-                    <div className="flex justify-between mt-10">
-                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+  
+                    <button type="button" className={`${styles["back-btn"]} mt-10 px-6 py-3 rounded-lg bg-blue-500 mx-auto block flex items-center justify-between`}
                           onClick={() => {
                             setCurrentStep(2); 
                           }}
-                            > Zurück 
+                            > 
+                               <img src="/images/back.svg" alt="icon"  />
+                               Zurück 
                     </button>
-                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-                          onClick={() => {
-                            if (validateFields()) {
-                            setCurrentStep(5); // Correctly update the step state
-                            }}}> Überspringen 
-                    </button>
-                        
-                    </div>
                          
                 </div>
               </div>

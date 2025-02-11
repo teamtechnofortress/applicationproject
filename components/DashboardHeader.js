@@ -91,7 +91,10 @@ export const DashboardHeader = () => {
                   <img className="h-6 rounded-full" src="/images/Shape.png" alt="" />
                   <span className={`${styles['bell-dot']} absolute top-0 right-0 h-2 w-2 rounded-full`}></span>
                 </div>
+                <Link href="/account/subscriptiondetail" legacyBehavior>
                 <button className={`${styles['btn-plan']}`}>Mein Plan</button>
+                </Link>
+                
 
                 <div ref={menuRef}>
                   <button

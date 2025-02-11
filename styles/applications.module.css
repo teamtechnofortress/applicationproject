@@ -48,8 +48,11 @@
     gap: 20px;
     position: absolute;
     top: -22px;
-    right: -6px; 
+    right: 50px; 
 }
+.img-pdf {
+    width: 85% !important;
+  }
 .application-flex-div{
     /* border-bottom: 2px solid rgb(187 187 187 / 42%); */
     margin-bottom: 35px;

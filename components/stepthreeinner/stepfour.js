@@ -22,7 +22,7 @@ const StepFourInner = ({
     setSchufa((prevImages) => (prevImages || []).filter((_, i) => i !== index)); // Safeguard against undefined
   };
 
-  setCurrentStep(14);
+  setCurrentStep(17);
 
   return (
     <div className="flex items-center justify-center">
@@ -84,7 +84,7 @@ const StepFourInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(13)}
+            onClick={() => setCurrentStep(16)}
           >
             Zurück
           </button>
@@ -93,7 +93,7 @@ const StepFourInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(15)}
+              onClick={() => setCurrentStep(18)}
             >
               Weiter
             </button>

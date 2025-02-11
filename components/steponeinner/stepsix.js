@@ -1,105 +1,151 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "@/styles/latest.module.css";
 
 const StepSixInner = ({
-  pets,
+  employment,
+  images,
+  arbeitsvertrag,
+  setarbeitsvertrag,
+  setImages,
   setCurrentStep,
-  handleChange,
 }) => {
   const [errors, setErrors] = useState({});
+  const handleFileChange = (event, type) => {
+    const files = Array.from(event.target.files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    if (type === "images") {
+      setImages((prev) => [...prev, ...files]);
+    } else if (type === "arbeitsvertrag") {
+      setarbeitsvertrag((prev) => [...prev, ...files]);
+    }
+  };
+  const removeImage = (index, type) => {
+    if (type === "images") {
+      setImages((prev) => prev.filter((_, i) => i !== index));
+    } else if (type === "arbeitsvertrag") {
+      setarbeitsvertrag((prev) => prev.filter((_, i) => i !== index));
+    }
+  };
   const validateFields = () => {
     const newErrors = {};
-    const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
-
-    if (!safeTrim(pets)) newErrors.pets = "Pets is required.";
-
+    if (employment === "Ja" && images.length < 3) {
+      newErrors.images = "Bitte laden Sie mindestens 3 Gehaltsnachweise hoch.";
+    }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    return Object.keys(newErrors).length === 0;
   };
-  setCurrentStep(5);
-
-
   return (
     <div>
-    <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
-       Nur noch ein paar Fragen.
-    </p>   
-    <p className={`${styles["p-address"]} mt-20 mb-10 text-center w-[40%] mx-auto`}>
-        Besitzt du ein oder mehrere Haustiere?
-    </p> 
-    <div className="grid grid-cols-2 mt-5 gap-10 w-[40%] mx-auto">
-         <div className="col-span-1 flex items-center">
-            <input
-              className={`${styles["form-check-input"]} mr-2  `}
-              type="radio"
-              name="pets"
-              id="pet1"
-              value="Ja"
-              onChange={handleChange}
-              checked={pets === "Ja"}
-            />
-              <label
-              className={`${styles["form-check-label"]} ${
-                styles["radio-btn"]
-              } ${
-                pets === "Ja" ? styles["black"] : ""
-              }`}
-              htmlFor="pet1"
-            >
-              Ja
-            </label>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <input
-              className={`${styles["form-check-input"]} mr-2  `}
-              type="radio"
-              name="pets"
-              id="pet2"
-              value="Nein"
-              onChange={handleChange}
-              checked={pets === "Nein"}
-            />
-            <label
-              className={`${styles["form-check-label"]} ${
-                styles["radio-btn"]
-              } ${
-                pets === "Nein" ? styles["black"] : ""
-              }`}
-              htmlFor="pet2"
-            >
-              Nein
-            </label>
-            {errors.pets && <p className="text-red-500 text-sm">{errors.pets}</p>}
+      <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
+        {employment === "Ja"
+          ? "Dein Beschäftigungsverhältnis besteht länger als 6 Monate."
+          : "Dein Beschäftigungsverhältnis besteht kürzer als 6 Monate."}
+      </p>
+      {/* Upload Section for Salary Proofs */}
+      <div className="flex flex-col items-center justify-center w-[40%] mx-auto">
+        <label
+          htmlFor="image-upload"
+          className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
+        >
+          <i className="fa fa-upload mr-2"></i>
+          {employment === "Ja"
+            ? "Upload letzte 3 Gehaltsnachweise."
+            : "Upload deiner letzten vorliegenden Gehaltsnachweise (max. 3 letzte)"}
+        </label>
+        <input
+          type="file"
+          id="image-upload"
+          className="hidden"
+          multiple
+          accept="image/*"
+          onChange={(e) => handleFileChange(e, "images")}
+        />
+        {/* Salary Proofs Preview */}
+        <div className="mt-4 grid grid-cols-3 gap-4">
+          {images.map((src, index) => (
+            <div key={index} className="relative w-24 h-24">
+              <img
+                src={src}
+                alt={`Gehaltsnachweis Preview ${index + 1}`}
+                className="object-cover w-full h-full rounded-lg"
+              />
+              <button
+                type="button"
+                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+                onClick={() => removeImage(index, "images")}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+        {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
       </div>
-    </div>
-          
-    <div className="flex justify-between mt-10">
+      {/* Upload Section for Employment Contract */}
+      <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
+        <label
+          htmlFor="arbeitsvertrag-upload"
+          className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
+        >
+          <i className="fa fa-upload mr-2"></i>
+          Upload Arbeitsvertrag
+        </label>
+        <input
+          type="file"
+          id="arbeitsvertrag-upload"
+          className="hidden"
+          multiple
+          accept="image/*"
+          onChange={(e) => handleFileChange(e, "arbeitsvertrag")}
+        />
+        {/* Employment Contract Preview */}
+        <div className="mt-4 grid grid-cols-3 gap-4">
+          {arbeitsvertrag.map((src, index) => (
+            <div key={index} className="relative w-24 h-24">
+              <img
+                src={src}
+                alt={`Arbeitsvertrag Preview ${index + 1}`}
+                className="object-cover w-full h-full rounded-lg"
+              />
+              <button
+                type="button"
+                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+                onClick={() => removeImage(index, "arbeitsvertrag")}
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Navigation Buttons */}
+      <div className="flex justify-between mt-10">
+        
         <button
           type="button"
           className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
           onClick={() => {
-            setCurrentStep(3);
+            setCurrentStep(4);
           }}
         >
           Zurück
         </button>
         <div className="col-span-2">
-        <button
+          <button
             type="button"
             className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
             onClick={() => {
               if (validateFields()) {
-                setCurrentStep(6);
+                setCurrentStep(8);
               }
             }}
           >
             Weiter
           </button>
         </div>
+      </div>
     </div>
-  </div>
-  
   );
 };
-
 export default StepSixInner;

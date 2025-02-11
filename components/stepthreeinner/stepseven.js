@@ -10,7 +10,7 @@ const StepSevenInner = ({
 }) => {
   const [errors, setErrors] = useState({});
 
-  setCurrentStep(17);
+  setCurrentStep(20);
 
   return (
     <div className="flex items-center justify-center">
@@ -74,7 +74,7 @@ const StepSevenInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(15)}
+            onClick={() => setCurrentStep(18)}
           >
             Zurück
           </button>
@@ -83,7 +83,7 @@ const StepSevenInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(20)}
+              onClick={() => setCurrentStep(22)}
             >
               Überspringen
             </button>

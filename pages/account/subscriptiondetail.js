@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SidebarHeader from '@/components/SidebarHeader';
 import styles from '../../styles/subscription.module.css';
+import Link from 'next/link';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -201,7 +202,9 @@ const SubscriptionDetail = () => {
           </div>
 
           <div className='text-center mb-20'>
-             <button className={`${styles['btn-tip']}`}>Weiter zur Bezahlung</button>
+             <Link href="/account/checkout" legacyBehavior>
+                <button className={`${styles['btn-tip']}`}>Weiter zur Bezahlung</button>
+             </Link>
           </div>
         </div>
       </div>

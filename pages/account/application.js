@@ -34,10 +34,13 @@ const application = () => {
   const [pets, setPets] = useState("");
   const [rentarea, setRentarea] = useState("");
   const [proceedings, setProceedings] = useState("");
+  const [profession, setprofession] = useState("");
   const [apartment, setApartment] = useState("");
   const [mietschuldenfreiheit, setMietschuldenfreiheit] = useState("");
   const [mietverhaltnis, setMietverhaltnis] = useState("");
   const [images, setImages] = useState([]);
+  const [bwaimages, setBwaimages] = useState([]);
+  const [incomeimages, setincomeimages] = useState([]);
   const [arbeitsvertrag, setarbeitsvertrag] = useState([]);
   const [personal, setPersonal] = useState([]);
   const [schufa, setSchufa] = useState([]);
@@ -94,10 +97,20 @@ const application = () => {
       const imageUrls = files.map((file) => URL.createObjectURL(file));
       setImages((prevImages) => [...prevImages, ...imageUrls]);
     }
+    if(name === "bwaimages"){
+      const files = Array.from(e.target.files);
+      const imageUrls = files.map((file) => URL.createObjectURL(file));
+      setBwaimages((prevImages) => [...prevImages, ...imageUrls]);
+    }
+    if(name === "incomeimages"){
+      const files = Array.from(e.target.files);
+      const imageUrls = files.map((file) => URL.createObjectURL(file));
+      setincomeimages((prevImages) => [...prevImages, ...imageUrls]);
+    }
     if(name === "arbeitsvertrag"){
       const files = Array.from(e.target.files);
       const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setImages((prevImages) => [...prevImages, ...imageUrls]);
+      setarbeitsvertrag((prevImages) => [...prevImages, ...imageUrls]);
     }
     if(name === "imageswbs"){
       const files = Array.from(e.target.files);
@@ -249,6 +262,8 @@ const application = () => {
       if (name === "pets") setPets(value);
       if (name === "rentarea") setRentarea(value);
       if (name === "proceedings") setProceedings(value);
+      if (name === "profession") setprofession(value);
+      if (name === "incomeimages") setprofession(value);
       if (name === "apartment") setApartment(value);
       if (name === "coverletter") setCoverletter(value);
       if (name === "testname") setTestname(value);
@@ -288,6 +303,8 @@ const application = () => {
     formData.append("arbeitgeber", arbeitgeber);
     formData.append("income", income);
     formData.append("employment", employment);
+    formData.append("profession", profession);
+    formData.append("incomeimages", incomeimages);
     formData.append("pets", pets);
     formData.append("rentarea", rentarea);
     formData.append("proceedings", proceedings);
@@ -507,6 +524,11 @@ const application = () => {
                   arbeitgeber={arbeitgeber}
                   income={income}
                   employment={employment}
+                  profession={profession}
+                  bwaimages={bwaimages}
+                  setBwaimages={setBwaimages}
+                  incomeimages={incomeimages}
+                  setincomeimages={setincomeimages}
                   pets={pets}
                   rentarea={rentarea}
                   proceedings={proceedings}

@@ -27,7 +27,7 @@ const StepTenInner = ({
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
-  setCurrentStep(20);
+  setCurrentStep(23);
 
   return (
     <div className="flex items-center justify-center bg-white shadow-lg rounded-lg">

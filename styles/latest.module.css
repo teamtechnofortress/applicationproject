@@ -4,6 +4,11 @@
     font-size: 29px;
     font-weight: 900;
 }
+.main-upload-heading{
+    font-family: 'Poppins Bold';
+    font-size: 22px;
+    font-weight: 900; 
+}
 .main-heading-2{
     font-family: 'Poppins Bold';
     font-size: 50px;
@@ -89,8 +94,13 @@
     font-size: 20px;
 }
 .black{
-    background: #e7e7e7 !important;
+    background: #8d8d8d !important;
     color: white !important;
+}
+.back-btn{
+    width: 80%;
+    background: #D9D9D9;
+    color: #ffff;
 }
 .form-check-input{
     display: none;
@@ -202,4 +212,12 @@ label.file_up {
     display: flex;
     justify-content: center;
     align-items: flex-end;
+}
+.profession-btn.black{
+    background: #ededed66 !important;
+}
+.profession-btn{
+    padding: 20px;
+    background-color: transparent;
+    border: 1px solid #e7fc42;
 }

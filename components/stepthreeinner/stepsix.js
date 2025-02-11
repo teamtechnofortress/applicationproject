@@ -16,7 +16,7 @@ const StepSixInner = ({
     setMietschuldenfreiheitimg((prevImages) => (prevImages || []).filter((_, i) => i !== index)); // Safeguard against undefined
   };
 
-  setCurrentStep(16);
+  setCurrentStep(19);
 
   return (
     <div className="flex items-center justify-center">
@@ -76,7 +76,7 @@ const StepSixInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(15)}
+            onClick={() => setCurrentStep(18)}
           >
             Zurück
           </button>
@@ -85,7 +85,7 @@ const StepSixInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(17)}
+              onClick={() => setCurrentStep(20)}
             >
               Weiter
             </button>

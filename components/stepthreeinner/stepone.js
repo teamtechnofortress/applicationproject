@@ -12,7 +12,7 @@ const StepOneInner = ({
 
   const handleNextClick = () => {
     setComponents(2);
-    setCurrentStep(10);
+    setCurrentStep(13);
   };
 
 
@@ -46,7 +46,7 @@ const StepOneInner = ({
          </button>
          <button
            type="button"
-           onClick={() => (setCurrentStep(12))} 
+           onClick={() => (setCurrentStep(15))} 
            className={`${styles["next-btn"]} bg-blue-500 text-white px-6 py-3 rounded-lg mx-auto block flex items-center justify-between`}
            style={{ width: '90%' }} // Assign 90% width
          >

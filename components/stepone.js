@@ -9,6 +9,10 @@ import StepSixInner from "@/components/steponeinner/stepsix";
 import StepSevenInner from "@/components/steponeinner/stepseven";
 import StepEightInner from "@/components/steponeinner/stepeight";
 import StepNineInner from "@/components/steponeinner/stepnine";
+import StepTenInner from "@/components/steponeinner/stepten";
+import StepElevenInner from "@/components/steponeinner/stepeleven";
+import StepTwelveInner from "@/components/steponeinner/steptwelve";
+
 
 
 const FirstStep = ({  
@@ -26,6 +30,11 @@ const FirstStep = ({
   arbeitgeber,
   income,
   employment,
+  profession,
+  bwaimages,
+  setBwaimages,
+  incomeimages,
+  setincomeimages,
   pets,
   rentarea,
   proceedings,
@@ -42,7 +51,7 @@ const FirstStep = ({
 }) => {
   // const [currentStep, setCurrentStep] = useState(0);
   const [errors, setErrors] = useState({});
-  const totalSteps = 9;
+  const totalSteps = 12;
  
   useEffect(() => {
     // Push the current step into the browser history
@@ -91,21 +100,21 @@ const FirstStep = ({
       }
       if (!safeTrim(phonenumber)) newErrors.phonenumber = "PhoneNumber is required.";
     }
-    if (step === 3) {
+    if (step === 4) {
       if (!safeTrim(ausgeubterBeruf)) newErrors.ausgeubterBeruf = "Ausgeübter Beruf is required.";
       if (!safeTrim(arbeitgeber)) newErrors.arbeitgeber = "Arbeitgeber is required.";
       if (!safeTrim(income)) newErrors.income = "Monatliches is required.";
     }
-    if (step === 5) {
+    if (step === 8) {
       if (!pets) newErrors.pets = "Pets status is required.";  
     }
-    if (step === 6) {
+    if (step === 9) {
       if (!rentarea) newErrors.rentarea = "Rent Area status is required.";  
     }
-    if (step === 7) {
+    if (step === 10) {
       if (!proceedings) newErrors.proceedings = "Proceedings status is required.";  
     }
-    if (step === 8) {
+    if (step === 11) {
       if (!apartment) newErrors.apartment = "Apartment status is required.";  
     }
 
@@ -172,8 +181,19 @@ const FirstStep = ({
         )}
 
         {/* Step 4 */}
-         {currentStep === 3 && (
-           <StepFourInner                 
+        {currentStep === 3 && (
+            <StepFourInner                 
+            profession={profession}
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+            handleChange={handleChange}
+          />
+        )}
+
+        {/* Step 5 */}
+         {currentStep === 4 && (
+           <StepFiveInner        
+           profession={profession}         
            ausgeubterBeruf={ausgeubterBeruf}
            arbeitgeber={arbeitgeber}
            employment={employment}
@@ -184,10 +204,9 @@ const FirstStep = ({
            handleChange={handleChange}
          />
         )}
-
-        {/* Step 5 */}
-         {currentStep === 4 && (
-           <StepFiveInner            
+        {/* Step 6 */}
+        {currentStep === 5 && (
+           <StepSixInner            
            employment={employment}
            images={images}
            arbeitsvertrag={arbeitsvertrag}
@@ -200,9 +219,31 @@ const FirstStep = ({
          />
         )}
 
-        {/* Step 6 */}
-         {currentStep === 5 && (
-            <StepSixInner            
+          {/* Step 7 */}
+          {currentStep === 6 && (
+           <StepSevenInner            
+           bwaimages={bwaimages}
+           setBwaimages={setBwaimages}
+           currentStep={currentStep}
+           setCurrentStep={setCurrentStep}
+           handleChange={handleChange}
+         />
+        )}
+         {/* Step 8 */}
+         {currentStep === 7 && (
+           <StepEightInner            
+           incomeimages={incomeimages}
+           setincomeimages={setincomeimages}
+           currentStep={currentStep}
+           setCurrentStep={setCurrentStep}
+           handleChange={handleChange}
+         />
+        )}
+        
+
+        {/* Step 9 */}
+         {currentStep === 8 && (
+            <StepNineInner            
             pets={pets}
             setComponents={setComponents}
             currentStep={currentStep}
@@ -210,9 +251,9 @@ const FirstStep = ({
             handleChange={handleChange}
           />
         )}
-         {/* Step 7 */}
-         {currentStep === 6 && (
-            <StepSevenInner            
+         {/* Step 10 */}
+         {currentStep === 9 && (
+            <StepTenInner            
             rentarea={rentarea}
             setComponents={setComponents}
             currentStep={currentStep}
@@ -222,9 +263,9 @@ const FirstStep = ({
       
         )}
 
-         {/* Step 8 */}
-         {currentStep === 7 && (
-            <StepEightInner            
+         {/* Step 11 */}
+         {currentStep === 10 && (
+            <StepElevenInner            
             proceedings={proceedings}
             setComponents={setComponents}
             currentStep={currentStep}
@@ -233,9 +274,9 @@ const FirstStep = ({
           />
         )}
 
-        {/* Step 9 */}
-        {currentStep === 8 && (
-            <StepNineInner            
+        {/* Step 12 */}
+        {currentStep === 11 && (
+            <StepTwelveInner            
             apartment={apartment}
             setComponents={setComponents}
             currentStep={currentStep}
@@ -243,7 +284,6 @@ const FirstStep = ({
             handleChange={handleChange}
           />
         )}
-
 
       </div>
     </div>

@@ -48,7 +48,7 @@ const SecondStep = ({ coverletter, setComponents, handleChange,currentStep,setCu
 
   const handleNextClick = () => {
     setComponents(1);
-    setCurrentStep(8);
+    setCurrentStep(12);
   };
 
   
@@ -56,7 +56,7 @@ const SecondStep = ({ coverletter, setComponents, handleChange,currentStep,setCu
   return (
     <>
       {/* Step 1 */}
-      {currentStep === 9 && (
+      {currentStep === 12 && (
          <StepOneInner               
            setComponents={setComponents}
            currentStep={currentStep}
@@ -67,7 +67,7 @@ const SecondStep = ({ coverletter, setComponents, handleChange,currentStep,setCu
       )}
 
       {/* Step 2 */}
-      {currentStep === 10 && (
+      {currentStep === 13 && (
         <StepTwoInner                 
         coverletter={coverletter}
         setComponents={setComponents}

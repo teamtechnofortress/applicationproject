@@ -59,25 +59,25 @@ const ThirdStep = ({
     }
   };
   useEffect(() => {
-    if (currentStep === 11) {
+    if (currentStep === 14) {
       setThirdStepComponent(null);
-    } else if (currentStep === 12) {
+    } else if (currentStep === 15) {
       setThirdStepComponent(0);
-    } else if (currentStep === 13) {
+    } else if (currentStep === 16) {
       setThirdStepComponent(1); 
-    } else if (currentStep === 14) {
+    } else if (currentStep === 17) {
       setThirdStepComponent(2); 
-    }else if (currentStep === 15) {
-      setThirdStepComponent(3); 
-    }else if (currentStep === 16) {
-      setThirdStepComponent(4); 
-    }else if (currentStep === 17) {
-      setThirdStepComponent(5); 
     }else if (currentStep === 18) {
-      setThirdStepComponent(6); 
+      setThirdStepComponent(3); 
     }else if (currentStep === 19) {
-      setThirdStepComponent(7); 
+      setThirdStepComponent(4); 
     }else if (currentStep === 20) {
+      setThirdStepComponent(5); 
+    }else if (currentStep === 21) {
+      setThirdStepComponent(6); 
+    }else if (currentStep === 22) {
+      setThirdStepComponent(7); 
+    }else if (currentStep === 23) {
       setThirdStepComponent(8); 
     }
   }, [currentStep]);
@@ -97,7 +97,7 @@ const ThirdStep = ({
 
   const handleNextClick = () => {
     setComponents(2);
-    setCurrentStep(10);
+    setCurrentStep(14);
   };
 
   
@@ -117,7 +117,7 @@ const ThirdStep = ({
         </div>
       )}
             {/* Step 1 */}
-      {currentStep === 11 && (
+      {currentStep === 14 && (
          <StepOneInner               
            setComponents={setComponents}
            currentStep={currentStep}
@@ -128,7 +128,7 @@ const ThirdStep = ({
       )}
 
       {/* Step 2 */}
-      {currentStep === 12 && (
+      {currentStep === 15 && (
         <StepTwoInner                 
         fläche={fläche}
         zimerzahl={zimerzahl}
@@ -142,7 +142,7 @@ const ThirdStep = ({
       )}
 
         {/* Step 3 */}
-        {currentStep === 13 && (
+        {currentStep === 16 && (
         <StepThreeInner                 
         personal={personal}
         setComponents={setComponents}
@@ -154,7 +154,7 @@ const ThirdStep = ({
       )}
    
     {/* Step 4 */}
-    {currentStep === 14 && (
+    {currentStep === 17 && (
           <StepFourInner                 
           setSchufa ={setSchufa}
           schufa ={schufa}
@@ -165,7 +165,7 @@ const ThirdStep = ({
         />
      )}
       {/* Step 5 */}
-      {currentStep === 15 && (
+      {currentStep === 18 && (
             <StepFiveInner          
             mietschuldenfreiheit ={mietschuldenfreiheit}
             setComponents={setComponents}
@@ -175,7 +175,7 @@ const ThirdStep = ({
           />
       )}
        {/* Step 6 */}
-       {currentStep === 16 && (
+       {currentStep === 19 && (
             <StepSixInner          
             mietschuldenfreiheitimg ={mietschuldenfreiheitimg}
             setMietschuldenfreiheitimg ={setMietschuldenfreiheitimg}
@@ -186,7 +186,7 @@ const ThirdStep = ({
           />
       )}
        {/* Step 7 */}
-       {currentStep === 17 && (
+       {currentStep === 20 && (
             <StepSevenInner          
             mietverhaltnis={mietverhaltnis}
             setComponents={setComponents}
@@ -196,7 +196,7 @@ const ThirdStep = ({
           />
       )}
         {/* Step 8 */}
-        {currentStep === 18 && (
+        {currentStep === 21 && (
             <StepEightInner          
             setComponents={setComponents}
             currentStep={currentStep}
@@ -204,7 +204,7 @@ const ThirdStep = ({
             handleChange={handleChange}
           />
       )}
-       {currentStep === 19 && (
+       {currentStep === 22 && (
             <StepNineInner          
             setComponents={setComponents}
             currentStep={currentStep}
@@ -212,7 +212,7 @@ const ThirdStep = ({
             handleChange={handleChange}
           />
       )}
-       {currentStep === 20 && (
+       {currentStep === 23 && (
             <StepTenInner     
             firstname={firstname}
             lastname={lastname}     

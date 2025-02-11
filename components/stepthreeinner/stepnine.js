@@ -9,7 +9,7 @@ const StepNineInner = ({
 }) => {
   const [errors, setErrors] = useState({});
 
-  setCurrentStep(19);
+  setCurrentStep(22);
 
   return (
     <div className="flex items-center justify-center">
@@ -48,7 +48,7 @@ const StepNineInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(16)}
+            onClick={() => setCurrentStep(20)}
           >
             Zurück
           </button>
@@ -57,7 +57,7 @@ const StepNineInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(20)}
+              onClick={() => setCurrentStep(23)}
             >
              Weiter
             </button>

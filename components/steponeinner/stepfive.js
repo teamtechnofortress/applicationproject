@@ -1,149 +1,176 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/styles/latest.module.css";
+
 const StepFiveInner = ({
+  profession,
+  ausgeubterBeruf,
+  arbeitgeber,
   employment,
-  images,
-  arbeitsvertrag,
-  setarbeitsvertrag,
-  setImages,
+  income,
   setCurrentStep,
+  handleChange,
 }) => {
   const [errors, setErrors] = useState({});
-  const handleFileChange = (event, type) => {
-    const files = Array.from(event.target.files).map((file) =>
-      URL.createObjectURL(file)
-    );
-    if (type === "images") {
-      setImages((prev) => [...prev, ...files]);
-    } else if (type === "arbeitsvertrag") {
-      setarbeitsvertrag((prev) => [...prev, ...files]);
-    }
-  };
-  const removeImage = (index, type) => {
-    if (type === "images") {
-      setImages((prev) => prev.filter((_, i) => i !== index));
-    } else if (type === "arbeitsvertrag") {
-      setarbeitsvertrag((prev) => prev.filter((_, i) => i !== index));
-    }
-  };
   const validateFields = () => {
     const newErrors = {};
-    if (employment === "Ja" && images.length < 3) {
-      newErrors.images = "Bitte laden Sie mindestens 3 Gehaltsnachweise hoch.";
-    }
+    const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
+
+    if (!safeTrim(ausgeubterBeruf)) newErrors.ausgeubterBeruf = "Ausgeübter Beruf is required.";
+    if (!safeTrim(arbeitgeber)) newErrors.arbeitgeber = "Arbeitgeber is required.";
+    if (!safeTrim(income)) newErrors.income = "Monatliches is required.";
+
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors).length === 0; // Return true if no errors
   };
+  setCurrentStep(4);
+
   return (
-    <div>
-      <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
-        {employment === "Ja"
-          ? "Dein Beschäftigungsverhältnis besteht länger als 6 Monate."
-          : "Dein Beschäftigungsverhältnis besteht kürzer als 6 Monate."}
-      </p>
-      {/* Upload Section for Salary Proofs */}
-      <div className="flex flex-col items-center justify-center w-[40%] mx-auto">
-        <label
-          htmlFor="image-upload"
-          className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
-        >
-          <i className="fa fa-upload mr-2"></i>
-          {employment === "Ja"
-            ? "Upload letzte 3 Gehaltsnachweise."
-            : "Upload deiner letzten vorliegenden Gehaltsnachweise (max. 3 letzte)"}
-        </label>
-        <input
-          type="file"
-          id="image-upload"
-          className="hidden"
-          multiple
-          accept="image/*"
-          onChange={(e) => handleFileChange(e, "images")}
-        />
-        {/* Salary Proofs Preview */}
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          {images.map((src, index) => (
-            <div key={index} className="relative w-24 h-24">
-              <img
-                src={src}
-                alt={`Gehaltsnachweis Preview ${index + 1}`}
-                className="object-cover w-full h-full rounded-lg"
-              />
-              <button
-                type="button"
-                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                onClick={() => removeImage(index, "images")}
-              >
-                ×
-              </button>
+    <div className="flex justify-center">
+            <div className="w-full max-w-lg">
+              <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
+                <div>
+                    <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
+                      Wo arbeitest du?
+                    </p>      
+                    <div className="grid grid-cols-2 gap-4 mt-5">
+                      <div className="...">
+                        <div className="input-field">
+                          <input
+                            type="text"
+                            className={`${styles["ausgeubterBeruf"]} form-input `}
+                            id="ausgeubterBeruf"
+                            name="ausgeubterBeruf"
+                            placeholder="Ausgeübter Beruf"
+                            value={ausgeubterBeruf}
+                            onChange={handleChange}
+                          />
+                          {/* Error Message */}
+                          {errors.ausgeubterBeruf && <p className="text-red-500 text-sm">{errors.ausgeubterBeruf}</p>}
+                        </div>
+                      </div>
+                      <div className="...">
+                        <div className="input-field">
+                          <input
+                            type="text"
+                            className={`${styles["form-input"]} form-input `}
+                            id="arbeitgeber"
+                            name="arbeitgeber"
+                            placeholder="Arbeitgeber"
+                            value={arbeitgeber}
+                            onChange={handleChange}
+                          />
+                          {/* Error Message */}
+                          {errors.arbeitgeber && <p className="text-red-500 text-sm">{errors.arbeitgeber}</p>}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="input-field mt-10">
+                      <input
+                            type="text"
+                            className={`${styles["form-input"]} form-control `}
+                            id="income"
+                            name="income"
+                            placeholder="monatliches Nettogehalt (€)"
+                            value={income}
+                            onChange={handleChange}
+                          />
+                           {errors.income && <p className="text-red-500 text-sm">{errors.income}</p>}
+                    </div>
+                    {profession === "Ja" && (
+                       <>
+                        <p className={`${styles["p-address"]} mt-20 mb-10 text-center`}>
+                        Besteht das Beschäftigungsverhältnis länger, als 6 Monate?
+                        </p> 
+                        <div className="grid grid-cols-2 mt-5 gap-10 w-[60%] mx-auto">
+                            <div className="col-span-1 flex items-center">
+                            <input
+                                  className={`${styles["form-check-input"]} mr-2`}
+                                  type="radio"
+                                  name="employment"
+                                  id="employment1"
+                                  value="Ja"
+                                  onChange={handleChange}
+                                  checked={employment === "Ja"}
+                                  onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
+                                />
+                                <label
+                                  className={`${styles["form-check-label"]} ${styles["radio-btn"]} ${
+                                    employment === "Ja" ? styles["black"] : ""
+                                  }`}
+                                  htmlFor="employment1"
+                                >
+                                  Ja
+                                </label>
+                              </div>
+                              <div className="col-span-1 flex items-center">
+                                <input
+                                  className={`${styles["form-check-input"]} mr-2`}
+                                  type="radio"
+                                  name="employment"
+                                  id="employment2"
+                                  value="Nein"
+                                  onChange={handleChange}
+                                  checked={employment === "Nein"}
+                                  onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
+                                />
+                                <label
+                                  className={`${styles["form-check-label"]} ${styles["radio-btn"]} ${
+                                    employment === "Nein" ? styles["black"] : ""
+                                  }`}
+                                  htmlFor="employment2"
+                                >
+                                  Nein
+                                </label>
+
+                              {errors.employment && <p className="text-red-500 text-sm">{errors.employment}</p>}
+                            </div>
+                        </div>
+                        </>
+                      )}
+                  
+                  {profession === "Ja" && (
+                    <>
+                    <div className="flex justify-between mt-10">
+                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                          onClick={() => {
+                            setCurrentStep(3); 
+                          }}
+                            > Zurück 
+                    </button>
+                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                          onClick={() => {
+                            if (validateFields()) {
+                            setCurrentStep(8); // Correctly update the step state
+                            }}}> Überspringen 
+                    </button>
+                        
+                    </div>
+                    </>
+                   )}   
+                   {profession === "Nein" && (
+                    <>
+                    <div className="flex justify-between mt-10">
+                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                          onClick={() => {
+                            setCurrentStep(3); 
+                          }}
+                            > Zurück 
+                    </button>
+                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                          onClick={() => {
+                            if (validateFields()) {
+                            setCurrentStep(6); // Correctly update the step state
+                            }}}> Next
+                    </button>
+                        
+                    </div>
+                    </>
+                   )}   
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-        {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
-      </div>
-      {/* Upload Section for Employment Contract */}
-      <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
-        <label
-          htmlFor="arbeitsvertrag-upload"
-          className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
-        >
-          <i className="fa fa-upload mr-2"></i>
-          Upload Arbeitsvertrag
-        </label>
-        <input
-          type="file"
-          id="arbeitsvertrag-upload"
-          className="hidden"
-          multiple
-          accept="image/*"
-          onChange={(e) => handleFileChange(e, "arbeitsvertrag")}
-        />
-        {/* Employment Contract Preview */}
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          {arbeitsvertrag.map((src, index) => (
-            <div key={index} className="relative w-24 h-24">
-              <img
-                src={src}
-                alt={`Arbeitsvertrag Preview ${index + 1}`}
-                className="object-cover w-full h-full rounded-lg"
-              />
-              <button
-                type="button"
-                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                onClick={() => removeImage(index, "arbeitsvertrag")}
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-      {/* Navigation Buttons */}
-      <div className="flex justify-between mt-10">
-        <button
-          type="button"
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-          onClick={() => {
-            setCurrentStep(3);
-          }}
-        >
-          Zurück
-        </button>
-        <div className="col-span-2">
-          <button
-            type="button"
-            className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
-            onClick={() => {
-              if (validateFields()) {
-                setCurrentStep(5);
-              }
-            }}
-          >
-            Weiter
-          </button>
-        </div>
-      </div>
-    </div>
+          </div>
   );
 };
+
 export default StepFiveInner;

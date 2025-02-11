@@ -29,8 +29,8 @@ const StepTwoInner = ({
   const handleNextClick = () => {
     console.log("Current Step before:", currentStep);
     setComponents(3);
-    setCurrentStep(11);
-    console.log("Current Step after:", 11);
+    setCurrentStep(14);
+    console.log("Current Step after:", 13);
   };
 
   return (
@@ -69,7 +69,7 @@ const StepTwoInner = ({
                     type="button"
                     className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
                     onClick={() => {
-                      setCurrentStep(9);
+                      setCurrentStep(12);
                     }}
                   >
                     Zurück

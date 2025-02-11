@@ -26,7 +26,7 @@ const StepFiveInner = ({
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
-  setCurrentStep(15);
+  setCurrentStep(18);
 
   return (
     <div className="flex items-center justify-center">
@@ -100,7 +100,7 @@ const StepFiveInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(14)}
+            onClick={() => setCurrentStep(17)}
           >
             Zurück
           </button>
@@ -111,7 +111,7 @@ const StepFiveInner = ({
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
               onClick={() => {
                 if (validateFields()) {
-                  setCurrentStep(16);
+                  setCurrentStep(19);
                 }
               }}
             >
