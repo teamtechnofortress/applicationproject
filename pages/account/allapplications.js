@@ -138,7 +138,7 @@ return (
              <img className={`${styles['img-pdf']}`} src="/images/img1.png"/> 
           </div>
         </div>
-        <div className="flex hidden" >
+        <div className="flex" >
           {isEmpty ? (
             <div>No data available</div>
           ) : (
