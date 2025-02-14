@@ -25,6 +25,9 @@ const FirstStep = ({
   email,
   phonenumber,
   setPhoneNumber,
+  inputfoto,
+  setinputfoto,
+  showinputfoto,
   geburtsdatum,
   ausgeubterBeruf,
   arbeitgeber,
@@ -173,6 +176,9 @@ const FirstStep = ({
             email={email}
             phonenumber={phonenumber}
             setPhoneNumber={setPhoneNumber}
+            inputfoto = {inputfoto}
+            setinputfoto = {setinputfoto}
+            showinputfoto ={showinputfoto}
             setComponents={setComponents}
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}

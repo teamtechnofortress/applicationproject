@@ -3,19 +3,19 @@ import styles from "@/styles/latest.module.css";
 
 const StepSevenInner = ({
   bwaimages,
-  setbwaimages,
+  setBwaimages,
   setCurrentStep,
   handleChange,
 }) => {
   const [errors, setErrors] = useState({});
   const removeImage = (index) => {
-    setbwaimages((prevImages) => (prevImages || []).filter((_, i) => i !== index)); // Safeguard against undefined
+    setBwaimages((prevImages) => (prevImages || []).filter((_, i) => i !== index));
   };
   const validateFields = () => {
     const newErrors = {};
 
     if (bwaimages.length < 3) {
-      newErrors.images = "Bitte laden Sie mindestens 3 Gehaltsnachweise hoch.";
+      newErrors.bwaimages = "Bitte laden Sie mindestens 3 BWS.";
     }
 
     setErrors(newErrors);
@@ -70,7 +70,8 @@ const StepSevenInner = ({
                             </div>
                           ))}
                         </div>
-                      </div>
+                        {errors.bwaimages && <p className="text-red-500 text-sm">{errors.bwaimages}</p>}
+                    </div>
                     <div className="flex justify-between mt-10">
                     <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
                           onClick={() => {

@@ -50,6 +50,7 @@ const StepEightInner = ({
                       </label>
                       <input
                         type="file"
+                        name="incomeimages"
                         id="image-upload"
                         className="hidden"
                         multiple

@@ -36,6 +36,8 @@ const application = () => {
   const [proceedings, setProceedings] = useState("");
   const [profession, setprofession] = useState("");
   const [apartment, setApartment] = useState("");
+  const [inputfoto, setinputfoto] = useState("");
+  const [showinputfoto, setshowinputfoto] = useState();
   const [mietschuldenfreiheit, setMietschuldenfreiheit] = useState("");
   const [mietverhaltnis, setMietverhaltnis] = useState("");
   const [images, setImages] = useState([]);
@@ -92,48 +94,62 @@ const application = () => {
     const { name, value, files } = e.target;
     const newErrors = {};
 
-    if(name === "images"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setImages((prevImages) => [...prevImages, ...imageUrls]);
-    }
-    if(name === "bwaimages"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setBwaimages((prevImages) => [...prevImages, ...imageUrls]);
-    }
-    if(name === "incomeimages"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setincomeimages((prevImages) => [...prevImages, ...imageUrls]);
-    }
-    if(name === "arbeitsvertrag"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setarbeitsvertrag((prevImages) => [...prevImages, ...imageUrls]);
-    }
-    if(name === "imageswbs"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setImageswbs((prevImages) => [...prevImages, ...imageUrls]);
-    }
-    if(name === "personal"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setPersonal((prevImages) => [...prevImages, ...imageUrls]);
+    if(name === "inputfoto"){
+      setinputfoto(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowinputfoto(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
     }
 
-    if(name === "schufa"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setSchufa((prevImages) => [...prevImages, ...imageUrls]);
-    }
-    if(name === "mietschuldenfreiheitimg"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setMietschuldenfreiheitimg((prevImages) => [...prevImages, ...imageUrls]);
-    }
- 
+    // if(name === "images"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setImages((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+    // if(name === "bwaimages"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setBwaimages((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+    // if(name === "incomeimages"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setincomeimages((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+    // if(name === "arbeitsvertrag"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setarbeitsvertrag((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+    // if(name === "imageswbs"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setImageswbs((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+    // if(name === "personal"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setPersonal((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+
+    // if(name === "schufa"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setSchufa((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+    // if(name === "mietschuldenfreiheitimg"){
+    //   const files = Array.from(e.target.files);
+    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
+    //   setMietschuldenfreiheitimg((prevImages) => [...prevImages, ...imageUrls]);
+    // }
+
+
    
     // console.log('Event triggered:', name, value, files);
     if (files && files.length > 0) {
@@ -254,6 +270,7 @@ const application = () => {
       if (name === "ort") setOrt(value);
       if (name === "income") setincome(value);
       if (name === "email")setEmail(value);
+      if (name === "inputfoto")setinputfoto(value);
       if (name === "email2")setEmail2(value);
       if (name === "phonenumber") setPhoneNumber(value);
       if (name === "ausgeubterBeruf") setausgeubterBeruf(value);
@@ -276,8 +293,6 @@ const application = () => {
       if (name === "fläche") setFläche(value);
       if (name === "zimerzahl") setZimerzahl(value);
       if (name === "mietschuldenfreiheit") setMietschuldenfreiheit(value);
-      
-   
     }
     
   };
@@ -287,6 +302,7 @@ const application = () => {
     e.preventDefault();
     setLoading(true);
     try {
+
     const formData = new FormData();
     formData.append("vorname", vorname);
     formData.append("nachname", nachname);
@@ -297,6 +313,7 @@ const application = () => {
     formData.append("postleitzahl", postleitzahl);
     formData.append("Ort", ort);
     formData.append("email", email);
+    formData.append("inputfoto", inputfoto);
     formData.append("phonenumber", phonenumber);
     formData.append("geburtsdatum", geburtsdatum);
     formData.append("ausgeubterBeruf", ausgeubterBeruf);
@@ -311,7 +328,7 @@ const application = () => {
     formData.append("apartment", apartment);
     formData.append("coverletter", coverletter);
     formData.append("images", images);
-    formData.append("noofpeople", people);
+    // formData.append("noofpeople", people);
     formData.append("status", status);
     formData.append("currentactivity", currentactivity);
     formData.append("currentemployer", currentemployer);
@@ -366,6 +383,7 @@ const application = () => {
         });
       }
     } catch (error) {
+      console.log(error)
       setLoading(true);
       toast.error("Form submission failed: An error occurred");
     }
@@ -517,6 +535,9 @@ const application = () => {
                   hausnummer={hausnummer}
                   ort={ort}
                   email={email}
+                  inputfoto={inputfoto}
+                  showinputfoto = {showinputfoto}
+                  setinputfoto={setinputfoto}
                   phonenumber={phonenumber}
                   setPhoneNumber={setPhoneNumber}
                   geburtsdatum={geburtsdatum}

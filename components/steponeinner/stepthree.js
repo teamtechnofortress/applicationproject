@@ -6,13 +6,30 @@ const StepThreeInner = ({
   email,
   phonenumber,
   setPhoneNumber,
+  inputfoto,
+  setinputfoto,
+  showinputfoto,
   setCurrentStep,
   handleChange,
 }) => {
   const [errors, setErrors] = useState({});
+  const handleFileChange = (event, type) => {
+    console.log(type);
+    const files = Array.from(event.target.files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    if (type === "inputfoto") {
+      setinputfoto((prev) => Array.isArray(prev) ? [...prev, ...files] : [...files]);
+    }
+  };
+  const removeImage = (index) => {
+    setinputfoto((prevImages) => (Array.isArray(prevImages) ? prevImages.filter((_, i) => i !== index) : []));
+  };
  
   const validateFields = () => {
     const newErrors = {};
+    
+
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
   
     if (!safeTrim(email)) {
@@ -23,6 +40,9 @@ const StepThreeInner = ({
   
     if (!safeTrim(phonenumber)) {
       newErrors.phonenumber = "PhoneNumber is required.";
+    }
+    if (!inputfoto || inputfoto.length === 0) {
+      newErrors.inputfoto = "Profilfoto ist erforderlich.";
     }
   
     setErrors(newErrors);
@@ -78,6 +98,49 @@ const StepThreeInner = ({
             placeholder="Phone number"
           />
           {errors.phonenumber && <p className="text-red-500 text-sm">{errors.phonenumber}</p>}
+        </div>
+        <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
+        (Name)lade dein Bewerberbild hoch
+        </p>
+        <img
+          src="/images/profile.jpg"
+          className="object-cover"
+        />
+        <div className="flex flex-col justify-center mx-auto">
+          <label
+            htmlFor="image-upload"
+            className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
+          >
+            <i className="fa fa-upload mr-2"></i> Upload Profile Photo
+          </label>
+          <input
+            type="file"
+            id="image-upload"
+            name="inputfoto"
+            className="hidden"
+            accept="image/*"
+            onChange={handleChange}
+          />
+          {/* Image Preview */}
+          <img src={showinputfoto} />
+          {/* {inputfoto && inputfoto.map((image, index) => (
+              <div key={index} className="mt-4 relative w-24 h-24">
+                <img
+                  src={image}
+                  alt={`Preview ${index + 1}`}
+                  className="object-cover w-full h-full rounded-lg"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+                  onClick={() => removeImage(index)}
+                >
+                  ×
+                </button>
+              </div>
+            ))} */}
+
+          {errors.inputfoto && <p className="text-red-500 text-sm">{errors.inputfoto}</p>}
         </div>
 
         </div>

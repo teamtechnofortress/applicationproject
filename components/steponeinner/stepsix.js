@@ -55,6 +55,7 @@ const StepSixInner = ({
         </label>
         <input
           type="file"
+          name="salaryslip"
           id="image-upload"
           className="hidden"
           multiple
@@ -93,6 +94,7 @@ const StepSixInner = ({
         </label>
         <input
           type="file"
+          name="employcontract"
           id="arbeitsvertrag-upload"
           className="hidden"
           multiple

@@ -45,11 +45,11 @@ const TestimonialSlider = () => {
           <div className={`${styles['slide-box']} bg-white rounded-md p-6 shadow-lg border border-gray-200 text-left`}>
             <p className={`${styles['slide-p']} mt-2 text-gray-600`}>“Wohnungsmappe hat mir wirklich geholfen, mich schnell und professionell zu bewerben. Ich war super beeindruckt, wie einfach alles funktioniert hat!“.”</p>
          
-           <div class={`${styles['slide-flex']} flex flex-row items-center justify-center`}>
-            <div class="basis-1/5">
+           <div className={`${styles['slide-flex']} flex flex-row items-center justify-center`}>
+            <div className="basis-1/5">
                <img src="/images/Testimonials-img-1.png" alt="" />
             </div> 
-            <div class="basis-4/5">
+            <div className="basis-4/5">
                 <h4>Cristina Durgan</h4>
                 <p>Founder & CEO</p>
             </div>  
@@ -62,11 +62,11 @@ const TestimonialSlider = () => {
           <div className={`${styles['slide-box']} bg-white rounded-md p-6 shadow-lg border border-gray-200 text-left`}>
             <p className={`${styles['slide-p']} mt-2 text-gray-600`}>“Dank der digitalen Mappe hatte ich meine neue Wohnung im Handumdrehen – klare Empfehlung!”</p>
          
-           <div class={`${styles['slide-flex']} flex flex-row items-center justify-center`}>
-            <div class="basis-1/5">
+           <div className={`${styles['slide-flex']} flex flex-row items-center justify-center`}>
+            <div className="basis-1/5">
                <img src="/images/Testimonials-img-1.png" alt="" />
             </div> 
-            <div class="basis-4/5">
+            <div className="basis-4/5">
                 <h4>Cristina Durgan</h4>
                 <p>Founder & CEO</p>
             </div>  
@@ -79,11 +79,11 @@ const TestimonialSlider = () => {
           <div className={`${styles['slide-box']} bg-white rounded-md p-6 shadow-lg border border-gray-200 text-left`}>
             <p className={`${styles['slide-p']} mt-2 text-gray-600`}>“Super einfach und effizient! Ich hatte innerhalb weniger Minuten meine Bewerbungsmappe fertig und konnte sie direkt an mehrere Vermieter senden. Wohnungsmappe hat mir wirklich viel Stress erspart.”</p>
          
-           <div class={`${styles['slide-flex']} flex flex-row items-center justify-center`}>
-            <div class="basis-1/5">
+           <div className={`${styles['slide-flex']} flex flex-row items-center justify-center`}>
+            <div className="basis-1/5">
                <img src="/images/Testimonials-img-1.png" alt="" />
             </div> 
-            <div class="basis-4/5">
+            <div className="basis-4/5">
                 <h4>Cristina Durgan</h4>
                 <p>Founder & CEO</p>
             </div>  

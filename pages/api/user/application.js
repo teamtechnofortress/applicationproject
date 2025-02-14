@@ -2,10 +2,11 @@ import { IncomingForm } from 'formidable';
 import fs from 'fs';
 import path from 'path';
 import Application from '@/models/Application';
+import ApplicationFile from '@/models/ApplicationFile';
 import jwt from 'jsonwebtoken';
 import { parseCookies } from 'nookies';
 import { connectDb } from '@/helper/db';
-import User from '@/models/User'; // Ensure you have the User model
+import User from '@/models/User';
 import { v4 as uuidv4 } from 'uuid';
 import { put } from '@vercel/blob';
 
@@ -50,20 +51,37 @@ const handler = async (req, res) => {
       const nachname = Array.isArray(fields.nachname) ? fields.nachname[0] : fields.nachname;
       const strabe = Array.isArray(fields.strabe) ? fields.strabe[0] : fields.strabe;
       const hausnummer = Array.isArray(fields.hausnummer) ? fields.hausnummer[0] : fields.hausnummer;
+      const postleitzahl = Array.isArray(fields.postleitzahl) ? fields.postleitzahl[0] : fields.postleitzahl;
       const PLZ = Array.isArray(fields.PLZ) ? fields.PLZ[0] : fields.PLZ;
       const Ort = Array.isArray(fields.Ort) ? fields.Ort[0] : fields.Ort;
       const email = Array.isArray(fields.email) ? fields.email[0] : fields.email;
       const tel = Array.isArray(fields.tel) ? fields.tel[0] : fields.tel;
+      const profession = Array.isArray(fields.profession) ? fields.profession[0] : fields.profession;
       const geburtsdatum = Array.isArray(fields.geburtsdatum) ? fields.geburtsdatum[0] : fields.geburtsdatum;
-      const ausgeübterBeruf = Array.isArray(fields.ausgeübterBeruf) ? fields.ausgeübterBeruf[0] : fields.ausgeübterBeruf;
+      const ausgeubterBeruf = Array.isArray(fields.ausgeubterBeruf) ? fields.ausgeubterBeruf[0] : fields.ausgeubterBeruf;
       const arbeitgeber = Array.isArray(fields.arbeitgeber) ? fields.arbeitgeber[0] : fields.arbeitgeber;
       const income = Array.isArray(fields.income) ? fields.income[0] : fields.income;
-      const textarea1 = Array.isArray(fields.textarea1) ? fields.textarea1[0] : fields.textarea1;
-      const textarea2 = Array.isArray(fields.textarea2) ? fields.textarea2[0] : fields.textarea2;
-      const textarea3 = Array.isArray(fields.textarea3) ? fields.textarea3[0] : fields.textarea3;
-      const textarea4 = Array.isArray(fields.textarea4) ? fields.textarea4[0] : fields.textarea4;
-      const textarea5 = Array.isArray(fields.textarea5) ? fields.textarea5[0] : fields.textarea5;
-      const noofpeople = Array.isArray(fields.noofpeople) ? fields.noofpeople[0] : fields.noofpeople;
+      const bwaimages = Array.isArray(fields.bwaimages) ? fields.bwaimages[0] : fields.bwaimages;
+      const employment = Array.isArray(fields.employment) ? fields.employment[0] : fields.employment;
+      const incomeimages = Array.isArray(fields.incomeimages) ? fields.incomeimages[0] : fields.incomeimages;
+      const salaryslip = Array.isArray(fields.salaryslip) ? fields.salaryslip[0] : fields.salaryslip;
+      const employcontract = Array.isArray(fields.employcontract) ? fields.employcontract[0] : fields.employcontract;
+      const pets = Array.isArray(fields.pets) ? fields.pets[0] : fields.pets;
+      const rentarea = Array.isArray(fields.rentarea) ? fields.rentarea[0] : fields.rentarea;
+      const proceedings = Array.isArray(fields.proceedings) ? fields.proceedings[0] : fields.proceedings;
+      const apartment = Array.isArray(fields.apartment) ? fields.apartment[0] : fields.apartment;
+      const coverletter = Array.isArray(fields.coverletter) ? fields.coverletter[0] : fields.coverletter;
+      const zimerzahl = Array.isArray(fields.zimerzahl) ? fields.zimerzahl[0] : fields.zimerzahl;
+      const imageswbs = Array.isArray(fields.imageswbs) ? fields.imageswbs[0] : fields.imageswbs;
+      const personal = Array.isArray(fields.personal) ? fields.personal[0] : fields.personal;
+      const schufa = Array.isArray(fields.schufa) ? fields.schufa[0] : fields.schufa;
+      const mietschuldenfreiheit = Array.isArray(fields.mietschuldenfreiheit) ? fields.mietschuldenfreiheit[0] : fields.mietschuldenfreiheit;
+      const mietschuldenfreiheitimg = Array.isArray(fields.mietschuldenfreiheitimg) ? fields.mietschuldenfreiheitimg[0] : fields.mietschuldenfreiheitimg;
+      const mietverhaltnis = Array.isArray(fields.mietverhaltnis) ? fields.mietverhaltnis[0] : fields.mietverhaltnis;
+      const firstname = Array.isArray(fields.firstname) ? fields.firstname[0] : fields.firstname;
+      const lastname = Array.isArray(fields.lastname) ? fields.lastname[0] : fields.lastname;
+      const email2 = Array.isArray(fields.email2) ? fields.email2[0] : fields.email2;
+      
       const status = Array.isArray(fields.status) ? fields.status[0] : fields.status;
       const currentactivity = Array.isArray(fields.currentactivity) ? fields.currentactivity[0] : fields.currentactivity;
       const currentemployer = Array.isArray(fields.currentemployer) ? fields.currentemployer[0] : fields.currentemployer;
@@ -315,47 +333,117 @@ const handler = async (req, res) => {
 
         fullfilenamecomponentImage = blob.url
       }
+
+
+      // new code for new images
     
+        // profile image
+        const inputfotoImage = files.inputfoto;
+      let fullfilenameinputfoto = null
+      console.log(files)
+      console.log(inputfotoImage)
+      if(inputfotoImage){
+        console.log('here2')
+        // If photo is an array, get the first item
+        const photoFile = Array.isArray(inputfotoImage) ? inputfotoImage[0] : inputfotoImage;
+
+        if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+          console.error('Filepath or originalFilename missing:', photoFile);
+          return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+        }
+
+        const fileContent = fs.readFileSync(photoFile.filepath);
+        const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+        const blob = await put(uniqueFileName, fileContent, {
+          access: 'public',
+        });
+
+        fullfilenameinputfoto = blob.url
+        console.log(fullfilenameinputfoto)
+      }
+
+
+      // new code for new images end
       try {
   
-        const newForm = new Application({
+        // const newForm = new Application({
+        //   userId: user._id,
+        //   vorname,
+        //   nachname,
+        //   strabe,
+        //   hausnummer,
+        //   PLZ,
+        //   Ort,
+        //   email,
+        //   tel,
+        //   geburtsdatum,
+        //   ausgeübterBeruf,
+        //   arbeitgeber,
+        //   income,
+        //   textarea1,
+        //   textarea2,
+        //   textarea3,
+        //   textarea4,
+        //   textarea5,
+        //   inputfoto: fullfilename, // Save the URL of the uploaded file
+        //   noofpeople, // Save the URL of the uploaded file
+        //   status, // Save the URL of the uploaded file
+        //   currentactivity, // Save the URL of the uploaded file
+        //   currentemployer, // Save the URL of the uploaded file
+        //   incomee, // Save the URL of the uploaded file
+        //   fläche,
+        //   familyid,
+        //   anzahlderzimmer,
+        //   salarystatementlast: fullfilenamesalarystatementlast,  
+        //   salarystatementbefore:fullfilenamesalarystatementbefore,       
+        //   salarystatementago:fullfilenamesalarystatementago,       
+        //   residencepermit:fullfilenameresidencepermit,       
+        //   identificationdocument:fullfilenameidentificationdocument,       
+        //   shortvideo:fullfilenameshortvideo,       
+        //   currentSchufareport:fullfilenamecurrentSchufareport,       
+        //   rentalschoolfree:fullfilenamerentalschoolfree,       
+        //   signatureData:fullfilenamesignatureData,       
+        //   applicationImg:fullfilenamecomponentImage,       
+        // });
+        console.log(user._id);
+        const newForm = new ApplicationFile({
           userId: user._id,
           vorname,
           nachname,
+          geburtsdatum,
           strabe,
+          postleitzahl,
           hausnummer,
-          PLZ,
           Ort,
           email,
           tel,
-          geburtsdatum,
-          ausgeübterBeruf,
+          inputfoto:fullfilenameinputfoto,
+          profession,
+          ausgeubterBeruf,
           arbeitgeber,
           income,
-          textarea1,
-          textarea2,
-          textarea3,
-          textarea4,
-          textarea5,
-          inputfoto: fullfilename, // Save the URL of the uploaded file
-          noofpeople, // Save the URL of the uploaded file
-          status, // Save the URL of the uploaded file
-          currentactivity, // Save the URL of the uploaded file
-          currentemployer, // Save the URL of the uploaded file
-          incomee, // Save the URL of the uploaded file
+          bwaimages,
+          employment,
+          incomeimages,
+          salaryslip,
+          employcontract,
+          pets,
+          rentarea,
+          proceedings,
+          apartment,
+          coverletter,
+       
           fläche,
-          familyid,
-          anzahlderzimmer,
-          salarystatementlast: fullfilenamesalarystatementlast,  
-          salarystatementbefore:fullfilenamesalarystatementbefore,       
-          salarystatementago:fullfilenamesalarystatementago,       
-          residencepermit:fullfilenameresidencepermit,       
-          identificationdocument:fullfilenameidentificationdocument,       
-          shortvideo:fullfilenameshortvideo,       
-          currentSchufareport:fullfilenamecurrentSchufareport,       
-          rentalschoolfree:fullfilenamerentalschoolfree,       
-          signatureData:fullfilenamesignatureData,       
-          applicationImg:fullfilenamecomponentImage,       
+          zimerzahl,
+          imageswbs,
+          personal,
+          schufa,
+          mietschuldenfreiheit,
+          mietschuldenfreiheitimg,
+          mietverhaltnis,
+          firstname,
+          lastname,
+          email2,      
         });
         await newForm.save();
          // salarystatementago,

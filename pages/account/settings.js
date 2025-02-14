@@ -229,10 +229,10 @@ const Account = () => {
                   <h3 className={`${styles['heading-news']}`}>Newsletter</h3>
                   <p className={`${styles['p-news']}`}>Erhalten Sie unseren wöchentlichen Newsletter in Ihrer Mailbox</p>
                   </div>
-                  <label class="switch relative inline-block w-12 h-6">
-                    <input type="checkbox" class="opacity-0 w-0 h-0 peer" />
-                    <span class="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-blue-500"></span>
-                    <span class="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
+                  <label className="switch relative inline-block w-12 h-6">
+                    <input type="checkbox" className="opacity-0 w-0 h-0 peer" />
+                    <span className="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-blue-500"></span>
+                    <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
                   </label>
                    
                     
@@ -242,10 +242,10 @@ const Account = () => {
                   <h3 className={`${styles['heading-news']}`}>Newsletter</h3>
                   <p className={`${styles['p-news']}`}>Erhalten Sie unseren wöchentlichen Newsletter in Ihrer Mailbox</p>
                   </div>
-                  <label class="switch relative inline-block w-12 h-6">
-                    <input type="checkbox" class="opacity-0 w-0 h-0 peer" />
-                    <span class="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-blue-500"></span>
-                    <span class="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
+                  <label className="switch relative inline-block w-12 h-6">
+                    <input type="checkbox" className="opacity-0 w-0 h-0 peer" />
+                    <span className="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-blue-500"></span>
+                    <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
                   </label>
                    
                     

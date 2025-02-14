@@ -119,7 +119,7 @@ const StepTenInner = ({
           </div>
         </div>
 
-          <button type="button" className={`${styles["submit-btn"]} mt-10 mb-10 text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}  onClick={() => setCurrentStep(19)}>
+          <button type="submit" className={`${styles["submit-btn"]} mt-10 mb-10 text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}>
             Einladungslink versenden.
             <svg
                 fill="#ffffff"
