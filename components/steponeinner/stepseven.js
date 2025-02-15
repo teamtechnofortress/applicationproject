@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "@/styles/latest.module.css";
 
 const StepSevenInner = ({
@@ -8,19 +8,32 @@ const StepSevenInner = ({
   handleChange,
 }) => {
   const [errors, setErrors] = useState({});
-  const removeImage = (index) => {
-    setBwaimages((prevImages) => (prevImages || []).filter((_, i) => i !== index));
+  const fileInputRef = useRef(null); // Add a ref for file input
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]; 
+    if (file) {
+      setBwaimages(file); 
+    }
   };
+
+  const removeImage = () => {
+    setBwaimages(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset file input field
+    }
+  };
+
   const validateFields = () => {
     const newErrors = {};
-
-    if (bwaimages.length < 3) {
-      newErrors.bwaimages = "Bitte laden Sie mindestens 3 BWS.";
+    if (!bwaimages) {
+      newErrors.bwaimages = "BWA ist erforderlich.";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
+
   setCurrentStep(6);
 
   return ( 
@@ -35,42 +48,38 @@ const StepSevenInner = ({
                      (Solltest du noch keine Vorliegen haben gehe zum nächsten Schritt)
                     </p> 
    
-                    <div className="flex flex-col mt-10 items-center justify-center w-[60%] mx-auto">
-                        <label
-                          htmlFor="image-upload"
-                          className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
-                        >
-                          <i className="fa fa-upload mr-2"></i>
-                          Upload BWA
-                        </label>
-                        <input
-                          name="bwaimages"
-                          type="file"
-                          id="image-upload"
-                          className="hidden"
-                          multiple
-                          accept="image/*, application/pdf"
-                          onChange={handleChange}
-                        />
-                        <div className="mt-4 grid grid-cols-3 gap-4">
-                          {bwaimages.map((src, index) => (
-                            <div key={index} className="relative w-24 h-24">
-                              <img
-                                src={src}
-                                alt={`Uploaded Preview ${index + 1}`}
-                                className="object-cover w-full h-full rounded-lg"
-                              />
-                              <button
-                                type="button"
-                                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                                onClick={() => removeImage(index)}
-                              >
-                                ×
-                              </button>
-                            </div>
-                          ))}
+                    <div className="flex flex-col w-full justify-center mx-auto">
+                      <label
+                        htmlFor="image-upload"
+                        className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
+                      >
+                        <i className="fa fa-upload mr-2"></i> Upload BWA
+                      </label>
+                      <input
+                        type="file"
+                        id="image-upload"
+                        name="bwaimages"
+                        className="hidden"
+                        accept="image/*"
+                        ref={fileInputRef} // Attach ref here
+                        onChange={handleFileChange}
+                      />
+
+                      {/* Image Preview */}
+                      {bwaimages && (
+                        <div className="relative w-24 h-24 mt-4">
+                          <img src={URL.createObjectURL(bwaimages)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                          <button
+                            type="button"
+                            className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                            onClick={removeImage}
+                          >
+                            ×
+                          </button>
                         </div>
-                        {errors.bwaimages && <p className="text-red-500 text-sm">{errors.bwaimages}</p>}
+                      )}
+
+                      {errors.bwaimages && <p className="text-red-500 text-sm">{errors.bwaimages}</p>}
                     </div>
                     <div className="flex justify-between mt-10">
                     <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"

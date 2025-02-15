@@ -40,14 +40,21 @@ const application = () => {
   const [showinputfoto, setshowinputfoto] = useState();
   const [mietschuldenfreiheit, setMietschuldenfreiheit] = useState("");
   const [mietverhaltnis, setMietverhaltnis] = useState("");
-  const [images, setImages] = useState([]);
-  const [bwaimages, setBwaimages] = useState([]);
-  const [incomeimages, setincomeimages] = useState([]);
-  const [arbeitsvertrag, setarbeitsvertrag] = useState([]);
-  const [personal, setPersonal] = useState([]);
-  const [schufa, setSchufa] = useState([]);
-  const [imageswbs, setImageswbs] = useState([]);
-  const [mietschuldenfreiheitimg, setMietschuldenfreiheitimg] = useState([]);
+  const [salarySlip, setsalarySlip] = useState([]);
+  const [bwaimages, setBwaimages] = useState("");
+  const [showbwaimages, setshowbwaimages] = useState("");
+  const [einkommensbescheinigungimg, seteinkommensbescheinigungimg] = useState("");
+  const [showeinkommensbescheinigungimg, setshoweinkommensbescheinigungimg] = useState("");
+  const [employcontract, setemploycontract] = useState("");
+  const [showemploycontract, setshowemploycontract] = useState("");
+  const [personal, setPersonal] = useState("");
+  const [showpersonal, setshowpersonal] = useState("");
+  const [schufa, setSchufa] = useState("");
+  const [showschufa, setshowschufa] = useState("");
+  const [imageswbs, setImageswbs] = useState("");
+  const [showimageswbs, setshowimageswbs] = useState("");
+  const [mietschuldenfreiheitimg, setMietschuldenfreiheitimg] = useState("");
+  const [showmietschuldenfreiheitimg, setshowmietschuldenfreiheitimg] = useState("");
   const [coverletter, setCoverletter] = useState("");
   const [status, setStatus] = useState("");
   const [currentactivity, setCurrentactivity] = useState("");
@@ -106,12 +113,95 @@ const application = () => {
         reader.readAsDataURL(files[0]);
       }
     }
-
-    // if(name === "images"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setImages((prevImages) => [...prevImages, ...imageUrls]);
-    // }
+    if(name === "bwaimages"){
+      setBwaimages(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowbwaimages(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
+    if(name === "einkommensbescheinigungimg"){
+      seteinkommensbescheinigungimg(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshoweinkommensbescheinigungimg(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
+    if(name === "imageswbs"){
+      setImageswbs(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowimageswbs(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
+    if(name === "personal"){
+      setPersonal(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowpersonal(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
+    if(name === "schufa"){
+      setSchufa(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowschufa(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
+    if(name === "mietschuldenfreiheitimg"){
+      setMietschuldenfreiheitimg(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowmietschuldenfreiheitimg(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
+    if(name === "employcontract"){
+      setemploycontract(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowemploycontract(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
+    if(name === "salarySlip"){
+      const files = Array.from(e.target.files);
+      const imageUrls = files.map((file) => URL.createObjectURL(file));
+      setsalarySlip((prevImages) => [...prevImages, ...imageUrls]);
+    }
     // if(name === "bwaimages"){
     //   const files = Array.from(e.target.files);
     //   const imageUrls = files.map((file) => URL.createObjectURL(file));
@@ -280,7 +370,10 @@ const application = () => {
       if (name === "rentarea") setRentarea(value);
       if (name === "proceedings") setProceedings(value);
       if (name === "profession") setprofession(value);
-      if (name === "incomeimages") setprofession(value);
+      if (name === "einkommensbescheinigungimg") seteinkommensbescheinigungimg(value);
+      if (name === "imageswbs") setImageswbs(value);
+      if (name === "mietschuldenfreiheitimg") setMietschuldenfreiheitimg(value);
+      if (name === "personal") setPersonal(value);
       if (name === "apartment") setApartment(value);
       if (name === "coverletter") setCoverletter(value);
       if (name === "testname") setTestname(value);
@@ -314,6 +407,11 @@ const application = () => {
     formData.append("Ort", ort);
     formData.append("email", email);
     formData.append("inputfoto", inputfoto);
+    formData.append("bwaimages", bwaimages);
+    formData.append("einkommensbescheinigungimg", einkommensbescheinigungimg);
+    formData.append("imageswbs", imageswbs);
+    formData.append("personal", personal);
+    formData.append("mietschuldenfreiheitimg", mietschuldenfreiheitimg);
     formData.append("phonenumber", phonenumber);
     formData.append("geburtsdatum", geburtsdatum);
     formData.append("ausgeubterBeruf", ausgeubterBeruf);
@@ -321,13 +419,12 @@ const application = () => {
     formData.append("income", income);
     formData.append("employment", employment);
     formData.append("profession", profession);
-    formData.append("incomeimages", incomeimages);
     formData.append("pets", pets);
     formData.append("rentarea", rentarea);
     formData.append("proceedings", proceedings);
     formData.append("apartment", apartment);
     formData.append("coverletter", coverletter);
-    formData.append("images", images);
+    formData.append("salarySlip", salarySlip);
     // formData.append("noofpeople", people);
     formData.append("status", status);
     formData.append("currentactivity", currentactivity);
@@ -548,16 +645,16 @@ const application = () => {
                   profession={profession}
                   bwaimages={bwaimages}
                   setBwaimages={setBwaimages}
-                  incomeimages={incomeimages}
-                  setincomeimages={setincomeimages}
+                  einkommensbescheinigungimg={einkommensbescheinigungimg}
+                  seteinkommensbescheinigungimg={seteinkommensbescheinigungimg}
                   pets={pets}
                   rentarea={rentarea}
                   proceedings={proceedings}
                   apartment={apartment}
-                  images={images}
-                  arbeitsvertrag={arbeitsvertrag}
-                  setarbeitsvertrag={setarbeitsvertrag}
-                  setImages={setImages}
+                  salarySlip={salarySlip}
+                  employcontract={employcontract}
+                  setemploycontract={setemploycontract}
+                  setsalarySlip={setsalarySlip}
                   setComponents={setComponents}
                   handleChange={handleChange}
                   currentStep={currentStep}

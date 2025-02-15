@@ -82,18 +82,6 @@ const ThirdStep = ({
     }
   }, [currentStep]);
 
-  const validateStep = () => {
-    const newErrors = {};
-    const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
-
-    // Check cover letter on step 1
-    if (currentStep === 1 && !safeTrim(coverletter)) {
-      newErrors.coverletter = "Cover letter is required.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleNextClick = () => {
     setComponents(2);

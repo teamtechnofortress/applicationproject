@@ -36,16 +36,16 @@ const FirstStep = ({
   profession,
   bwaimages,
   setBwaimages,
-  incomeimages,
-  setincomeimages,
+  einkommensbescheinigungimg,
+  seteinkommensbescheinigungimg,
   pets,
   rentarea,
   proceedings,
   apartment,
-  images,
-  arbeitsvertrag,
-  setarbeitsvertrag,
-  setImages,
+  salarySlip,
+  employcontract,
+  setemploycontract,
+  setsalarySlip,
   setComponents,
   handleChange,
   setCurrentStep,
@@ -76,55 +76,6 @@ const FirstStep = ({
     };
   }, [currentStep]);
 
-  const showStep = (stepIndex) => {
-    if (validateStep(currentStep)) {
-      setCurrentStep(stepIndex);
-    }
-  };
-
-  const validateStep = (step) => {
-    const newErrors = {};
-    const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
-    if (step === 0) {
-      if (!safeTrim(vorname)) newErrors.vorname = "Vorname is required.";
-      if (!safeTrim(nachname)) newErrors.nachname = "Nachname is required.";
-      if (!safeTrim(geburtsdatum)) newErrors.geburtsdatum = "Geburtsdatum is required.";
-    }
-    if (step === 1) {
-      if (!safeTrim(strabe)) newErrors.strabe = "Address is required.";
-      if (!safeTrim(postleitzahl)) newErrors.postleitzahl = "Postleitzahl is required.";
-      if (!safeTrim(hausnummer)) newErrors.hausnummer = "Hausnummer is required.";
-      if (!safeTrim(ort)) newErrors.ort = "Ort is required.";
-    }
-    if (step === 2) {
-      if (!safeTrim(email)) newErrors.email = "Bitte geben Sie Ihre E-Mail-Adresse ein.";
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        newErrors.email = "Bitte geben Sie eine gültige E-Mail-Adresse ein.";
-      }
-      if (!safeTrim(phonenumber)) newErrors.phonenumber = "PhoneNumber is required.";
-    }
-    if (step === 4) {
-      if (!safeTrim(ausgeubterBeruf)) newErrors.ausgeubterBeruf = "Ausgeübter Beruf is required.";
-      if (!safeTrim(arbeitgeber)) newErrors.arbeitgeber = "Arbeitgeber is required.";
-      if (!safeTrim(income)) newErrors.income = "Monatliches is required.";
-    }
-    if (step === 8) {
-      if (!pets) newErrors.pets = "Pets status is required.";  
-    }
-    if (step === 9) {
-      if (!rentarea) newErrors.rentarea = "Rent Area status is required.";  
-    }
-    if (step === 10) {
-      if (!proceedings) newErrors.proceedings = "Proceedings status is required.";  
-    }
-    if (step === 11) {
-      if (!apartment) newErrors.apartment = "Apartment status is required.";  
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
   return (
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
@@ -214,10 +165,10 @@ const FirstStep = ({
         {currentStep === 5 && (
            <StepSixInner            
            employment={employment}
-           images={images}
-           arbeitsvertrag={arbeitsvertrag}
-           setarbeitsvertrag={setarbeitsvertrag}
-           setImages={setImages}
+           salarySlip={salarySlip}
+           employcontract={employcontract}
+           setemploycontract={setemploycontract}
+           setsalarySlip={setsalarySlip}
            setComponents={setComponents}
            currentStep={currentStep}
            setCurrentStep={setCurrentStep}
@@ -227,7 +178,7 @@ const FirstStep = ({
 
           {/* Step 7 */}
           {currentStep === 6 && (
-           <StepSevenInner            
+           <StepSevenInner             
            bwaimages={bwaimages}
            setBwaimages={setBwaimages}
            currentStep={currentStep}
@@ -238,8 +189,8 @@ const FirstStep = ({
          {/* Step 8 */}
          {currentStep === 7 && (
            <StepEightInner            
-           incomeimages={incomeimages}
-           setincomeimages={setincomeimages}
+           einkommensbescheinigungimg={einkommensbescheinigungimg}
+           seteinkommensbescheinigungimg={seteinkommensbescheinigungimg}
            currentStep={currentStep}
            setCurrentStep={setCurrentStep}
            handleChange={handleChange}

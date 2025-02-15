@@ -20,7 +20,6 @@ const ApplicationFileSchema = new mongoose.Schema({
   income: { type: String},
   bwaimages: { type: String },
   employment: { type: String },
-  incomeimages: { type: String },
   salaryslip: { type: String},
   employcontract: { type: String },
   pets: { type: String },

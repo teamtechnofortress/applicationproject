@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "@/styles/latest.module.css";
 
 const StepFourInner = ({
@@ -18,8 +18,20 @@ const StepFourInner = ({
     setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
   };
 
-  const removeImage = (index) => {
-    setSchufa((prevImages) => (prevImages || []).filter((_, i) => i !== index)); // Safeguard against undefined
+  const fileInputRef = useRef(null); // Add a ref for file input
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]; 
+    if (file) {
+      setSchufa(file); 
+    }
+  };
+
+  const removeImage = () => {
+    setSchufa(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset file input field
+    }
   };
 
   setCurrentStep(17);
@@ -49,31 +61,28 @@ const StepFourInner = ({
           Uploads Schufa
         </label>
         <input
-          name="schufa"
-          type="file"
-          id="image-upload"
-          className="hidden"
-          multiple
-          accept="image/*, application/pdf"
-          onChange={handleChange}
-        />
+              type="file"
+              id="image-upload"
+              name="schufa"
+              className="hidden"
+              accept="image/*"
+              ref={fileInputRef} // Attach ref here
+              onChange={handleFileChange}
+            />
         <div className="mt-4 grid grid-cols-3 gap-4">
-          {schufa.map((src, index) => (
-            <div key={index} className="relative w-24 h-24">
-              <img
-                src={src}
-                alt={`Uploaded Preview ${index + 1}`}
-                className="object-cover w-full h-full rounded-lg"
-              />
-              <button
-                type="button"
-                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                onClick={() => removeImage(index)}
-              >
-                ×
-              </button>
-            </div>
-          ))}
+          {/* Image Preview */}
+          {schufa && (
+              <div className="relative w-24 h-24 mt-4">
+                <img src={URL.createObjectURL(schufa)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                  onClick={removeImage}
+                >
+                  ×
+                </button>
+              </div>
+            )}
         </div>
         <a href="" className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg text-center`} >
         Hier Schufaauskunft erhalten

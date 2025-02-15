@@ -63,7 +63,6 @@ const handler = async (req, res) => {
       const income = Array.isArray(fields.income) ? fields.income[0] : fields.income;
       const bwaimages = Array.isArray(fields.bwaimages) ? fields.bwaimages[0] : fields.bwaimages;
       const employment = Array.isArray(fields.employment) ? fields.employment[0] : fields.employment;
-      const incomeimages = Array.isArray(fields.incomeimages) ? fields.incomeimages[0] : fields.incomeimages;
       const salaryslip = Array.isArray(fields.salaryslip) ? fields.salaryslip[0] : fields.salaryslip;
       const employcontract = Array.isArray(fields.employcontract) ? fields.employcontract[0] : fields.employcontract;
       const pets = Array.isArray(fields.pets) ? fields.pets[0] : fields.pets;
@@ -340,10 +339,8 @@ const handler = async (req, res) => {
         // profile image
         const inputfotoImage = files.inputfoto;
       let fullfilenameinputfoto = null
-      console.log(files)
-      console.log(inputfotoImage)
       if(inputfotoImage){
-        console.log('here2')
+
         // If photo is an array, get the first item
         const photoFile = Array.isArray(inputfotoImage) ? inputfotoImage[0] : inputfotoImage;
 
@@ -362,6 +359,29 @@ const handler = async (req, res) => {
         console.log(fullfilenameinputfoto)
       }
 
+       // profile image
+       const employcontractImage = files.employcontract;
+       let fullfilenameemploycontract = null
+
+       if(employcontractImage){
+         // If photo is an array, get the first item
+         const photoFile = Array.isArray(employcontractImage) ? employcontractImage[0] : employcontractImage;
+ 
+         if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+           console.error('Filepath or originalFilename missing:', photoFile);
+           return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+         }
+ 
+         const fileContent = fs.readFileSync(photoFile.filepath);
+         const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+         const blob = await put(uniqueFileName, fileContent, {
+           access: 'public',
+         });
+ 
+         fullfilenameemploycontract = blob.url
+         console.log(fullfilenameemploycontract)
+       }
+ 
 
       // new code for new images end
       try {
@@ -424,15 +444,13 @@ const handler = async (req, res) => {
           income,
           bwaimages,
           employment,
-          incomeimages,
           salaryslip,
-          employcontract,
+          employcontract:fullfilenameemploycontract,
           pets,
           rentarea,
           proceedings,
           apartment,
           coverletter,
-       
           fläche,
           zimerzahl,
           imageswbs,
