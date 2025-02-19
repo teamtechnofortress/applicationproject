@@ -13,16 +13,34 @@ const StepSixInner = ({
   const fileInputRef = useRef(null);
 
   // Handle File Upload for Salary Slips & Employment Contract
+  // const handleFileChange = (event, type) => {
+  //   const files = Array.from(event.target.files);
+
+
+  //   if (type === "employcontract") {
+  //     // Only set employcontract if it's the correct input
+  //     setemploycontract(files[0]);
+  //   } else if (type === "salarySlip") {
+  //     // Append salary slip files without affecting employcontract
+  //     const fileURLs = files.map((file) => URL.createObjectURL(file));
+  //     // setsalarySlip((prev) => [...prev, ...fileURLs]);
+  //     setsalarySlip(Array.from(files));
+  //   }
+  // };
   const handleFileChange = (event, type) => {
     const files = Array.from(event.target.files);
-
+  
     if (type === "employcontract") {
       // Only set employcontract if it's the correct input
       setemploycontract(files[0]);
     } else if (type === "salarySlip") {
-      // Append salary slip files without affecting employcontract
-      const fileURLs = files.map((file) => URL.createObjectURL(file));
-      setsalarySlip((prev) => [...prev, ...fileURLs]);
+      // Create Object URLs for images and use them for preview
+      const fileURLs = files.map((file) =>
+        file.type.startsWith('image/') ? URL.createObjectURL(file) : file.name
+      );
+      // setsalarySlip(Array.from(files));
+      setsalarySlip(prev => [...prev, ...Array.from(files)]);
+      // setsalarySlip((prev) => [...prev, ...fileURLs]);
     }
   };
 
@@ -42,8 +60,8 @@ const StepSixInner = ({
   // Validation before proceeding
   const validateFields = () => {
     const newErrors = {};
-    if (employment === "Ja" && salarySlip.length < 3) {
-      newErrors.salarySlip = "Bitte laden Sie mindestens 3 Gehaltsnachweise hoch.";
+    if (salarySlip.length < 1 || salarySlip.length > 3) {
+      newErrors.salarySlip = "Bitte laden Sie zwischen 1 und 3 Gehaltsnachweise hoch.";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -74,31 +92,41 @@ const StepSixInner = ({
           id="salarySlip-upload"
           className="hidden"
           multiple
-          accept="image/*"
+          accept="image/*, application/pdf"
           onChange={(e) => handleFileChange(e, "salarySlip")}
         />
 
         {/* Salary Proofs Preview */}
         <div className="mt-4 grid grid-cols-3 gap-4">
-          {salarySlip.map((src, index) => (
-            <div key={index} className="relative w-24 h-24">
-              <img
-                src={src}
-                alt={`Gehaltsnachweis Preview ${index + 1}`}
-                className="object-cover w-full h-full rounded-lg"
-              />
-              <button
-                type="button"
-                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                onClick={() => removeImage(index)}
-              >
-                ×
-              </button>
-            </div>
-          ))}
+  {salarySlip.map((file, index) => (
+    <div key={index} className="relative w-24 h-24">
+      {/* Check if the file is an image or not */}
+      {file instanceof File && file.type.startsWith('image/') ? (
+        // Render Image for Image files
+        <img
+          src={URL.createObjectURL(file)} // Use the object URL created for images
+          alt={`Gehaltsnachweis Preview ${index + 1}`}
+          className="object-cover w-full h-full rounded-lg"
+        />
+      ) : (
+        // Render PDF icon or text for PDFs
+        <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
+          <span>PDF</span>
+        </div>
+      )}
+      <button
+        type="button"
+        className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+        onClick={() => removeImage(index)}
+      >
+        ×
+      </button>
+    </div>
+  ))}
         </div>
         {errors.salarySlip && <p className="text-red-500 text-sm">{errors.salarySlip}</p>}
-      </div>
+
+          </div>
 
       {/* Upload Section for Employment Contract */}
       <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">

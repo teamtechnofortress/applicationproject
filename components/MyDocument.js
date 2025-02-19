@@ -385,20 +385,39 @@ const MyDocument = ({ profileData }) => {
     { field: "Vorname", value: profileData.vorname },
     { field: "Nachname", value: profileData.nachname},
     { field: "Straße", value: profileData.strabe },
+    { field: "postleitzahl", value: profileData.postleitzahl },
     { field: "hausnummer", value: profileData.hausnummer },
-    { field: "PLZ", value: profileData.PLZ },
+    // { field: "PLZ", value: profileData.PLZ },
     { field: "Ort", value: profileData.Ort },
+    { field: "inputfoto", value: profileData.inputfoto },
     { field: "E-Mail", value: profileData.email },
     { field: "Tel. Mobil", value: profileData.tel },
+    { field: "profession", value: profileData.profession },
+    { field: "ausgeubterBeruf", value: profileData.ausgeubterBeruf },
+    
     { field: "Geburtsdatum", value: profileData.geburtsdatum },
     { field: "Ausgeübter Beruf", value: profileData.ausgeübterBeruf },
     { field: "Arbeitgeber", value: profileData.arbeitgeber },
     { field: "Nettoeinkommen (€)", value: profileData.income },
-    { field: "textarea1", value: profileData.textarea1 },
-    { field: "textarea2", value: profileData.textarea2 },
-    { field: "textarea3", value: profileData.textarea3 },
-    { field: "textarea4", value: profileData.textarea4 },
-    { field: "textarea5", value: profileData.textarea5 }
+    { field: "bwaimages", value: profileData.bwaimages },
+    
+    { field: "employment", value: profileData.employment },
+    { field: "salaryslip", value: profileData.salaryslip },
+    { field: "employcontract", value: profileData.employcontract },
+    { field: "pets", value: profileData.pets },
+    { field: "einkommensbescheinigungimg", value: profileData.einkommensbescheinigungimg },
+    { field: "rentarea", value: profileData.rentarea },
+    { field: "proceedings", value: profileData.proceedings },
+    { field: "apartment", value: profileData.apartment },
+    { field: "coverletter", value: profileData.coverletter },
+    { field: "fläche", value: profileData.fläche },
+    { field: "zimerzahl", value: profileData.zimerzahl },
+    { field: "imageswbs", value: profileData.imageswbs },
+    { field: "personal", value: profileData.personal },
+    { field: "schufa", value: profileData.schufa },
+    { field: "mietschuldenfreiheitimg", value: profileData.mietschuldenfreiheitimg },
+    { field: "firstname", value: profileData.firstname },
+    { field: "lastname", value: profileData.lastname },
   ];
  
   return (
@@ -412,14 +431,14 @@ const MyDocument = ({ profileData }) => {
           <Text style={styles.bannersmall}>Die</Text>
           <Text style={styles.bannertitle}>Bewerbermappe</Text>
           <Text style={styles.para}>Von</Text>
-          <Text style={styles.para}>Max Mustermann</Text>
+          <Text style={styles.para}>{profileData.vorname} {profileData.nachname}</Text>
         </View>
         <View style={styles.footer}>
             {/* Parent Row */}
             <View style={styles.footerRow}>
               {/* Left Column */}
               <View style={styles.footerColOne}>
-                <Text style={styles.footerTextOne}>Lützowstraße 110{"\n"} 10785, Berlin
+                <Text style={styles.footerTextOne}>{profileData.strabe} {profileData.hausnummer}{"\n"} {profileData.postleitzahl}, {profileData.Ort}
                 </Text>
               </View>
 
@@ -430,8 +449,8 @@ const MyDocument = ({ profileData }) => {
 
               {/* Right Column */}
               <View style={styles.footerCol}>
-                <Text style={styles.footerText}>+49 173 370 455 4</Text>
-                <Text style={styles.footerText}>maxmustermann@gmail.com</Text>
+                <Text style={styles.footerText}>+{profileData.phonenumber}</Text>
+                <Text style={styles.footerText}>{profileData.email}</Text>
               </View>
             </View>
           </View>
@@ -445,17 +464,17 @@ const MyDocument = ({ profileData }) => {
         <View style={styles.headerText}>
           <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
           <Text style={styles.headerPhone}>{profileData.tel}</Text>
-          <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
+          <Text style={styles.headerEmail}>{profileData.email}</Text>
         </View>
         <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-        <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
+        <Image style={styles.headerImage} src={profileData.inputfoto}/>
       </View>
        {/* header */}
        <View style={styles.bodyWhite}>
         <View style={styles.secondPageBody}>
           <Text style={styles.titleBorder}>Mieterselbstauskunft</Text>
           <View style={styles.secondPagesection}>
-            <Text style={styles.titleCapital}>MAX MUSTERMANN</Text>
+            <Text style={styles.titleCapital}>{profileData.vorname} {profileData.nachname}</Text>
             <View style={styles.table}>
                <Text style={styles.tableHeading}>KONTAKT</Text>
                   {/* Table Rows */}
@@ -464,7 +483,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Name, Vorname: </Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>Max Mustermann</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.vorname} {profileData.nachname}</Text>
                     </View>
                   </View>
 
@@ -473,7 +492,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Straße, Nr.</Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>Lützowstraße 110</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.strabe} {profileData.hausnummer}</Text>
                     </View>
                   </View>
 
@@ -482,7 +501,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>PLZ, Ort</Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>10785, Berlin</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.postleitzahl}, {profileData.Ort}</Text>
                     </View>
                   </View>
 
@@ -491,7 +510,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>E-Mail</Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>max@gmail.com</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.email}</Text>
                     </View>
                   </View>
 
@@ -500,7 +519,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Tel. Mobil</Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>+49 173 370 455 9</Text>
+                      <Text style={styles.tableCellTwo}>+{profileData.phonenumber}</Text>
                     </View>
                   </View>
             </View>
@@ -513,7 +532,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Geburtsdatum: </Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>18.09.1997</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.geburtsdatum}</Text>
                     </View>
                   </View>
                   <Text style={styles.tableHeading}>ÜBER MICH</Text>
@@ -552,7 +571,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Haben Sie Haustiere?</Text>
                     </View>
                     <View style={styles.tableColTwo}>
-                      <Text style={styles.tableCellTwo}>Nein</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.pets === 'Ja' ? 'Ja' : 'Nein'}</Text>
                     </View>
                   </View>
 
@@ -561,7 +580,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Sollen außer ihnen noch weitere Personen die Wohnung beziehen?</Text>
                     </View>
                     <View style={styles.tableColTwo}>
-                      <Text style={styles.tableCellTwo}>Nein</Text>
+                      <Text style={styles.tableCellTwo}>Nein (static)</Text>
                     </View>
                   </View>
 
@@ -570,7 +589,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Bestehen Mietrückstände aus bisherigen Mietverhältnissen?</Text>
                     </View>
                     <View style={styles.tableColTwo}>
-                      <Text style={styles.tableCellTwo}>Nein</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.rentarea === 'Ja' ? 'Ja' : 'Nein'}</Text>
                     </View>
                   </View>
 
@@ -579,7 +598,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Wurde in den letzten 5 Jahren Insolvenzverfahren gegen Sie eröffnet?</Text>
                     </View>
                     <View style={styles.tableColTwo}>
-                      <Text style={styles.tableCellTwo}>Nein</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.proceedings === 'Ja' ? 'Ja' : 'Nein'}</Text>
                     </View>
                   </View>
 
@@ -588,7 +607,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Ist eine gewerbliche Nutzung der Wohnung beabsichtigt?</Text>
                     </View>
                     <View style={styles.tableColTwo}>
-                      <Text style={styles.tableCellTwo}>Nein</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.apartment === 'Ja' ? 'Ja' : 'Nein'}</Text>
                     </View>
                   </View>
             </View>
@@ -596,7 +615,7 @@ const MyDocument = ({ profileData }) => {
         </View> 
         </View>
           {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
+        <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
       </Page>
       {/* page 2 end*/}
 
@@ -607,30 +626,24 @@ const MyDocument = ({ profileData }) => {
         <View style={styles.headerText}>
           <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
           <Text style={styles.headerPhone}>{profileData.tel}</Text>
-          <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
+          <Text style={styles.headerEmail}>{profileData.email}</Text>
         </View>
         <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-        <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
+        <Image style={styles.headerImage} src={profileData.inputfoto}/>
       </View>
        {/* header */}
        <View style={styles.bodyWhite}>
         <View style={styles.secondPageBody}>
           <Text style={styles.titleBorder}>Über mich</Text>
           <View style={styles.secondPagesection}>
-            <Text style={styles.titleCapital}>MAX MUSTERMANN</Text>
-            <Text style={styles.descriptionText}>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.{"\n"}{"\n"}   
-
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.{"\n"}{"\n"}
-
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.{"\n"}{"\n"}
-
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.  </Text>
+            <Text style={styles.titleCapital}>{profileData.vorname} {profileData.nachname}</Text>
+            <Text style={styles.descriptionText}>{profileData.coverletter}  </Text>
            
           </View>
         </View> 
         </View>
           {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
+          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
       </Page>
       {/* page 3 end*/}
 
@@ -641,23 +654,23 @@ Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming 
           <View style={styles.headerText}>
             <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
             <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
+            <Text style={styles.headerEmail}>{profileData.email}</Text>
           </View>
           <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
+          <Image style={styles.headerImage} src={profileData.inputfoto}/>
         </View>
         {/* header */}
         <View style={styles.bodyWhite}>
         <View style={styles.secondPageBody}>
           <Text style={styles.titleBorder}>WBS</Text>
           <View style={styles.secondPagesection}>
-            <Image style={styles.pdfImage}  src={`${profileData.salarystatementbefore}`} />
+            <Image style={styles.pdfImage}  src={`${profileData.imageswbs}`} />
            
           </View>
         </View> 
         </View>
           {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
+          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
 
       </Page>
       {/* page 4 end*/}
@@ -669,124 +682,153 @@ Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming 
           <View style={styles.headerText}>
             <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
             <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
+            <Text style={styles.headerEmail}>{profileData.email}</Text>
           </View>
           <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
+          <Image style={styles.headerImage} src={profileData.inputfoto}/>
         </View>
         {/* header */}
         <View style={styles.bodyWhite}>
         <View style={styles.secondPageBody}>
           <Text style={styles.titleBorder}>Ausweiskopie</Text>
           <View style={styles.greyCardBg}>
-            <Image style={styles.idImage}  src={`${window.location.origin}/idfront.png`} />
-          </View>
-          <View style={styles.greyCardBg}>
-            <Image style={styles.idImage}  src={`${window.location.origin}/idback.png`} />
-          </View>
+            <Image style={styles.idImage}  src={`${profileData.personal}`} />
+          </View>      
         </View> 
         </View>
           {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
+          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
 
       </Page>
       {/* page 5 end*/}
 
-       {/* page 6*/}
+      {/* schufa */}
+      {profileData.schufa && (
        <Page style={styles.page}>
         {/* header */}
         <View style={styles.header}>
           <View style={styles.headerText}>
             <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
             <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
+            <Text style={styles.headerEmail}>{profileData.email}</Text>
           </View>
           <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
+          <Image style={styles.headerImage} src={profileData.inputfoto}/>
         </View>
         {/* header */}
         <View style={styles.bodyWhite}>
         <View style={styles.secondPageBody}>
           <Text style={styles.titleBorder}>Schufa - Bonität</Text>
           <View style={styles.secondPagesection}>
-            <Image style={styles.pdfImage}  src={`${profileData.salarystatementbefore}`} />
+            <Image style={styles.pdfImage}  src={`${profileData.schufa}`} />
            
           </View>
         </View> 
         </View>
           {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
+          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
 
       </Page>
-      {/* page 6 end*/}
+     )}
 
-       {/* page 7*/}
-       <Page style={styles.page}>
-        {/* header */}
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-            <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
+      {/* Salary Slips Pages */}
+      {profileData.salaryslip?.length > 0 &&
+        profileData.salaryslip.map((slip, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} />
+              <Image style={styles.headerImage} src={profileData.inputfoto} />
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+                <Image style={styles.salarySlipFullPage} src={slip} />
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+
+   
+    {/* einkommensbescheinigungimg */}
+    {profileData.einkommensbescheinigungimg && (
+        <Page style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+              <Text style={styles.headerPhone}>{profileData.tel}</Text>
+              <Text style={styles.headerEmail}>{profileData.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerImage} src={profileData.inputfoto} />
           </View>
-          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
-        </View>
-        {/* header */}
-        <View style={styles.bodyWhite}>
-        <View style={styles.secondPageBody}>
-          <Text style={styles.titleBorder}>Einkommensnachweis</Text>
-          <View style={styles.secondPagesection}>
-            <Image style={styles.pdfImage}  src={`${profileData.salarystatementbefore}`} />
-           
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Einkommensbescheinigung</Text>
+              <View style={styles.secondPagesection}>
+                <Image style={styles.pdfImage} src={`${profileData.einkommensbescheinigungimg}`} />
+              </View>
+            </View>
           </View>
-        </View> 
-        </View>
+
           {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      )}
+      {/* mietschuldenfreiheitimg */}
+      {profileData.mietschuldenfreiheitimg && (
+        <Page style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+              <Text style={styles.headerPhone}>{profileData.tel}</Text>
+              <Text style={styles.headerEmail}>{profileData.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerImage} src={profileData.inputfoto} />
+          </View>
 
-      </Page>
-      {/* page 7 end*/}
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Mietschuldenfreiheitsbescheinigung</Text>
+              <View style={styles.secondPagesection}>
+                <Image style={styles.pdfImage} src={`${profileData.mietschuldenfreiheitimg}`} />
+              </View>
+            </View>
+          </View>
 
-      {/* page 8*/}
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      )}  
+
+    {profileData.imageswbs && (
       <Page style={styles.page}>
         {/* header */}
         <View style={styles.header}>
           <View style={styles.headerText}>
             <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
             <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
+            <Text style={styles.headerEmail}>{profileData.email}</Text>
           </View>
           <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
-        </View>
-        {/* header */}
-        <View style={styles.bodyWhite}>
-        <View style={styles.secondPageBody}>
-          <Text style={styles.titleBorder}>Einkommensnachweis</Text>
-          <View style={styles.secondPagesection}>
-            <Image style={styles.pdfImage}  src={`${profileData.salarystatementbefore}`} />
-           
-          </View>
-        </View> 
-        </View>
-          {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
-
-      </Page>
-      {/* page 8 end*/}
-
-      {/* page 9 */}
-      <Page style={styles.page}>
-        {/* header */}
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-            <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>maxmustermann@gmail.com</Text>
-          </View>
-          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={`${window.location.origin}/avatar.png`}/>
+          <Image style={styles.headerImage} src={profileData.inputfoto}/>
         </View>
         {/* header */}
         <View style={styles.bodyWhite}>
@@ -799,10 +841,10 @@ Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming 
         </View> 
         </View>
           {/* Page Number */}
-        <Text style={styles.pageNumber} render={({ pageNumber }) => `${pageNumber}/9`} fixed />
+          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
 
       </Page>
-      {/* page 9 end*/}
+       )}  
 
     </Document>
   );

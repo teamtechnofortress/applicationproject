@@ -74,7 +74,7 @@ const StepThreeInner = ({
         <input
               type="file"
               id="image-upload"
-              name="imageswbs"
+              name="personal"
               className="hidden"
               accept="image/*"
               ref={fileInputRef} // Attach ref here

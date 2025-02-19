@@ -101,18 +101,18 @@ const application = () => {
     const { name, value, files } = e.target;
     const newErrors = {};
 
-    if(name === "inputfoto"){
-      setinputfoto(files[0])
-      if (files[0]) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const result = reader.result;
-          setshowinputfoto(result);
-          console.log(selectedImg);
-        };
-        reader.readAsDataURL(files[0]);
-      }
-    }
+    // if(name === "inputfoto"){
+    //   setinputfoto(files[0])
+    //   if (files[0]) {
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //       const result = reader.result;
+    //       setshowinputfoto(result);
+    //       console.log(selectedImg);
+    //     };
+    //     reader.readAsDataURL(files[0]);
+    //   }
+    // }
     if(name === "bwaimages"){
       setBwaimages(files[0])
       if (files[0]) {
@@ -192,16 +192,12 @@ const application = () => {
         reader.onloadend = () => {
           const result = reader.result;
           setshowemploycontract(result);
-          console.log(selectedImg);
         };
         reader.readAsDataURL(files[0]);
       }
     }
-    if(name === "salarySlip"){
-      const files = Array.from(e.target.files);
-      const imageUrls = files.map((file) => URL.createObjectURL(file));
-      setsalarySlip((prevImages) => [...prevImages, ...imageUrls]);
-    }
+  
+    
     // if(name === "bwaimages"){
     //   const files = Array.from(e.target.files);
     //   const imageUrls = files.map((file) => URL.createObjectURL(file));
@@ -243,6 +239,12 @@ const application = () => {
    
     // console.log('Event triggered:', name, value, files);
     if (files && files.length > 0) {
+      // if(name === "salarySlip"){
+      //   // const files = Array.from(e.target.files);
+      //   // const imageUrls = files.map((file) => URL.createObjectURL(file));
+      //   // setsalarySlip((prevImages) => [...prevImages, ...imageUrls]);
+      //   setsalarySlip(Array.from(files));
+      // }
       if (name === "photo") {
         setPhoto(files[0]);
         // console.log(photo);
@@ -359,21 +361,25 @@ const application = () => {
       if (name === "geburtsdatum") setGeburtsdatum(value);
       if (name === "ort") setOrt(value);
       if (name === "income") setincome(value);
-      if (name === "email")setEmail(value);
+      if (name === "email") setEmail(value);
       if (name === "inputfoto")setinputfoto(value);
-      if (name === "email2")setEmail2(value);
+      if (name === "email2") setEmail2(value);
       if (name === "phonenumber") setPhoneNumber(value);
       if (name === "ausgeubterBeruf") setausgeubterBeruf(value);
       if (name === "arbeitgeber") setarbeitgeber(value);
       if (name === "employment") setEmployment(value);
+      // if (name === "salaryslip") setsalarySlip(value);
+      if (name === "employcontract") setemploycontract(value);
       if (name === "pets") setPets(value);
       if (name === "rentarea") setRentarea(value);
       if (name === "proceedings") setProceedings(value);
       if (name === "profession") setprofession(value);
+      if (name === "bwaimages") setBwaimages(value);
       if (name === "einkommensbescheinigungimg") seteinkommensbescheinigungimg(value);
       if (name === "imageswbs") setImageswbs(value);
       if (name === "mietschuldenfreiheitimg") setMietschuldenfreiheitimg(value);
       if (name === "personal") setPersonal(value);
+      if (name === "schufa") setPersonal(value);
       if (name === "apartment") setApartment(value);
       if (name === "coverletter") setCoverletter(value);
       if (name === "testname") setTestname(value);
@@ -419,12 +425,15 @@ const application = () => {
     formData.append("income", income);
     formData.append("employment", employment);
     formData.append("profession", profession);
+    formData.append("employcontract", employcontract);
     formData.append("pets", pets);
     formData.append("rentarea", rentarea);
     formData.append("proceedings", proceedings);
     formData.append("apartment", apartment);
     formData.append("coverletter", coverletter);
-    formData.append("salarySlip", salarySlip);
+    // formData.append("salarySlip", salarySlip);
+    salarySlip.forEach((file) => formData.append("salarySlip", file));
+    formData.append("schufa", schufa);
     // formData.append("noofpeople", people);
     formData.append("status", status);
     formData.append("currentactivity", currentactivity);

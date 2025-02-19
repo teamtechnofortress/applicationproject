@@ -55,7 +55,7 @@ const handler = async (req, res) => {
       const PLZ = Array.isArray(fields.PLZ) ? fields.PLZ[0] : fields.PLZ;
       const Ort = Array.isArray(fields.Ort) ? fields.Ort[0] : fields.Ort;
       const email = Array.isArray(fields.email) ? fields.email[0] : fields.email;
-      const tel = Array.isArray(fields.tel) ? fields.tel[0] : fields.tel;
+      const phonenumber = Array.isArray(fields.phonenumber) ? fields.phonenumber[0] : fields.phonenumber;
       const profession = Array.isArray(fields.profession) ? fields.profession[0] : fields.profession;
       const geburtsdatum = Array.isArray(fields.geburtsdatum) ? fields.geburtsdatum[0] : fields.geburtsdatum;
       const ausgeubterBeruf = Array.isArray(fields.ausgeubterBeruf) ? fields.ausgeubterBeruf[0] : fields.ausgeubterBeruf;
@@ -63,7 +63,9 @@ const handler = async (req, res) => {
       const income = Array.isArray(fields.income) ? fields.income[0] : fields.income;
       const bwaimages = Array.isArray(fields.bwaimages) ? fields.bwaimages[0] : fields.bwaimages;
       const employment = Array.isArray(fields.employment) ? fields.employment[0] : fields.employment;
-      const salaryslip = Array.isArray(fields.salaryslip) ? fields.salaryslip[0] : fields.salaryslip;
+      // const salaryslip = Array.isArray(fields.salaryslip) ? fields.salaryslip[0] : fields.salaryslip;
+      // const salaryslip = Array.isArray(fields.salarySlip) ? fields.salarySlip : [fields.salarySlip];
+      // console.log('heretest', salaryslip);
       const employcontract = Array.isArray(fields.employcontract) ? fields.employcontract[0] : fields.employcontract;
       const pets = Array.isArray(fields.pets) ? fields.pets[0] : fields.pets;
       const rentarea = Array.isArray(fields.rentarea) ? fields.rentarea[0] : fields.rentarea;
@@ -356,14 +358,16 @@ const handler = async (req, res) => {
         });
 
         fullfilenameinputfoto = blob.url
-        console.log(fullfilenameinputfoto)
+        // console.log(fullfilenameinputfoto)
       }
 
-       // profile image
+       // employcontract image
        const employcontractImage = files.employcontract;
        let fullfilenameemploycontract = null
 
        if(employcontractImage){
+         console.log('contract')
+         console.log(employcontractImage)
          // If photo is an array, get the first item
          const photoFile = Array.isArray(employcontractImage) ? employcontractImage[0] : employcontractImage;
  
@@ -381,7 +385,213 @@ const handler = async (req, res) => {
          fullfilenameemploycontract = blob.url
          console.log(fullfilenameemploycontract)
        }
+
+        // bwa image
+        const bwaimagesImage = files.bwaimages;
+        let fullfilenamebwaimages = null
  
+        if(bwaimagesImage){
+          console.log('contract')
+          console.log(bwaimagesImage)
+          // If photo is an array, get the first item
+          const photoFile = Array.isArray(bwaimagesImage) ? bwaimagesImage[0] : bwaimagesImage;
+  
+          if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+            console.error('Filepath or originalFilename missing:', photoFile);
+            return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+          }
+  
+          const fileContent = fs.readFileSync(photoFile.filepath);
+          const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+          const blob = await put(uniqueFileName, fileContent, {
+            access: 'public',
+          });
+  
+          fullfilenamebwaimages = blob.url
+          console.log(fullfilenamebwaimages)
+        }
+         // einkommensbescheinigungimg image
+         const einkommensbescheinigungimgImage = files.einkommensbescheinigungimg;
+         let fullfilenameeinkommensbescheinigungimg = null
+  
+         if(einkommensbescheinigungimgImage){
+           console.log('contract')
+           console.log(einkommensbescheinigungimgImage)
+           // If photo is an array, get the first item
+           const photoFile = Array.isArray(einkommensbescheinigungimgImage) ? einkommensbescheinigungimgImage[0] : einkommensbescheinigungimgImage;
+   
+           if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+             console.error('Filepath or originalFilename missing:', photoFile);
+             return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+           }
+   
+           const fileContent = fs.readFileSync(photoFile.filepath);
+           const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+           const blob = await put(uniqueFileName, fileContent, {
+             access: 'public',
+           });
+   
+           fullfilenameeinkommensbescheinigungimg = blob.url
+           console.log(fullfilenameeinkommensbescheinigungimg)
+         }
+         // imageswbs image
+         const imageswbsImage = files.imageswbs;
+         let fullfilenameimageswbs = null
+  
+         if(imageswbsImage){
+           console.log('contract')
+           console.log(imageswbsImage)
+           // If photo is an array, get the first item
+           const photoFile = Array.isArray(imageswbsImage) ? imageswbsImage[0] : imageswbsImage;
+   
+           if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+             console.error('Filepath or originalFilename missing:', photoFile);
+             return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+           }
+   
+           const fileContent = fs.readFileSync(photoFile.filepath);
+           const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+           const blob = await put(uniqueFileName, fileContent, {
+             access: 'public',
+           });
+   
+           fullfilenameimageswbs = blob.url
+           console.log(fullfilenameimageswbs)
+         }
+
+         //id card imag
+         const personalImage = files.personal;
+         let fullfilenamepersonal = null
+  
+         if(personalImage){
+           console.log('contract')
+           console.log(personalImage)
+           // If photo is an array, get the first item
+           const photoFile = Array.isArray(personalImage) ? personalImage[0] : personalImage;
+   
+           if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+             console.error('Filepath or originalFilename missing:', photoFile);
+             return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+           }
+   
+           const fileContent = fs.readFileSync(photoFile.filepath);
+           const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+           const blob = await put(uniqueFileName, fileContent, {
+             access: 'public',
+           });
+   
+           fullfilenamepersonal = blob.url
+           console.log(fullfilenamepersonal)
+         }
+
+        // schufa img
+         const schufaImage = files.schufa;
+         let fullfilenameschufa = null
+  
+         if(schufaImage){
+           console.log('contract')
+           console.log(schufaImage)
+           // If photo is an array, get the first item
+           const photoFile = Array.isArray(schufaImage) ? schufaImage[0] : schufaImage;
+   
+           if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+             console.error('Filepath or originalFilename missing:', photoFile);
+             return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+           }
+   
+           const fileContent = fs.readFileSync(photoFile.filepath);
+           const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+           const blob = await put(uniqueFileName, fileContent, {
+             access: 'public',
+           });
+   
+           fullfilenameschufa = blob.url
+           console.log(fullfilenameschufa)
+         }
+
+         //mietschuldenfreiheitimg
+
+         const mietschuldenfreiheitimgImage = files.mietschuldenfreiheitimg;
+         let fullfilenamemietschuldenfreiheitimg = null
+  
+         if(mietschuldenfreiheitimgImage){
+           console.log('contract')
+           console.log(mietschuldenfreiheitimgImage)
+           // If photo is an array, get the first item
+           const photoFile = Array.isArray(mietschuldenfreiheitimgImage) ? mietschuldenfreiheitimgImage[0] : mietschuldenfreiheitimgImage;
+   
+           if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+             console.error('Filepath or originalFilename missing:', photoFile);
+             return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+           }
+   
+           const fileContent = fs.readFileSync(photoFile.filepath);
+           const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+           const blob = await put(uniqueFileName, fileContent, {
+             access: 'public',
+           });
+   
+           fullfilenamemietschuldenfreiheitimg = blob.url
+           console.log(fullfilenamemietschuldenfreiheitimg)
+         }
+
+        //  const salarySlipImage = files.salarySlip;
+        //  let fullfilenamesalarySlipImageimg = null
+  
+        //  if(salarySlipImage){
+        //    console.log('contract')
+        //    console.log(salarySlipImage)
+        //    // If photo is an array, get the first item
+        //    const photoFile = Array.isArray(salarySlipImage) ? salarySlipImage[0] : salarySlipImage;
+   
+        //    if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
+        //      console.error('Filepath or originalFilename missing:', photoFile);
+        //      return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
+        //    }
+   
+        //    const fileContent = fs.readFileSync(photoFile.filepath);
+        //    const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
+        //    const blob = await put(uniqueFileName, fileContent, {
+        //      access: 'public',
+        //    });
+   
+        //    fullfilenamesalarySlipImageimg = blob.url
+        //    console.log(fullfilenamesalarySlipImageimg)
+        //  }
+        const salarySlipImagesArray = [];
+
+      const salaryslipImages = files.salarySlip;
+      console.log('files', files);
+         console.log('salaryslipImages', salaryslipImages);
+      if (salaryslipImages) {
+        const salaryslipFiles = Array.isArray(salaryslipImages) ? salaryslipImages : [salaryslipImages];
+
+        for (const file of salaryslipFiles) {
+          if (file && file.filepath && file.originalFilename) {
+            try {
+              const fileContent = fs.readFileSync(file.filepath);
+              const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
+              const blob = await put(uniqueFileName, fileContent, {
+                access: 'public',
+              });
+
+              salarySlipImagesArray.push(blob.url);
+              console.log("Uploaded Salary Slip:", blob.url);
+            } catch (error) {
+              console.error("Error uploading salary slip:", error);
+            }
+          } else {
+            console.warn("Invalid file structure:", file);
+          }
+        }
+      } else {
+        console.warn("No salary slips uploaded or incorrect format");
+      }
+
+
+
+         
+         
 
       // new code for new images end
       try {
@@ -425,7 +635,6 @@ const handler = async (req, res) => {
         //   signatureData:fullfilenamesignatureData,       
         //   applicationImg:fullfilenamecomponentImage,       
         // });
-        console.log(user._id);
         const newForm = new ApplicationFile({
           userId: user._id,
           vorname,
@@ -436,28 +645,29 @@ const handler = async (req, res) => {
           hausnummer,
           Ort,
           email,
-          tel,
+          phonenumber: phonenumber,
           inputfoto:fullfilenameinputfoto,
           profession,
           ausgeubterBeruf,
           arbeitgeber,
           income,
-          bwaimages,
+          bwaimages:fullfilenamebwaimages,
           employment,
-          salaryslip,
+          salaryslip: salarySlipImagesArray,
           employcontract:fullfilenameemploycontract,
           pets,
+          einkommensbescheinigungimg:fullfilenameeinkommensbescheinigungimg,
           rentarea,
           proceedings,
           apartment,
           coverletter,
           fläche,
           zimerzahl,
-          imageswbs,
-          personal,
-          schufa,
+          imageswbs:fullfilenameimageswbs,
+          personal: fullfilenamepersonal,
+          schufa: fullfilenameschufa,
           mietschuldenfreiheit,
-          mietschuldenfreiheitimg,
+          mietschuldenfreiheitimg: fullfilenamemietschuldenfreiheitimg,
           mietverhaltnis,
           firstname,
           lastname,

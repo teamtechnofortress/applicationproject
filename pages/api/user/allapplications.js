@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { parseCookies } from 'nookies';
 const {connectDb}  = require("@/helper/db");
-import Application from '@/models/Application';
+import Application from '@/models/ApplicationFile';
 import User from '@/models/User';
 
 const handler = async (req, res) => {
