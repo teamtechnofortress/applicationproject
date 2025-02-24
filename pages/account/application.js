@@ -473,8 +473,8 @@ const application = () => {
           progress: undefined,
           theme: "light",
         });
-
-        router.push(`${process.env.NEXT_PUBLIC_HOST}/account/allapplications`);
+        
+        router.push(`${process.env.NEXT_PUBLIC_HOST}/account/success`);
       } else {
         setLoading(false);
         toast.error(response.error, {

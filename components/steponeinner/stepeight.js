@@ -57,7 +57,7 @@ const StepEightInner = ({
                         id="image-upload"
                         name="einkommensbescheinigungimg"
                         className="hidden"
-                        accept="image/*"
+                        accept="image/*, application/pdf"
                         ref={fileInputRef} // Attach ref here
                         onChange={handleFileChange}
                       />

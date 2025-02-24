@@ -65,7 +65,7 @@ const StepFourInner = ({
               id="image-upload"
               name="schufa"
               className="hidden"
-              accept="image/*"
+              accept="image/*, application/pdf"
               ref={fileInputRef} // Attach ref here
               onChange={handleFileChange}
             />

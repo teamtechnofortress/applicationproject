@@ -7,9 +7,26 @@ const StepNineInner = ({
   currentStep,
   setCurrentStep,
 }) => {
-  const [errors, setErrors] = useState({});
 
   setCurrentStep(22);
+   // Function to copy text
+   const handleCopy = () => {
+    const textToCopy = `
+      Hallo [Name des Hauptmieters], 
+      
+      ich benötige für meinen neuen Vermieter eine Mietschuldfreiheitsbescheinigung.
+      
+      Könntest du mir bitte bestätigen, dass ich während meiner Zeit als Untermieter immer pünktlich und vollständig meine Miete gezahlt habe?
+      
+      Vielen Dank im Voraus für deine Hilfe!
+    `;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      alert("Text wurde kopiert!");
+    }).catch(err => {
+      console.error("Fehler beim Kopieren des Textes: ", err);
+    });
+  };
 
   return (
     <div className="flex items-center justify-center">
@@ -22,26 +39,34 @@ const StepNineInner = ({
         </p>
 
         <p className={`${styles["p-address"]} mt-20 mb-10 text-center w-[60%] mx-auto`}>
-        Als Untermieter kannst du eine Mietschuldfreiheit nicht direkt vom Hauptvermieter beantragen, da dein Mietverhältnis mit dem Hauptmieter besteht. Stattdessen musst du dich an deinen Hauptmieter wenden.
+        Kopiere diesen Text und sende ihn an deine Hausverwaltung.
         </p>
-        <div className={`${styles["static-section"]} `}>
-            <p className={`${styles["p-address"]}`}>
-            Hallo [Name des Hauptmieters], 
-            </p>
-            <p className={`${styles["p-address"]} mt-2 w-[80%]`}>
-            ich benötige für meinen neuen Vermieter eine Mietschuldfreiheitsbescheinigung.
-            </p>
-            <p className={`${styles["p-address"]} mt-2 w-[80%]`}>
-            Könntest du mir bitte bestätigen, dass ich während meiner Zeit als Untermieter immer pünktlich und vollständig meine Miete gezahlt habe?
-            </p>
-            <p className={`${styles["p-address"]} mt-2`}>
-            Vielen Dank im Voraus für deine Hilfe!
-            </p>
+        <div className={`${styles["static-section"]} w-[70%] mx-auto`}>
+              <p className={`${styles["p-address"]}`}>
+              Hallo [Name des Hauptmieters], 
+              </p>
+              <p className={`${styles["p-address"]} mt-2 w-[80%]`}>
+              ich benötige für meinen neuen Vermieter eine Mietschuldfreiheitsbescheinigung.
+              </p>
+              <p className={`${styles["p-address"]} mt-2 w-[80%]`}>
+              Könntest du mir bitte bestätigen, dass ich während meiner Zeit als Untermieter immer pünktlich und vollständig meine Miete gezahlt habe?
+              </p>
+              <p className={`${styles["p-address"]} mt-2`}>
+              Vielen Dank im Voraus für deine Hilfe!
+              </p>
+
+              <button className={`${styles["p-copy"]} text-end mt-2`} type="button"
+               onClick={handleCopy}>
+              <img src="/images/copy-right.svg" alt="Tip Icon" />
+              Text kopieren
+            </button>
         </div>
      
-        <p className={`${styles["p-address"]} mb-10 mt-20 text-center w-[60%] mx-auto`}>
-        Der Hauptmieter sollte dir schriftlich bestätigen, dass du alle Mietzahlungen ordnungsgemäß geleistet hast. Eine formlose Bescheinigung reicht oft aus. Lade diese bitte hier hoch!
-        </p>
+        <div className="w-full flex justify-center">
+            <button type="button" className={`${styles["download-btn"]} w-[30%] mt-8`}>
+                Hier Vorlage downloaden
+            </button>
+        </div>
                   
 
         <div className="flex justify-between mt-10 p-6">
@@ -55,9 +80,9 @@ const StepNineInner = ({
 
           <div className="col-span-2">
             <button
-              type="button"
+             type="submit"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(23)}
+              // onClick={() => setCurrentStep(23)}
             >
              Weiter
             </button>

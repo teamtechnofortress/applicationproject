@@ -76,7 +76,7 @@ const StepThreeInner = ({
               id="image-upload"
               name="personal"
               className="hidden"
-              accept="image/*"
+              accept="image/*, application/pdf"
               ref={fileInputRef} // Attach ref here
               onChange={handleFileChange}
             />

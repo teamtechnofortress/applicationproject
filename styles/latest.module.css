@@ -138,10 +138,11 @@ label.file_up {
     width: 35%;
 }
 .static-section{
-    background-color: #e7fc42;
-    padding: 8%;
+    background-color: #FCFCFC;
+    border: 1px solid #E7FC42;
+    border-radius: 20px;
+    padding: 4%;    
 }
-
 .file-upload {
     display: flex;
     justify-content: center;
@@ -220,4 +221,20 @@ label.file_up {
     padding: 20px;
     background-color: transparent;
     border: 1px solid #e7fc42;
+}
+.p-copy{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 12px;
+    font-family: 'Poppins Medium';
+    font-size: 16px;
+}
+.download-btn{
+    background: #E7FC41;
+    padding: 13px;
+    border-radius: 10px;
+    font-family: 'Poppins Medium';
+    font-size: 12px;
 }

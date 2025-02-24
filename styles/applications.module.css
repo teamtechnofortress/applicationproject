@@ -48,7 +48,7 @@
     gap: 20px;
     position: absolute;
     top: -22px;
-    right: 50px; 
+    right: 0px; 
 }
 .img-pdf {
     width: 85% !important;
@@ -73,6 +73,98 @@
     font-weight: 700;
     font-size: 22px;
     line-height: 50px;
+}
+.flex-sec{
+    display: flex;
+}
+.logoimage{
+    width: 35%;
+    height: auto;
+    margin-top: -20px;
+    margin-left:4px;
+}
+.pdf-layout{
+    background-color: #fff;
+    width: 400px;
+    box-shadow: 17px 13px 0px #E7FC41;
+    border-radius: 10px;
+}
+.pdf-body{
+    background: #F8F8F8;
+    border-radius: 0px 0px 50px 0px;
+    padding-bottom: 53px;
+}
+.bannersmall{
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    margin-top:20px;
+}
+.bannertitle{
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    font-size: 34px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: -10px;
+    color: #333333;
+    letter-spacing: 1px;
+}
+.para{
+    font-size: 16px;
+    text-align: center;
+    color: '#333333';
+    margin-top: 10px;
+  }
+  .footer-pdf {
+    width: 100%;
+    padding: 10px;
+    border-radius: 34px;
+    background-color: #fff;
+  }
+  .footerRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .footerColOne {
+    width: 27%;
+  }
+  .footerCol {
+    width: 33%;
+  }
+  .footerText,
+  .footerTextOne {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+  }
+  .footerColCenter {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .footerlogo {
+    width: 58%;
+    height: auto;
+    margin-top: -34px;
+    background: #ffff;
+    align-items: center;
+  }
+  @media (max-width: 1080px) {
+    .flex-sec{
+        display: block;
+    }
+    .pdf-btn-grp{
+        right: auto;
+        left: 50px;
+    }
+    .pdf-sec{
+        margin-bottom: 60px;
+    }
 }
 
 @media (max-width: 600px) {

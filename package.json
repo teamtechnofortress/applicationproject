@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@canvas/image": "^2.0.0",
     "@react-pdf/renderer": "^3.4.4",
     "@vercel/blob": "^0.23.3",
     "axios": "^1.6.8",

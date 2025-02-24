@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
+
 // Register the Poppins font
 Font.register({
   family: 'Poppins',
@@ -147,11 +148,17 @@ const styles = StyleSheet.create({
   pdfImage: {
     marginTop: 20,
     padding: 20,
-    width: '100%',
-    height: 'auto',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#e2e2e2',
+    maxHeight:700,
+    objectFit: "contain",
+    // borderWidth: 1,
+    // borderStyle: 'solid',
+    // borderColor: '#e2e2e2',
+  },
+  salarySlipFullPage: {
+    marginTop: 20,
+    padding: 20,
+    maxHeight:700,
+    objectFit: "contain",
   },
   idImage: {
     width: '50%',
@@ -377,48 +384,169 @@ const styles = StyleSheet.create({
   },
 });
 
+// Helper function to check if a file is a PDF
+const isPdf = (file) => file && typeof file === "string" && file.toLowerCase().endsWith(".pdf");
+
+// PDF.js Loader
+const loadPdfJs = async () => {
+  if (!window.pdfjsLib) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = "/pdfjs/pdf.mjs";
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error("Failed to load PDF.js"));
+      document.body.appendChild(script);
+    });
+  }
+};
+
+// Convert PDF to Images
+const convertPdfToImages = async (pdfUrl) => {
+  await loadPdfJs();
+  const pdfjsLib = window.pdfjsLib;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.mjs";
+
+  try {
+    const loadingTask = pdfjsLib.getDocument(pdfUrl);
+    const pdf = await loadingTask.promise;
+    const numPages = pdf.numPages;
+    const images = [];
+
+    for (let i = 1; i <= numPages; i++) {
+      const page = await pdf.getPage(i);
+      const scale = 2;
+      const viewport = page.getViewport({ scale });
+
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      const renderContext = { canvasContext: context, viewport: viewport };
+      await page.render(renderContext).promise;
+
+      images.push(canvas.toDataURL("image/png"));
+    }
+
+    return images;
+  } catch (error) {
+    console.error("Error converting PDF to images:", error);
+    return [];
+  }
+};
+
 
 // Create Document Component
 const MyDocument = ({ profileData }) => {
-  // console.log(profileData);
-  const rows = [
-    { field: "Vorname", value: profileData.vorname },
-    { field: "Nachname", value: profileData.nachname},
-    { field: "Straße", value: profileData.strabe },
-    { field: "postleitzahl", value: profileData.postleitzahl },
-    { field: "hausnummer", value: profileData.hausnummer },
-    // { field: "PLZ", value: profileData.PLZ },
-    { field: "Ort", value: profileData.Ort },
-    { field: "inputfoto", value: profileData.inputfoto },
-    { field: "E-Mail", value: profileData.email },
-    { field: "Tel. Mobil", value: profileData.tel },
-    { field: "profession", value: profileData.profession },
-    { field: "ausgeubterBeruf", value: profileData.ausgeubterBeruf },
-    
-    { field: "Geburtsdatum", value: profileData.geburtsdatum },
-    { field: "Ausgeübter Beruf", value: profileData.ausgeübterBeruf },
-    { field: "Arbeitgeber", value: profileData.arbeitgeber },
-    { field: "Nettoeinkommen (€)", value: profileData.income },
-    { field: "bwaimages", value: profileData.bwaimages },
-    
-    { field: "employment", value: profileData.employment },
-    { field: "salaryslip", value: profileData.salaryslip },
-    { field: "employcontract", value: profileData.employcontract },
-    { field: "pets", value: profileData.pets },
-    { field: "einkommensbescheinigungimg", value: profileData.einkommensbescheinigungimg },
-    { field: "rentarea", value: profileData.rentarea },
-    { field: "proceedings", value: profileData.proceedings },
-    { field: "apartment", value: profileData.apartment },
-    { field: "coverletter", value: profileData.coverletter },
-    { field: "fläche", value: profileData.fläche },
-    { field: "zimerzahl", value: profileData.zimerzahl },
-    { field: "imageswbs", value: profileData.imageswbs },
-    { field: "personal", value: profileData.personal },
-    { field: "schufa", value: profileData.schufa },
-    { field: "mietschuldenfreiheitimg", value: profileData.mietschuldenfreiheitimg },
-    { field: "firstname", value: profileData.firstname },
-    { field: "lastname", value: profileData.lastname },
-  ];
+  
+  const [convertedImages, setConvertedImages] = useState({});
+
+  useEffect(() => {
+    const loadConvertedImages = async () => {
+      if (!profileData) return;
+  
+      const fields = [
+        "salaryslip",  // ✅ Multiple files (PDFs or Images)
+        "employcontract",
+        "einkommensbescheinigungimg",
+        "imageswbs",
+        "personal",
+        "schufa",
+        "mietschuldenfreiheitimg",
+        "bwaimages"
+      ];
+  
+      const newImages = {};
+  
+      for (const field of fields) {
+        const files = profileData[field];
+  
+        if (!files || files.length === 0) {
+          newImages[field] = [];
+          continue;
+        }
+  
+        if (Array.isArray(files)) {
+          try {
+            const processedFiles = await Promise.all(
+              files.map(async (file) => {
+                if (isPdf(file)) {
+                  return await convertPdfToImages(file); // ✅ Convert PDFs to images
+                } else {
+                  return [file]; // ✅ Store image URLs directly
+                }
+              })
+            );
+  
+            newImages[field] = processedFiles.flat();
+          } catch (error) {
+            console.error(`Error processing ${field}:`, error);
+            newImages[field] = [];
+          }
+        } else {
+          if (isPdf(files)) {
+            try {
+              newImages[field] = await convertPdfToImages(files);
+            } catch (error) {
+              console.error(`Error processing single ${field}:`, error);
+              newImages[field] = [];
+            }
+          } else {
+            newImages[field] = [files];
+          }
+        }
+      }
+  
+      // console.log("Updated convertedImages:", newImages);
+      setConvertedImages(newImages);
+    };
+  
+    loadConvertedImages();
+  }, [profileData]);
+  
+  
+
+  // Function to render document sections dynamically
+  const renderSection = (key, title) => {
+    // console.log("Rendering section for:", key, convertedImages[key]);
+  
+    if (!convertedImages[key] || convertedImages[key].length === 0) {
+      console.warn(`No images found for ${key}`);
+      return null;
+    }
+  
+    return convertedImages[key].map((img, index) => (
+      <Page key={`${key}-${index}`} style={styles.page}>
+        <View style={styles.header}>
+          <View style={styles.headerText}>
+            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+            <Text style={styles.headerPhone}>{profileData.tel}</Text>
+            <Text style={styles.headerEmail}>{profileData.email}</Text>
+          </View>
+          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Logo" />
+          <Image style={styles.headerImage} src={profileData.inputfoto} />
+        </View>
+  
+        <View style={styles.bodyWhite}>
+          <View style={styles.secondPageBody}>
+            <Text style={styles.titleBorder}>{title}</Text>
+            <View style={styles.greyCardBg}>
+              <Image 
+                style={{ maxHeight: "500px", objectFit: "contain" }} 
+                src={img} 
+              />
+            </View>
+          </View> 
+        </View>
+  
+        <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+      </Page>
+    ));
+  };
+  
+  
  
   return (
     <Document>
@@ -541,7 +669,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Ausgeübter Beruf:</Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>Consultant</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.ausgeubterBeruf}</Text>
                     </View>
                   </View>
 
@@ -550,7 +678,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Arbeitgeber:</Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>Muster GmbH</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.arbeitgeber}</Text>
                     </View>
                   </View>
 
@@ -559,7 +687,7 @@ const MyDocument = ({ profileData }) => {
                       <Text style={styles.tableCell}>Haushaltsnettoeinkommen:</Text>
                     </View>
                     <View style={styles.tableCol}>
-                      <Text style={styles.tableCellTwo}>10000€</Text>
+                      <Text style={styles.tableCellTwo}>{profileData.income}€</Text>
                     </View>
                  </View>
           </View>
@@ -572,15 +700,6 @@ const MyDocument = ({ profileData }) => {
                     </View>
                     <View style={styles.tableColTwo}>
                       <Text style={styles.tableCellTwo}>{profileData.pets === 'Ja' ? 'Ja' : 'Nein'}</Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.tableRow}>
-                    <View style={styles.tableColOne}>
-                      <Text style={styles.tableCell}>Sollen außer ihnen noch weitere Personen die Wohnung beziehen?</Text>
-                    </View>
-                    <View style={styles.tableColTwo}>
-                      <Text style={styles.tableCellTwo}>Nein (static)</Text>
                     </View>
                   </View>
 
@@ -647,204 +766,23 @@ const MyDocument = ({ profileData }) => {
       </Page>
       {/* page 3 end*/}
 
-      {/* page 4*/}
-      <Page style={styles.page}>
-        {/* header */}
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-            <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>{profileData.email}</Text>
-          </View>
-          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={profileData.inputfoto}/>
-        </View>
-        {/* header */}
-        <View style={styles.bodyWhite}>
-        <View style={styles.secondPageBody}>
-          <Text style={styles.titleBorder}>WBS</Text>
-          <View style={styles.secondPagesection}>
-            <Image style={styles.pdfImage}  src={`${profileData.imageswbs}`} />
-           
-          </View>
-        </View> 
-        </View>
-          {/* Page Number */}
-          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-
-      </Page>
-      {/* page 4 end*/}
-
-      {/* page 5*/}
-      <Page style={styles.page}>
-        {/* header */}
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-            <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>{profileData.email}</Text>
-          </View>
-          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={profileData.inputfoto}/>
-        </View>
-        {/* header */}
-        <View style={styles.bodyWhite}>
-        <View style={styles.secondPageBody}>
-          <Text style={styles.titleBorder}>Ausweiskopie</Text>
-          <View style={styles.greyCardBg}>
-            <Image style={styles.idImage}  src={`${profileData.personal}`} />
-          </View>      
-        </View> 
-        </View>
-          {/* Page Number */}
-          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-
-      </Page>
-      {/* page 5 end*/}
-
-      {/* schufa */}
-      {profileData.schufa && (
-       <Page style={styles.page}>
-        {/* header */}
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-            <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>{profileData.email}</Text>
-          </View>
-          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={profileData.inputfoto}/>
-        </View>
-        {/* header */}
-        <View style={styles.bodyWhite}>
-        <View style={styles.secondPageBody}>
-          <Text style={styles.titleBorder}>Schufa - Bonität</Text>
-          <View style={styles.secondPagesection}>
-            <Image style={styles.pdfImage}  src={`${profileData.schufa}`} />
-           
-          </View>
-        </View> 
-        </View>
-          {/* Page Number */}
-          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-
-      </Page>
-     )}
-
       {/* Salary Slips Pages */}
-      {profileData.salaryslip?.length > 0 &&
-        profileData.salaryslip.map((slip, index) => (
-          <Page key={index} style={styles.page}>
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.headerText}>
-                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-                <Text style={styles.headerPhone}>{profileData.tel}</Text>
-                <Text style={styles.headerEmail}>{profileData.email}</Text>
-              </View>
-              <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} />
-              <Image style={styles.headerImage} src={profileData.inputfoto} />
-            </View>
-
-            {/* Body */}
-            <View style={styles.bodyWhite}>
-              <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
-                <Image style={styles.salarySlipFullPage} src={slip} />
-              </View>
-            </View>
-
-            {/* Page Number */}
-            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-          </Page>
-        ))
-      }
-
-   
-    {/* einkommensbescheinigungimg */}
-    {profileData.einkommensbescheinigungimg && (
-        <Page style={styles.page}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.headerText}>
-              <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-              <Text style={styles.headerPhone}>{profileData.tel}</Text>
-              <Text style={styles.headerEmail}>{profileData.email}</Text>
-            </View>
-            <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Logo" />
-            <Image style={styles.headerImage} src={profileData.inputfoto} />
-          </View>
-
-          {/* Body */}
-          <View style={styles.bodyWhite}>
-            <View style={styles.secondPageBody}>
-              <Text style={styles.titleBorder}>Einkommensbescheinigung</Text>
-              <View style={styles.secondPagesection}>
-                <Image style={styles.pdfImage} src={`${profileData.einkommensbescheinigungimg}`} />
-              </View>
-            </View>
-          </View>
-
-          {/* Page Number */}
-          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-        </Page>
-      )}
+      {renderSection("salaryslip", "Einkommensnachweis")}
+      {/* Arbeitsvertrag */}
+      {renderSection("employcontract", " Arbeitsvertrag")}
+      {/* einkommensbescheinigungimg */}
+      {renderSection("einkommensbescheinigungimg", "Einkommensbescheinigung")}
+      {/* BWA */}
+      {renderSection("bwaimages", "BWA")}
+    
+      {/* WBS*/}
+      {renderSection("imageswbs", "WBS")}
+      {/* Ausweiskopie */}
+      {renderSection("personal", "Ausweiskopie")}
+      {/* schufa */}
+      {renderSection("schufa", "Schufa - Bonität")}
       {/* mietschuldenfreiheitimg */}
-      {profileData.mietschuldenfreiheitimg && (
-        <Page style={styles.page}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.headerText}>
-              <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-              <Text style={styles.headerPhone}>{profileData.tel}</Text>
-              <Text style={styles.headerEmail}>{profileData.email}</Text>
-            </View>
-            <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Logo" />
-            <Image style={styles.headerImage} src={profileData.inputfoto} />
-          </View>
-
-          {/* Body */}
-          <View style={styles.bodyWhite}>
-            <View style={styles.secondPageBody}>
-              <Text style={styles.titleBorder}>Mietschuldenfreiheitsbescheinigung</Text>
-              <View style={styles.secondPagesection}>
-                <Image style={styles.pdfImage} src={`${profileData.mietschuldenfreiheitimg}`} />
-              </View>
-            </View>
-          </View>
-
-          {/* Page Number */}
-          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-        </Page>
-      )}  
-
-    {profileData.imageswbs && (
-      <Page style={styles.page}>
-        {/* header */}
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-            <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>{profileData.email}</Text>
-          </View>
-          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-          <Image style={styles.headerImage} src={profileData.inputfoto}/>
-        </View>
-        {/* header */}
-        <View style={styles.bodyWhite}>
-        <View style={styles.secondPageBody}>
-          <Text style={styles.titleBorder}>Mietschuldenfreiheitsbescheinigung</Text>
-          <View style={styles.secondPagesection}>
-            <Image style={styles.pdfImage}  src={`${profileData.salarystatementbefore}`} />
-           
-          </View>
-        </View> 
-        </View>
-          {/* Page Number */}
-          <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-
-      </Page>
-       )}  
+      {renderSection("mietschuldenfreiheitimg", "Mietschuldenfreiheitsbescheinigung")}
 
     </Document>
   );

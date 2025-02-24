@@ -60,7 +60,7 @@ const StepSevenInner = ({
                         id="image-upload"
                         name="bwaimages"
                         className="hidden"
-                        accept="image/*"
+                        accept="image/*, application/pdf"
                         ref={fileInputRef} // Attach ref here
                         onChange={handleFileChange}
                       />

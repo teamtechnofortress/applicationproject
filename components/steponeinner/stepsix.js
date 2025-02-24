@@ -142,7 +142,7 @@ const StepSixInner = ({
           id="employcontract-upload"
           name="employcontract"
           className="hidden"
-          accept="image/*"
+          accept="image/*, application/pdf"
           ref={fileInputRef}
           onChange={(e) => handleFileChange(e, "employcontract")}
         />

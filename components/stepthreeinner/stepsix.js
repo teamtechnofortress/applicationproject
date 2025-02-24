@@ -59,7 +59,7 @@ const StepSixInner = ({
               id="image-upload"
               name="mietschuldenfreiheitimg"
               className="hidden"
-              accept="image/*"
+              accept="image/*, application/pdf"
               ref={fileInputRef} // Attach ref here
               onChange={handleFileChange}
             />
