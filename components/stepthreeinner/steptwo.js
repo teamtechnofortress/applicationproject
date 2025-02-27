@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "@/styles/latest.module.css";
+import usePdfToImages from "@/hooks/usePdfToImages";
 
 const StepTwoInner = ({
   fläche,
@@ -11,17 +12,42 @@ const StepTwoInner = ({
   currentStep,
   setCurrentStep,
 }) => {
+  const { convertPdfToImages } = usePdfToImages();
   const [errors, setErrors] = useState({});
   const [isTipModal, setisTipModal] = useState(false);
+  const [wbsiImageShow, setwbsiImageShow] = useState(false);
   const fileInputRef = useRef(null); // Add a ref for file input
+  const [isConverting, setIsConverting] = useState(false);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0]; 
-    if (file) {
-      setImageswbs(file); 
+
+  const handleFileChange = async (event) => {
+    setIsConverting(true);  // Show loading state
+
+    const file = event.target.files[0];
+    if (!file) return; // Exit if no file is selected
+  
+    let updatedImages = []; // To store processed images
+  
+    if (file.type === "application/pdf") {
+      // Convert PDF to images
+      const fileURL = URL.createObjectURL(file);
+      const images = await convertPdfToImages(fileURL);
+      console.log("Converted PDF to images:", images);
+  
+      updatedImages = images; // Store all images from the PDF
+      setwbsiImageShow(file); // Show first page preview if available
+    } else {
+      // Directly add uploaded image
+      updatedImages = [file];
+      setwbsiImageShow(file); // Show image preview
     }
+  
+    // Ensure imageswbs state is always an array (either multiple images from PDF or single image)
+    setImageswbs(updatedImages);
+    setIsConverting(false);  // Hide loading state
   };
-
+  
+  
   const removeImage = () => {
     setImageswbs(null);
     if (fileInputRef.current) {
@@ -100,22 +126,44 @@ const StepTwoInner = ({
               className="hidden"
               accept="image/*, application/pdf"
               ref={fileInputRef} // Attach ref here
-              onChange={handleFileChange}
+              onChange={(e) => handleFileChange(e, "imageswbs")}
             />
-
+          {/* ✅ Show Spinner when Converting PDF */}
+            {isConverting && (
+                <div className="flex justify-center mt-4">
+                  <div className="loader"></div>
+                </div>
+              )}
             {/* Image Preview */}
-            {imageswbs && (
-              <div className="relative w-24 h-24 mt-4">
-                <img src={URL.createObjectURL(imageswbs)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+            {wbsiImageShow && !isConverting && (
+              <div className="relative w-24 h-24">
+                {/* Check if the file is an image or PDF */}
+                {wbsiImageShow instanceof File && wbsiImageShow.type.startsWith('image/') ? (
+                  // Render Image for Image files
+                  <img
+                    src={URL.createObjectURL(wbsiImageShow)}
+                    alt="Gehaltsnachweis Preview"
+                    className="object-cover w-full h-full rounded-lg"
+                  />
+                ) : (
+                  // Render PDF icon or text for PDFs
+                  <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
+                    <span>PDF</span>
+                  </div>
+                )}
                 <button
                   type="button"
-                  className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
-                  onClick={removeImage}
+                  className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+                  onClick={() => {
+                    setImageswbs([]);      // Clear the images array
+                    setwbsiImageShow(null); // Clear the preview state
+                  }}
                 >
                   ×
                 </button>
               </div>
             )}
+
 
         </div>
 
@@ -133,6 +181,7 @@ const StepTwoInner = ({
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
               onClick={() => setCurrentStep(16)}
+              disabled={isConverting}
             >
               Weiter
             </button>

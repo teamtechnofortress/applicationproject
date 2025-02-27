@@ -97,15 +97,15 @@ const AllApplications = () => {
                             <img src="/images/write.svg" />
                           </button>
                         </Link>
-                        <PDFDownloadLink document={<MyDocument profileData={profile} />} fileName={`Application_${profile._id}.pdf`}>
-                          {({ loading }) => (
-                            <button className={`${styles['pdf-btn']}`} disabled={loading}>
-                              {loading ? 'Loading...' : <img src="/images/view.svg" className={`${styles['img-pdf']}`} />}
-                            </button>
-                          )}
-                        </PDFDownloadLink>
-                      </div>
+                        <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
+                        <button className={`${styles['pdf-btn']}`}>
+                          <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+                        </button>
+                      </a>
 
+                      </div>
+                      
+                     
                       {/* Dynamic PDF Banner */}
                       <div className={`${styles['pdf-layout']}`}>
                         <div className={`${styles['pdf-body']}`}>

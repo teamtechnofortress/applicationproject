@@ -1,123 +1,156 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "@/styles/latest.module.css";
+import usePdfToImages from "@/hooks/usePdfToImages"; // ✅ Import the PDF conversion hook
 
 const StepThreeInner = ({
   personal, 
   setPersonal, 
-  setComponents,
-  handleChange,
-  currentStep,
   setCurrentStep,
 }) => {
+  const { convertPdfToImages } = usePdfToImages(); // ✅ Use the hook for PDF conversion
   const [errors, setErrors] = useState({});
   const [isTipModal, setisTipModal] = useState(false);
-  // Set the default open index to 0 (first FAQ item)
   const [openIndex, setOpenIndex] = useState(0);
-  // Toggle Accordion Item
-  const toggleAccordion = (index) => {
+  const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
+  const fileInputRef = useRef(null);
+  const [previewImage, setPreviewImage] = useState(null); // ✅ For preview display
+   // Toggle Accordion Item
+   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
   };
+  const handleFileChange = async (event) => {
+    setIsConverting(true); // ✅ Start loading state
+    const file = event.target.files[0];
 
-  const fileInputRef = useRef(null); // Add a ref for file input
+    if (!file) return;
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0]; 
-    if (file) {
-      setPersonal(file); 
+    let updatedImages = []; // ✅ Store processed images
+
+    if (file.type === "application/pdf") {
+      // ✅ Convert PDF to images
+      const fileURL = URL.createObjectURL(file);
+      const images = await convertPdfToImages(fileURL);
+      console.log("Converted PDF to images:", images);
+
+      updatedImages = images; // Store all images from the PDF
+      setPreviewImage(file); // Show first page preview
+    } else {
+      // ✅ Directly add uploaded image
+      updatedImages = [file];
+      setPreviewImage(file); // Show image preview
     }
+
+    // ✅ Ensure `personal` state is always an array (multiple PDF pages or single image)
+    setPersonal(updatedImages);
+    setIsConverting(false); // ✅ Stop loading state
   };
 
   const removeImage = () => {
-    setPersonal(null);
+    setPersonal([]);
+    setPreviewImage(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Reset file input field
+      fileInputRef.current.value = ""; // Reset input field
     }
   };
-  setCurrentStep(16);
-  if(setCurrentStep(16)){
-    thirdStepComponent=1;
-  }
+
+  const validateFields = () => {
+    const newErrors = {};
+    if (!personal || personal.length === 0) {
+      newErrors.personal = "Personalausweis ist erforderlich.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
+  };
 
   return (
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
-        <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>
-           Personalausweis
-        </p>
+        <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>Personalausweis</p>
         <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
-        Bitte lade nun einen Kopie deines Personalausweises hoch. In dem Beispiel siehst du, welche Stellen du schwärzen darfst.
+          Bitte lade nun eine Kopie deines Personalausweises hoch. In dem Beispiel siehst du, welche Stellen du schwärzen darfst.
         </p>
-        <button
-              type="button" 
-              className={`${styles["tips"]} mx-auto`}
-              id="tip_btn"
-              onClick={() => setisTipModal(true)}>
-              <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
-            </button>
+
+        <button type="button" className={`${styles["tips"]} mx-auto`} onClick={() => setisTipModal(true)}>
+          <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
+        </button>
+
         <div className="grid grid-cols-2 mt-5 gap-10 mt-3 mb-3">
-            <div className="col-span-1 flex items-center justify-end">
-               <img src="/idfront.png" alt="ID Front" className="w-[53%] h-auto" />
-            </div>
-            <div className="col-span-1 flex items-center">
-              <img src="/idback.png" alt="ID Front" className="w-[55%] h-auto" />
-            </div>
-         </div>
+          <div className="col-span-1 flex items-center justify-end">
+            <img src="/idfront.png" alt="ID Front" className="w-[53%] h-auto" />
+          </div>
+          <div className="col-span-1 flex items-center">
+            <img src="/idback.png" alt="ID Back" className="w-[55%] h-auto" />
+          </div>
+        </div>
 
         <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
-        <label
-          htmlFor="image-upload"
-          className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
-        >
-          <i className="fa fa-upload mr-2"></i>
-          Uploads Personalausweis
-        </label>
-        <input
-              type="file"
-              id="image-upload"
-              name="personal"
-              className="hidden"
-              accept="image/*, application/pdf"
-              ref={fileInputRef} // Attach ref here
-              onChange={handleFileChange}
-            />
+          <label
+            htmlFor="image-upload"
+            className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
+          >
+            <i className="fa fa-upload mr-2"></i> Upload Personalausweis
+          </label>
+          <input
+            type="file"
+            id="image-upload"
+            name="personal"
+            className="hidden"
+            accept="image/*, application/pdf"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+          />
 
-            {/* Image Preview */}
-            {personal && (
-              <div className="relative w-24 h-24 mt-4">
-                <img src={URL.createObjectURL(personal)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
-                <button
-                  type="button"
-                  className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
-                  onClick={removeImage}
-                >
-                  ×
-                </button>
-              </div>
-            )}
-      </div>
+          {/* ✅ Show Spinner when Converting PDF */}
+          {isConverting && (
+            <div className="flex justify-center mt-4">
+              <div className="loader"></div>
+            </div>
+          )}
+
+          {/* ✅ Image Preview */}
+          {previewImage && !isConverting && (
+            <div className="relative w-24 h-24 mt-4">
+              {previewImage instanceof File && previewImage.type.startsWith("image/") ? (
+                <img
+                  src={URL.createObjectURL(previewImage)}
+                  alt="Personalausweis Preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
+                  <span>PDF</span>
+                </div>
+              )}
+              <button
+                type="button"
+                className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                onClick={removeImage}
+              >
+                ×
+              </button>
+            </div>
+          )}
+        </div>
 
         <div className="flex justify-between mt-10">
-          <button
-            type="button"
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(15)}
-          >
+          <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => setCurrentStep(15)}>
             Zurück
           </button>
 
-          <div className="col-span-2">
-            <button
-              type="button"
-              className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(17)}
-            >
-              Weiter
-            </button>
-          </div>
+          <button
+            type="button"
+            className={`bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
+            onClick={() => setCurrentStep(17)}
+            disabled={isConverting}
+          >
+            {isConverting ? "Verarbeiten..." : "Weiter"}
+          </button>
         </div>
       </div>
-       {/* Modal - Conditional Rendering */}
-       {isTipModal && (
+
+      {/* Modal - Conditional Rendering */}
+      {isTipModal && (
           <div
             id="tip-modal"
             className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import styles from "@/styles/latest.module.css";
+import usePdfToImages from "@/hooks/usePdfToImages";
 
 const StepOneInner = ({
   vorname,

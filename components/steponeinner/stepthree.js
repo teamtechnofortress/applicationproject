@@ -42,9 +42,9 @@ const StepThreeInner = ({
     if (!safeTrim(phonenumber)) {
       newErrors.phonenumber = "PhoneNumber is required.";
     }
-    if (!inputfoto || inputfoto.length === 0) {
-      newErrors.inputfoto = "Profilfoto ist erforderlich.";
-    }
+    // if (!inputfoto || inputfoto.length === 0) {
+    //   newErrors.inputfoto = "Profilfoto ist erforderlich.";
+    // }
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors

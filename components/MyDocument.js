@@ -6,15 +6,15 @@ Font.register({
   family: 'Poppins',
   fonts: [
     {
-      src: '/Font/Poppins/Poppins-Regular.ttf',
+      src: `${process.env.NEXT_PUBLIC_HOST}/Font/Poppins/Poppins-Regular.ttf`,
       fontWeight: 'regular',
     },
     {
-      src: '/Font/Poppins/Poppins-Bold.ttf',
+      src: `${process.env.NEXT_PUBLIC_HOST}/Font/Poppins/Poppins-Bold.ttf`,
       fontWeight: 'bold',
     },
     {
-      src: '/Font/Poppins/Poppins-Medium.ttf',
+      src: `${process.env.NEXT_PUBLIC_HOST}/Font/Poppins/Poppins-Medium.ttf`,
       fontWeight: 'medium',
     },
   ],
@@ -384,176 +384,21 @@ const styles = StyleSheet.create({
   },
 });
 
-// Helper function to check if a file is a PDF
-const isPdf = (file) => file && typeof file === "string" && file.toLowerCase().endsWith(".pdf");
 
-// PDF.js Loader
-const loadPdfJs = async () => {
-  if (!window.pdfjsLib) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = "/pdfjs/pdf.mjs";
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error("Failed to load PDF.js"));
-      document.body.appendChild(script);
-    });
-  }
-};
-
-// Convert PDF to Images
-const convertPdfToImages = async (pdfUrl) => {
-  await loadPdfJs();
-  const pdfjsLib = window.pdfjsLib;
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.mjs";
-
-  try {
-    const loadingTask = pdfjsLib.getDocument(pdfUrl);
-    const pdf = await loadingTask.promise;
-    const numPages = pdf.numPages;
-    const images = [];
-
-    for (let i = 1; i <= numPages; i++) {
-      const page = await pdf.getPage(i);
-      const scale = 2;
-      const viewport = page.getViewport({ scale });
-
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-
-      const renderContext = { canvasContext: context, viewport: viewport };
-      await page.render(renderContext).promise;
-
-      images.push(canvas.toDataURL("image/png"));
-    }
-
-    return images;
-  } catch (error) {
-    console.error("Error converting PDF to images:", error);
-    return [];
-  }
-};
 
 
 // Create Document Component
 const MyDocument = ({ profileData }) => {
-  
-  const [convertedImages, setConvertedImages] = useState({});
+  console.log('profileData', profileData)
 
-  useEffect(() => {
-    const loadConvertedImages = async () => {
-      if (!profileData) return;
-  
-      const fields = [
-        "salaryslip",  // ✅ Multiple files (PDFs or Images)
-        "employcontract",
-        "einkommensbescheinigungimg",
-        "imageswbs",
-        "personal",
-        "schufa",
-        "mietschuldenfreiheitimg",
-        "bwaimages"
-      ];
-  
-      const newImages = {};
-  
-      for (const field of fields) {
-        const files = profileData[field];
-  
-        if (!files || files.length === 0) {
-          newImages[field] = [];
-          continue;
-        }
-  
-        if (Array.isArray(files)) {
-          try {
-            const processedFiles = await Promise.all(
-              files.map(async (file) => {
-                if (isPdf(file)) {
-                  return await convertPdfToImages(file); // ✅ Convert PDFs to images
-                } else {
-                  return [file]; // ✅ Store image URLs directly
-                }
-              })
-            );
-  
-            newImages[field] = processedFiles.flat();
-          } catch (error) {
-            console.error(`Error processing ${field}:`, error);
-            newImages[field] = [];
-          }
-        } else {
-          if (isPdf(files)) {
-            try {
-              newImages[field] = await convertPdfToImages(files);
-            } catch (error) {
-              console.error(`Error processing single ${field}:`, error);
-              newImages[field] = [];
-            }
-          } else {
-            newImages[field] = [files];
-          }
-        }
-      }
-  
-      // console.log("Updated convertedImages:", newImages);
-      setConvertedImages(newImages);
-    };
-  
-    loadConvertedImages();
-  }, [profileData]);
-  
-  
-
-  // Function to render document sections dynamically
-  const renderSection = (key, title) => {
-    // console.log("Rendering section for:", key, convertedImages[key]);
-  
-    if (!convertedImages[key] || convertedImages[key].length === 0) {
-      console.warn(`No images found for ${key}`);
-      return null;
-    }
-  
-    return convertedImages[key].map((img, index) => (
-      <Page key={`${key}-${index}`} style={styles.page}>
-        <View style={styles.header}>
-          <View style={styles.headerText}>
-            <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
-            <Text style={styles.headerPhone}>{profileData.tel}</Text>
-            <Text style={styles.headerEmail}>{profileData.email}</Text>
-          </View>
-          <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Logo" />
-          <Image style={styles.headerImage} src={profileData.inputfoto} />
-        </View>
-  
-        <View style={styles.bodyWhite}>
-          <View style={styles.secondPageBody}>
-            <Text style={styles.titleBorder}>{title}</Text>
-            <View style={styles.greyCardBg}>
-              <Image 
-                style={{ maxHeight: "500px", objectFit: "contain" }} 
-                src={img} 
-              />
-            </View>
-          </View> 
-        </View>
-  
-        <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-      </Page>
-    ));
-  };
-  
   
  
   return (
     <Document>
       {/* page 1*/}
       <Page style={styles.page}>
-      <Image style={styles.banner} src={`${window.location.origin}/images/pdfbanner.png`} alt="Description of the image" />
-      <Image style={styles.logo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
+      <Image style={styles.banner} src={`${process.env.NEXT_PUBLIC_HOST}/images/pdfbanner.png`} alt="Description of the image" />
+      <Image style={styles.logo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
       <View style={styles.section}>
          
           <Text style={styles.bannersmall}>Die</Text>
@@ -572,7 +417,7 @@ const MyDocument = ({ profileData }) => {
 
               {/* Center Column (Logo) */}
               <View style={styles.footerColCenter}>
-                <Image style={styles.footerlogo} src={`${window.location.origin}/images/barcode.png`} alt="Description of the image" />
+                <Image style={styles.footerlogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/barcode.png`} alt="Description of the image" />
               </View>
 
               {/* Right Column */}
@@ -594,8 +439,12 @@ const MyDocument = ({ profileData }) => {
           <Text style={styles.headerPhone}>{profileData.tel}</Text>
           <Text style={styles.headerEmail}>{profileData.email}</Text>
         </View>
-        <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-        <Image style={styles.headerImage} src={profileData.inputfoto}/>
+        <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
+        <Image 
+          style={styles.headerImage} 
+          src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+        />
+
       </View>
        {/* header */}
        <View style={styles.bodyWhite}>
@@ -747,8 +596,13 @@ const MyDocument = ({ profileData }) => {
           <Text style={styles.headerPhone}>{profileData.tel}</Text>
           <Text style={styles.headerEmail}>{profileData.email}</Text>
         </View>
-        <Image style={styles.headerLogo} src={`${window.location.origin}/images/logo.png`} alt="Description of the image" />
-        <Image style={styles.headerImage} src={profileData.inputfoto}/>
+        <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
+        <Image 
+          style={styles.headerImage} 
+          src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+        />
+
+
       </View>
        {/* header */}
        <View style={styles.bodyWhite}>
@@ -766,23 +620,288 @@ const MyDocument = ({ profileData }) => {
       </Page>
       {/* page 3 end*/}
 
-      {/* Salary Slips Pages */}
-      {renderSection("salaryslip", "Einkommensnachweis")}
-      {/* Arbeitsvertrag */}
-      {renderSection("employcontract", " Arbeitsvertrag")}
-      {/* einkommensbescheinigungimg */}
-      {renderSection("einkommensbescheinigungimg", "Einkommensbescheinigung")}
-      {/* BWA */}
-      {renderSection("bwaimages", "BWA")}
-    
-      {/* WBS*/}
-      {renderSection("imageswbs", "WBS")}
-      {/* Ausweiskopie */}
-      {renderSection("personal", "Ausweiskopie")}
-      {/* schufa */}
-      {renderSection("schufa", "Schufa - Bonität")}
-      {/* mietschuldenfreiheitimg */}
-      {renderSection("mietschuldenfreiheitimg", "Mietschuldenfreiheitsbescheinigung")}
+      {profileData.imageswbs && profileData.imageswbs.length > 0 &&
+        profileData.imageswbs.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>WBS</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.einkommensbescheinigungimg && profileData.einkommensbescheinigungimg.length > 0 &&
+        profileData.einkommensbescheinigungimg.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>einkommensbescheinigungimg</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+
+      {profileData.personal && profileData.personal.length > 0 &&
+        profileData.personal.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>personal</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.mietschuldenfreiheitimg && profileData.mietschuldenfreiheitimg.length > 0 &&
+        profileData.mietschuldenfreiheitimg.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>mietschuldenfreiheitimg</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.schufa && profileData.schufa.length > 0 &&
+        profileData.schufa.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>schufa</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.bwaimages && profileData.bwaimages.length > 0 &&
+        profileData.bwaimages.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>bwaimages</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.employcontract && profileData.employcontract.length > 0 &&
+        profileData.employcontract.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>employcontract</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.salaryslip && profileData.salaryslip.length > 0 &&
+        profileData.salaryslip.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>salaryslip</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+
 
     </Document>
   );

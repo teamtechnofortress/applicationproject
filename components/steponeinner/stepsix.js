@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import styles from "@/styles/latest.module.css";
+import usePdfToImages from "@/hooks/usePdfToImages";
 
 const StepSixInner = ({
   employment,
@@ -9,63 +10,106 @@ const StepSixInner = ({
   setsalarySlip,
   setCurrentStep,
 }) => {
+  const { convertPdfToImages } = usePdfToImages(); // ✅ PDF Conversion Hook
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null);
 
-  // Handle File Upload for Salary Slips & Employment Contract
-  // const handleFileChange = (event, type) => {
-  //   const files = Array.from(event.target.files);
+ // ✅ Separate loading states
+ const [isConvertingEmploycontract, setIsConvertingEmploycontract] = useState(false);
+ const [isConvertingSalarySlip, setIsConvertingSalarySlip] = useState(false);
 
+ // ✅ Separate states for previews & file storage
+ const [employcontractPreview, setEmploycontractPreview] = useState(null);
+ const [salarySlipPreview, setSalarySlipPreview] = useState([]);
 
-  //   if (type === "employcontract") {
-  //     // Only set employcontract if it's the correct input
-  //     setemploycontract(files[0]);
-  //   } else if (type === "salarySlip") {
-  //     // Append salary slip files without affecting employcontract
-  //     const fileURLs = files.map((file) => URL.createObjectURL(file));
-  //     // setsalarySlip((prev) => [...prev, ...fileURLs]);
-  //     setsalarySlip(Array.from(files));
-  //   }
-  // };
-  const handleFileChange = (event, type) => {
-    const files = Array.from(event.target.files);
-  
-    if (type === "employcontract") {
-      // Only set employcontract if it's the correct input
-      setemploycontract(files[0]);
-    } else if (type === "salarySlip") {
-      // Create Object URLs for images and use them for preview
-      const fileURLs = files.map((file) =>
-        file.type.startsWith('image/') ? URL.createObjectURL(file) : file.name
-      );
-      // setsalarySlip(Array.from(files));
-      setsalarySlip(prev => [...prev, ...Array.from(files)]);
-      // setsalarySlip((prev) => [...prev, ...fileURLs]);
+ const handleFileChange = async (event, type) => {
+  const files = Array.from(event.target.files);
+
+  if (type === "employcontract") {
+    setIsConvertingEmploycontract(true); // ✅ Show loader for employcontract
+    const file = files[0]; 
+    if (!file) return;
+
+    let updatedFiles = [];
+
+    if (file.type === "application/pdf") {
+      // ✅ Convert PDF to images
+      const fileURL = URL.createObjectURL(file);
+      const images = await convertPdfToImages(fileURL);
+      console.log("Converted Employcontract PDF to images:", images);
+
+      if (images.length > 0) {
+        setEmploycontractPreview(file.name); // ✅ Show PDF name as preview
+        updatedFiles = images; // ✅ Store only images, not the PDF
+      }
+    } else {
+      setEmploycontractPreview(URL.createObjectURL(file)); // ✅ Show image preview
+      updatedFiles.push(file);
     }
-  };
 
-  // Remove individual salary slip image
-  const removeImage = (index) => {
+    setemploycontract(updatedFiles); // ✅ Store images instead of the PDF
+    setIsConvertingEmploycontract(false); // ✅ Hide loader for employcontract
+  } 
+  
+  else if (type === "salarySlip") {
+    setIsConvertingSalarySlip(true); // ✅ Show loader for salarySlip
+    let updatedPreviews = [];
+    let updatedFiles = [];
+
+    for (const file of files) {
+      if (file.type === "application/pdf") {
+        // ✅ Convert PDF to images
+        const fileURL = URL.createObjectURL(file);
+        const images = await convertPdfToImages(fileURL);
+        console.log("Converted PDF to images:", images);
+
+        if (images.length > 0) {
+          updatedPreviews.push(file.name); // ✅ PDF preview
+          updatedFiles.push(...images); // ✅ Save only the images, not the PDF
+        }
+      } else {
+        // ✅ Directly add image previews
+        updatedPreviews.push(URL.createObjectURL(file));
+        updatedFiles.push(file);
+      }
+    }
+
+    setSalarySlipPreview((prev) => [...prev, ...updatedPreviews]);
+    setsalarySlip((prev) => [...prev, ...updatedFiles]); // ✅ Only store images here
+    setIsConvertingSalarySlip(false); // ✅ Hide loader for salarySlip
+  }
+};
+
+  const removeSalarySlip = (index) => {
+    setSalarySlipPreview((prev) => prev.filter((_, i) => i !== index));
     setsalarySlip((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Delete employment contract & reset file input
-  const delImage = () => {
+  const removeEmployContract = () => {
+    setEmploycontractPreview(null);
     setemploycontract(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Reset file input field
-    }
+    if (fileInputRef.current) fileInputRef.current.value = ""; // Reset input
   };
 
-  // Validation before proceeding
   const validateFields = () => {
     const newErrors = {};
-    if (salarySlip.length < 1 || salarySlip.length > 3) {
+    
+    // ✅ Count PDF files separately
+    const pdfFiles = salarySlip.filter(file => file instanceof File && file.type === "application/pdf");
+    
+    // ✅ Count image files separately
+    const imageFiles = salarySlip.filter(file => file instanceof File && file.type.startsWith("image/"));
+  
+    const totalFiles = pdfFiles.length + imageFiles.length; // ✅ PDFs count as one file
+  
+    if (totalFiles < 1 || totalFiles > 3) {
       newErrors.salarySlip = "Bitte laden Sie zwischen 1 und 3 Gehaltsnachweise hoch.";
     }
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
 
   return (
     <div>
@@ -75,7 +119,7 @@ const StepSixInner = ({
           : "Dein Beschäftigungsverhältnis besteht kürzer als 6 Monate."}
       </p>
 
-      {/* Upload Section for Salary Proofs */}
+      {/* ✅ Upload Salary Slips */}
       <div className="flex flex-col items-center justify-center w-[40%] mx-auto">
         <label
           htmlFor="salarySlip-upload"
@@ -96,39 +140,39 @@ const StepSixInner = ({
           onChange={(e) => handleFileChange(e, "salarySlip")}
         />
 
-        {/* Salary Proofs Preview */}
+        {/* ✅ Show Loader only for Salary Slip */}
+        {isConvertingSalarySlip && (
+          <div className="flex justify-center mt-4">
+            <div className="loader"></div>
+          </div>
+        )}
+
+
+        {/* ✅ Salary Slips Preview */}
         <div className="mt-4 grid grid-cols-3 gap-4">
-  {salarySlip.map((file, index) => (
-    <div key={index} className="relative w-24 h-24">
-      {/* Check if the file is an image or not */}
-      {file instanceof File && file.type.startsWith('image/') ? (
-        // Render Image for Image files
-        <img
-          src={URL.createObjectURL(file)} // Use the object URL created for images
-          alt={`Gehaltsnachweis Preview ${index + 1}`}
-          className="object-cover w-full h-full rounded-lg"
-        />
-      ) : (
-        // Render PDF icon or text for PDFs
-        <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
-          <span>PDF</span>
-        </div>
-      )}
-      <button
-        type="button"
-        className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-        onClick={() => removeImage(index)}
-      >
-        ×
-      </button>
-    </div>
-  ))}
+          {salarySlipPreview.map((preview, index) => (
+            <div key={index} className="relative w-24 h-24">
+              {preview.startsWith("data:image") || preview.startsWith("blob:") ? (
+                <img src={preview} alt={`Gehaltsnachweis Preview ${index + 1}`} className="object-cover w-full h-full rounded-lg" />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
+                  <span>PDF</span>
+                </div>
+              )}
+              <button
+                type="button"
+                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
+                onClick={() => removeSalarySlip(index)}
+              >
+                ×
+              </button>
+            </div>
+          ))}
         </div>
         {errors.salarySlip && <p className="text-red-500 text-sm">{errors.salarySlip}</p>}
+      </div>
 
-          </div>
-
-      {/* Upload Section for Employment Contract */}
+      {/* ✅ Upload Employment Contract */}
       <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
         <label
           htmlFor="employcontract-upload"
@@ -146,15 +190,26 @@ const StepSixInner = ({
           ref={fileInputRef}
           onChange={(e) => handleFileChange(e, "employcontract")}
         />
-
-        {/* Employment Contract Preview */}
-        {employcontract && (
+       {/* ✅ Show Loader only for Employ Contract */}
+       {isConvertingEmploycontract && (
+          <div className="flex justify-center mt-4">
+            <div className="loader"></div>
+          </div>
+        )}
+        {/* ✅ Employment Contract Preview */}
+        {employcontractPreview && (
           <div className="relative w-24 h-24 mt-4">
-            <img src={URL.createObjectURL(employcontract)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+            {typeof employcontractPreview === "string" ? (
+              <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
+                <span>PDF</span>
+              </div>
+            ) : (
+              <img src={employcontractPreview} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+            )}
             <button
               type="button"
               className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
-              onClick={delImage}
+              onClick={removeEmployContract}
             >
               ×
             </button>
@@ -162,7 +217,7 @@ const StepSixInner = ({
         )}
       </div>
 
-      {/* Navigation Buttons */}
+      {/* ✅ Navigation Buttons */}
       <div className="flex justify-between mt-10">
         <button
           type="button"
