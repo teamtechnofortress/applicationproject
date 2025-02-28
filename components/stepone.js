@@ -43,9 +43,15 @@ const FirstStep = ({
   proceedings,
   apartment,
   salarySlip,
+  salarySlip1,
+  salarySlip2,
+  salarySlip3,
   employcontract,
   setemploycontract,
   setsalarySlip,
+  setSalarySlip1,
+  setSalarySlip2,
+  setSalarySlip3,
   setComponents,
   handleChange,
   setCurrentStep,
@@ -166,9 +172,15 @@ const FirstStep = ({
            <StepSixInner            
            employment={employment}
            salarySlip={salarySlip}
+           salarySlip1={salarySlip1}
+           salarySlip2={salarySlip2}
+           salarySlip3={salarySlip3}
            employcontract={employcontract}
            setemploycontract={setemploycontract}
-           setsalarySlip={setsalarySlip}
+           setsalarySlip = {setsalarySlip}
+           setSalarySlip1={setSalarySlip1}
+           setSalarySlip2={setSalarySlip2}
+           setSalarySlip3={setSalarySlip3}
            setComponents={setComponents}
            currentStep={currentStep}
            setCurrentStep={setCurrentStep}

@@ -102,7 +102,7 @@ const StepSixInner = ({
   
     const totalFiles = pdfFiles.length + imageFiles.length; // ✅ PDFs count as one file
   
-    if (totalFiles < 1 || totalFiles > 3) {
+    if (salarySlipPreview < 1 || salarySlipPreview > 3) {
       newErrors.salarySlip = "Bitte laden Sie zwischen 1 und 3 Gehaltsnachweise hoch.";
     }
   
@@ -197,14 +197,18 @@ const StepSixInner = ({
           </div>
         )}
         {/* ✅ Employment Contract Preview */}
-        {employcontractPreview && (
+        {employcontractPreview && !isConvertingEmploycontract && (
           <div className="relative w-24 h-24 mt-4">
-            {typeof employcontractPreview === "string" ? (
+             {typeof employcontractPreview === "string" && (employcontractPreview.startsWith("data:image") || employcontractPreview.startsWith("blob:")) ? (
+              <img
+                src={employcontractPreview}
+                alt="Employment Contract Preview"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            ) : (
               <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
                 <span>PDF</span>
               </div>
-            ) : (
-              <img src={employcontractPreview} alt="Preview" className="w-full h-full object-cover rounded-lg" />
             )}
             <button
               type="button"
@@ -215,6 +219,7 @@ const StepSixInner = ({
             </button>
           </div>
         )}
+
       </div>
 
       {/* ✅ Navigation Buttons */}

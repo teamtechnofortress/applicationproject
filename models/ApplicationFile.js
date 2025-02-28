@@ -23,6 +23,9 @@ const ApplicationFileSchema = new mongoose.Schema({
   salaryslip: { type: [String],
     default: []
             },
+salarySlip1: {  type: [String], default: [] },
+salarySlip2: {  type: [String], default: [] },
+salarySlip3: {  type: [String], default: [] },
   employcontract: { type: [String], default: [] },
   pets: { type: String },
   einkommensbescheinigungimg:{  type: [String], default: [] },

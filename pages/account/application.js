@@ -41,6 +41,10 @@ const application = () => {
   const [mietschuldenfreiheit, setMietschuldenfreiheit] = useState("");
   const [mietverhaltnis, setMietverhaltnis] = useState("");
   const [salarySlip, setsalarySlip] = useState([]);
+  const [salarySlip1, setSalarySlip1] = useState([]);
+  const [salarySlip2, setSalarySlip2] = useState([]);
+  const [salarySlip3, setSalarySlip3] = useState([]);
+  
   const [bwaimages, setBwaimages] = useState("");
   const [showbwaimages, setshowbwaimages] = useState("");
   const [einkommensbescheinigungimg, seteinkommensbescheinigungimg] = useState("");
@@ -197,6 +201,7 @@ const application = () => {
         reader.readAsDataURL(files[0]);
       }
     }
+    
   
     
     // if(name === "bwaimages"){
@@ -448,6 +453,7 @@ const application = () => {
       }
     }
   };
+  let salary1;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -503,6 +509,7 @@ const application = () => {
     formData.append("rentalschoolfree", rentalschoolfree);
     formData.append("signatureData", signatureData);
     formData.append('componentImage', applicationimg);
+    formData.append('salarySlip1', salarySlip1);
     // Convert Base64 images to File objects before appending
     if (imageswbs && imageswbs.length > 0) {
       for (const [index, image] of imageswbs.entries()) {
@@ -704,6 +711,81 @@ const application = () => {
         }
       }
     }
+    // if (salarySlip1 && salarySlip1.length > 0) {
+    //   for (const [index, image] of salarySlip1.entries()) {
+    //     if (typeof image === "string") {
+    //       if (image.startsWith("data:image")) {
+    //         // Convert Base64 to File
+    //         const file = base64ToFile(image, `salarySlip1_${index}.png`);
+    //         formData.append("salarySlip1 am", file);
+    //       } else if (image.startsWith("blob:")) {
+    //         // Convert Blob URL to File
+    //         const file = await blobToFile(image, `salarySlip1_${index}.png`);
+    //         formData.append("salarySlip1 dfxc", file);
+    //         console.log("salarySlip1 blob fdss:", file);
+    //       } else {
+    //         // Handle other cases (if necessary)
+    //         console.warn("Unexpected format for salarySlip1:", image);
+    //       }
+    //     } else if (image instanceof File) {
+    //       // Append File object directly
+    //       formData.append("salarySlip1", image);
+    //       console.log("Appending file:", image);
+    //     } else {
+    //       console.warn("Unknown image format:", image);
+    //     }
+    //   }
+    // }
+    // if (salarySlip2 && salarySlip2.length > 0) {
+    //   for (const [index, image] of salarySlip2.entries()) {
+    //     if (typeof image === "string") {
+    //       if (image.startsWith("data:image")) {
+    //         // Convert Base64 to File
+    //         const file = base64ToFile(image, `salarySlip2_${index}.png`);
+    //         formData.append("salarySlip2", file);
+    //       } else if (image.startsWith("blob:")) {
+    //         // Convert Blob URL to File
+    //         const file = await blobToFile(image, `salarySlip2_${index}.png`);
+    //         formData.append("salarySlip2", file);
+    //         console.log("salarySlip2 blob:", file);
+    //       } else {
+    //         // Handle other cases (if necessary)
+    //         console.warn("Unexpected format for salarySlip2:", image);
+    //       }
+    //     } else if (image instanceof File) {
+    //       // Append File object directly
+    //       formData.append("salarySlip2", image);
+    //       console.log("Appending file:", image);
+    //     } else {
+    //       console.warn("Unknown image format:", image);
+    //     }
+    //   }
+    // }
+    // if (salarySlip3 && salarySlip3.length > 0) {
+    //   for (const [index, image] of salarySlip3.entries()) {
+    //     if (typeof image === "string") {
+    //       if (image.startsWith("data:image")) {
+    //         // Convert Base64 to File
+    //         const file = base64ToFile(image, `salarySlip3_${index}.png`);
+    //         formData.append("salarySlip3", file);
+    //       } else if (image.startsWith("blob:")) {
+    //         // Convert Blob URL to File
+    //         const file = await blobToFile(image, `salarySlip3_${index}.png`);
+    //         formData.append("salarySlip3", file);
+    //         console.log("salarySlip3 blob:", file);
+    //       } else {
+    //         // Handle other cases (if necessary)
+    //         console.warn("Unexpected format for salarySlip3:", image);
+    //       }
+    //     } else if (image instanceof File) {
+    //       // Append File object directly
+    //       formData.append("salarySlip3", image);
+    //       console.log("Appending file:", image);
+    //     } else {
+    //       console.warn("Unknown image format:", image);
+    //     }
+    //   }
+    // }
       const res = await fetch("/api/user/application", {
         method: "POST",
         body: formData,
@@ -750,6 +832,7 @@ const application = () => {
 
   return (
     <>
+   
       {loading && (
         <>
           <div className="fixed inset-0 bg-white bg-opacity-70 z-50"></div>
@@ -914,9 +997,15 @@ const application = () => {
                   proceedings={proceedings}
                   apartment={apartment}
                   salarySlip={salarySlip}
+                  salarySlip1={salarySlip1}
+                  salarySlip2={salarySlip2}
+                  salarySlip3={salarySlip3}
                   employcontract={employcontract}
                   setemploycontract={setemploycontract}
                   setsalarySlip={setsalarySlip}
+                  setSalarySlip1={setSalarySlip1}
+                  setSalarySlip2={setSalarySlip2}
+                  setSalarySlip3={setSalarySlip3}
                   setComponents={setComponents}
                   handleChange={handleChange}
                   currentStep={currentStep}

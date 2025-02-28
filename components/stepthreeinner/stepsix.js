@@ -50,8 +50,9 @@ const StepSixInner = ({
   };
 
   const validateFields = () => {
+    console.log(mietschuldenfreiheitimg)
     const newErrors = {};
-    if (!mietschuldenfreiheitimg || mietschuldenfreiheitimg.length === 0) {
+    if (!mietschuldenfreiheitimg) {
       newErrors.mietschuldenfreiheitimg = "Mietschuldenfreiheitsbescheinigung ist erforderlich.";
     }
 
@@ -118,6 +119,10 @@ const StepSixInner = ({
               </button>
             </div>
           )}
+          {errors.mietschuldenfreiheitimg && (
+            <p className="text-red-500 text-sm mt-2">{errors.mietschuldenfreiheitimg}</p>
+          )}
+
         </div>
 
         <div className="flex justify-between mt-10">

@@ -840,8 +840,91 @@ if (schufaImages) {
   console.warn("No schufaImages uploaded or incorrect format");
 }
 const schufaImagesData = schufaImagesArray.length === 1 ? schufaImagesArray : schufaImagesArray;
-         
-         
+        
+
+const salarySlip1ImagesArray = [];
+const salarySlip1Images = files.salarySlip1;
+console.log("salarySlip1Images", salarySlip1Images);
+
+if (salarySlip1Images) {
+  const salarySlip1Files = Array.isArray(salarySlip1Images) ? salarySlip1Images : [salarySlip1Images];
+
+  for (const file of salarySlip1Files) {
+    if (file && file.filepath && file.originalFilename) {
+      try {
+        const fileContent = fs.readFileSync(file.filepath);
+        const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
+        const blob = await put(uniqueFileName, fileContent, { access: "public" });
+
+        salarySlip1ImagesArray.push(blob.url);
+        console.log("Uploaded salarySlip1Images:", blob.url);
+      } catch (error) {
+        console.error("Error uploading salarySlip1Images:", error);
+      }
+    } else {
+      console.warn("Invalid file structure:", file);
+    }
+  }
+} else {
+  console.warn("No salarySlip1Images uploaded or incorrect format");
+}
+const salarySlip1ImagesData = salarySlip1ImagesArray.length === 1 ? salarySlip1ImagesArray : salarySlip1ImagesArray;
+
+const salarySlip2ImagesArray = [];
+const salarySlip2Images = files.salarySlip2;
+console.log("salarySlip2Images", salarySlip2Images);
+
+if (salarySlip2Images) {
+  const salarySlip2Files = Array.isArray(salarySlip2Images) ? salarySlip2Images : [salarySlip2Images];
+
+  for (const file of salarySlip2Files) {
+    if (file && file.filepath && file.originalFilename) {
+      try {
+        const fileContent = fs.readFileSync(file.filepath);
+        const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
+        const blob = await put(uniqueFileName, fileContent, { access: "public" });
+
+        salarySlip2ImagesArray.push(blob.url);
+        console.log("Uploaded salarySlip2Images:", blob.url);
+      } catch (error) {
+        console.error("Error uploading salarySlip2Images:", error);
+      }
+    } else {
+      console.warn("Invalid file structure:", file);
+    }
+  }
+} else {
+  console.warn("No salarySlip2Images uploaded or incorrect format");
+}
+const salarySlip2ImagesData = salarySlip2ImagesArray.length === 1 ? salarySlip2ImagesArray : salarySlip2ImagesArray;
+const salarySlip3ImagesArray = [];
+const salarySlip3Images = files.salarySlip3;
+console.log("salarySlip3Images", salarySlip3Images);
+
+if (salarySlip3Images) {
+  const salarySlip3Files = Array.isArray(salarySlip3Images) ? salarySlip3Images : [salarySlip3Images];
+
+  for (const file of salarySlip3Files) {
+    if (file && file.filepath && file.originalFilename) {
+      try {
+        const fileContent = fs.readFileSync(file.filepath);
+        const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
+        const blob = await put(uniqueFileName, fileContent, { access: "public" });
+
+        salarySlip3ImagesArray.push(blob.url);
+        console.log("Uploaded salarySlip3Images:", blob.url);
+      } catch (error) {
+        console.error("Error uploading salarySlip3Images:", error);
+      }
+    } else {
+      console.warn("Invalid file structure:", file);
+    }
+  }
+} else {
+  console.warn("No salarySlip3Images uploaded or incorrect format");
+}
+const salarySlip3ImagesData = salarySlip3ImagesArray.length === 1 ? salarySlip3ImagesArray : salarySlip3ImagesArray;
+
 
       // new code for new images end
       try {
@@ -904,6 +987,9 @@ const schufaImagesData = schufaImagesArray.length === 1 ? schufaImagesArray : sc
           bwaimages:bwaImagesData,
           employment,
           salaryslip: salarySlipImagesArray,
+          salarySlip1: salarySlip1ImagesData,
+          salarySlip2: salarySlip2ImagesData,
+          salarySlip3: salarySlip3ImagesData,
           employcontract:employContractImagesData,
           pets,
           einkommensbescheinigungimg:einkommensbescheinigungimgData,
