@@ -3,18 +3,28 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from '../styles/login.module.css';
+import styles from '../styles/newlogin.module.css'
 import Link from "next/link";
+import {Icon} from 'react-icons-kit';
+import {eyeOff} from 'react-icons-kit/feather/eyeOff';
+import {eye} from 'react-icons-kit/feather/eye'
 
 const ResetPassword = () => {
 
-const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
-  const toggleSignupModal = () => {
-    setIsSignupModalOpen(!isSignupModalOpen);
-  };
 
   const [newPassword, setNewPassword] = useState('');
+  const [type, setType] = useState('password');
+  const [icon, setIcon] = useState(eyeOff);
+  const handleToggle = () => {
+      if (type==='password'){
+        setIcon(eye);
+        setType('text')
+      } else {
+        setIcon(eyeOff)
+        setType('password')
+      }
+  }
   const router = useRouter();
   const { token } = router.query;
 
@@ -81,64 +91,65 @@ const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
         pauseOnHover
         theme="colors"
       />
-       <section className="p-4 mx-auto">
-        <nav className="bg-white border-gray-200">
-          <div className="flex flex-wrap items-center justify-between mx-auto p-4">
-            <Link href="/" legacyBehavior>
-              <a className="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-                <img src="/images/OHNUNGSGURU.svg" className="h-8" alt="Flowbite Logo" />
-              </a>
-            </Link>
-            <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-              <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white">
-                <li>
-                  <button className={`${styles['register-btn']} nav-link`} onClick={toggleSignupModal}>Lebenslauf erstellen</button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </section>
-      <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
+      <div className={`${styles['body-background']} flex min-h-full items-center justify-center`}>
+        <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+          <div className={`${styles['login-form']} w-full max-w-md space-y-8`}>
           <div>
-           
-            <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
-            Reset Password
+            <h2 className={`${styles['heading-login']} mt-3 text-gray-900`}>
+            Erstelle ein kostenloses Konto und sichere dir deine Traumwohnung
             </h2>
+            <div className="flex gap-3 mt-3">
+                <div className={`${styles['heading-left']}`}>Hast du bereits ein Konto?</div>
+                <div>
+                    <Link
+                      href="/login"
+                      className={`${styles['jetzt-btn']}`}>
+                      Jetzt anmelden
+                    </Link>
+                </div>
+            </div>
+            <div className="flex gap-3 mt-3 hidden">
+                <div className={`${styles['google-btn']} flex g-6`}><img src="/images/google.svg" />Sign in with Google</div>
+                <div className={`${styles['linkdin-btn']}`}>
+                    <Link href="">
+                       <img src="/images/linkdin.svg" />
+                    </Link>
+                </div>
+                <div className={`${styles['apple-btn']}`}>
+                    <Link href="">
+                       <img src="/images/apple.svg" />
+                    </Link>
+                </div>
+            </div>
           </div>
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6" method="POST">
-            {/* <input type="hidden" name="remember" value="true" /> */}
-            <div className="space-y-px rounded-md shadow-sm">
+           
             
-              <div className="mt-3 mb-3">
-                <label htmlFor="new-password" className={`${styles['label-input']}`}>
-                    New Password
-                </label>
-                <input
-                  onChange={handleChange}
-                  value={newPassword}
-                  id="new-password"
-                  name="newPassword"
-                  type="password"
-                  required
-                  className="relative block w-full mt-1 appearance-none rounded rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-pink-500 focus:outline-none focus:ring-pink-500 sm:text-sm"
-                  placeholder=""
-                />
-              </div>
-             
-            </div>
-
-
-            <div>
-            <button type="submit" className={`${styles['signIn-btn']} flex w-full leading-6 shadow-sm px-3 py-1.5 justify-center`} >Login with new password</button>
-
-            </div>
-          </form>
+              <form onSubmit={handleSubmit}  className="mt-8 mb-6 space-y-6" action="#" method="POST">
+                <input type="hidden" name="remember" value="true" />
+                <div className="space-y-px rounded-md shadow-sm">
+                  <div className="flex mt-8">
+                    <input
+                      onChange={handleChange}
+                      value={newPassword}
+                      id="email"
+                      name="newPassword"
+                      type={type}
+                      required
+                      className={`${styles['input-field']}`}
+                      placeholder="Enter New Password"
+                    />
+                    <span className="flex justify-around items-center" onClick={handleToggle}>
+                      <Icon className="absolute mr-10" icon={icon} size={25}/>
+                  </span>
+                  </div>
+                </div>
+                <div>
+                  <button type="submit" className={`${styles['signIn-btn']} flex w-full leading-6 shadow-sm px-3 py-1.5 justify-center`}>Continue</button>
+                </div>
+              </form>
+          </div>
         </div>
       </div>
-      {isSignupModalOpen && <Signup onClose={toggleSignupModal} />}
     </div>
   );
 };

@@ -13,6 +13,12 @@ const StepThreeInner = ({
 }) => {
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null); // Add a ref for file input
+   // ✅ Ensure preview persists when navigating back to this step
+ useEffect(() => {
+  if (inputfoto && inputfoto.length > 0) {
+    setinputfoto(inputfoto[0]); // Show the first image or file
+  }
+}, [inputfoto]);
   const handleFileChange = (event) => {
   
     const file = event.target.files[0]; 

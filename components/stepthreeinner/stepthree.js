@@ -18,6 +18,14 @@ const StepThreeInner = ({
    const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
   };
+
+   // ✅ Ensure preview persists when navigating back to this step
+ useEffect(() => {
+  if (personal && personal.length > 0) {
+    setPreviewImage(personal[0]); // Show the first image or file
+  }
+}, [personal]);
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import {useEffect, useState, useRef } from "react";
 import styles from "@/styles/latest.module.css";
 import usePdfToImages from "@/hooks/usePdfToImages";
 
@@ -12,7 +12,12 @@ const StepEightInner = ({
   const fileInputRef = useRef(null);
   const [einkommensbescheinigungimgshow, seteinkommensbescheinigungimgshow] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
-
+ // ✅ Ensure preview persists when navigating back to this step
+ useEffect(() => {
+  if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
+    seteinkommensbescheinigungimgshow(einkommensbescheinigungimg[0]); // Show the first image or file
+  }
+}, [einkommensbescheinigungimg]);
   const handleFileChange = async (event) => {
     setIsConverting(true); // Show loading state
 

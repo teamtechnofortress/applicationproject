@@ -13,7 +13,12 @@ const StepSevenInner = ({
   const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
   const fileInputRef = useRef(null);
   const [bwaImageShow, setBwaImageShow] = useState(null); // ✅ For preview display
-
+ // ✅ Ensure preview persists when navigating back to this step
+ useEffect(() => {
+  if (bwaimages && bwaimages.length > 0) {
+    setBwaImageShow(bwaimages[0]); // Show the first image or file
+  }
+}, [bwaimages]);
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];

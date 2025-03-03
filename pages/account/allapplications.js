@@ -24,19 +24,22 @@ const AllApplications = () => {
   const fetchProfileData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/user/allapplications`);
-      if (!response.data || response.data.length === 0) {
-        setIsEmpty(true);
-      } else {
-        setIsEmpty(false);
+      if (response.data && Array.isArray(response.data)) {
         setCvdata(response.data);
+        setIsEmpty(response.data.length === 0);
+      } else {
+        setCvdata([]); // Ensure it's always an array
+        setIsEmpty(true);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+      setCvdata([]); // Ensure cvdata is always an array
       setIsEmpty(true);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const fetchUserData = async () => {
     try {
@@ -81,63 +84,66 @@ const AllApplications = () => {
               </div>
 
               <div className={`${styles['flex-sec']} gap-8`}>
-                {isEmpty ? (
-                  <div>No data available</div>
-                ) : (
-                  cvdata.map((profile) => (
-                    <div key={profile._id} className={`${styles['pdf-sec']} relative`}>
-                      <div className={`${styles['pdf-btn-grp']}`}>
-                        <Link href="/account/application" legacyBehavior>
-                          <button className={`${styles['pdf-person']}`}>
-                            Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg" />
-                          </button>
-                        </Link>
-                        <Link href="/account/application" legacyBehavior>
-                          <button className={`${styles['pdf-btn']}`}>
-                            <img src="/images/write.svg" />
-                          </button>
-                        </Link>
-                        <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
-                        <button className={`${styles['pdf-btn']}`}>
-                          <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+              {loading ? (
+                <div>Loading...</div> // Show a loading state until data is fetched
+              ) : isEmpty ? (
+                <div>No data available</div>
+              ) : (
+                cvdata.map((profile) => (
+                  <div key={profile._id} className={`${styles['pdf-sec']} relative`}>
+                    <div className={`${styles['pdf-btn-grp']}`}>
+                      <Link href="/account/application" legacyBehavior>
+                        <button className={`${styles['pdf-person']}`}>
+                          Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg" />
                         </button>
-                      </a>
+                      </Link>
+                      <Link href="/account/application" legacyBehavior>
+                        <button className={`${styles['pdf-btn']}`}>
+                          <img src="/images/write.svg" />
+                        </button>
+                      </Link>
+                      <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
+                      <button className={`${styles['pdf-btn']}`}>
+                        <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+                      </button>
+                    </a>
 
+                    </div>
+                    
+                  
+                    {/* Dynamic PDF Banner */}
+                    <div className={`${styles['pdf-layout']}`}>
+                      <div className={`${styles['pdf-body']}`}>
+                        <img src="/images/pdfbanner.png" alt="PDF Banner" />
+                        <img src="/images/logo.png" className={`${styles['logoimage']}`} alt="Logo" />
+                        <p className={`${styles['bannersmall']}`}>Die</p>
+                        <p className={`${styles['bannertitle']}`}>Bewerbermappe</p>
+                        <p className={`${styles['para']}`}>Von</p>
+                        <p className={`${styles['para']}`}>{profile.vorname} {profile.nachname}</p>
                       </div>
-                      
-                     
-                      {/* Dynamic PDF Banner */}
-                      <div className={`${styles['pdf-layout']}`}>
-                        <div className={`${styles['pdf-body']}`}>
-                          <img src="/images/pdfbanner.png" alt="PDF Banner" />
-                          <img src="/images/logo.png" className={`${styles['logoimage']}`} alt="Logo" />
-                          <p className={`${styles['bannersmall']}`}>Die</p>
-                          <p className={`${styles['bannertitle']}`}>Bewerbermappe</p>
-                          <p className={`${styles['para']}`}>Von</p>
-                          <p className={`${styles['para']}`}>{profile.vorname} {profile.nachname}</p>
-                        </div>
 
-                        {/* Footer Section */}
-                        <div className={`${styles['footer-pdf']}`}>
-                          <div className={`${styles['footerRow']}`}>
-                            <div className={`${styles['footerColOne']}`}>
-                              <p className={`${styles['footerTextOne']}`}>{profile.strabe} {profile.hausnummer}{"\n"} {profile.postleitzahl}, {profile.Ort}</p>
-                            </div>
-                            <div className={`${styles['footerColCenter']}`}>
-                              <img className={`${styles['footerlogo']}`} src="/images/barcode.png" alt="Barcode" />
-                            </div>
-                            <div className={`${styles['footerCol']}`}>
-                              <p className={`${styles['footerText']}`}>{profile.phonenumber}</p>
-                              <p className={`${styles['footerText']}`}>{profile.email}</p>
-                            </div>
+                      {/* Footer Section */}
+                      <div className={`${styles['footer-pdf']}`}>
+                        <div className={`${styles['footerRow']}`}>
+                          <div className={`${styles['footerColOne']}`}>
+                            <p className={`${styles['footerTextOne']}`}>{profile.strabe} {profile.hausnummer}{"\n"} {profile.postleitzahl}, {profile.Ort}</p>
+                          </div>
+                          <div className={`${styles['footerColCenter']}`}>
+                            <img className={`${styles['footerlogo']}`} src="/images/barcode.png" alt="Barcode" />
+                          </div>
+                          <div className={`${styles['footerCol']}`}>
+                            <p className={`${styles['footerText']}`}>{profile.phonenumber}</p>
+                            <p className={`${styles['footerText']}`}>{profile.email}</p>
                           </div>
                         </div>
                       </div>
-                      {/* PDF Settings */}
-                      {/* <Pdfpopup pdfID={profile._id} handleFormSubmit={fetchProfileData} /> */}
                     </div>
-                  ))
-                )}
+                    {/* PDF Settings */}
+                    {/* <Pdfpopup pdfID={profile._id} handleFormSubmit={fetchProfileData} /> */}
+                  </div>
+                ))
+              )}
+              
               </div>
             </div>
           </div>

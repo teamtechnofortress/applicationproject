@@ -19,7 +19,12 @@ const StepTwoInner = ({
   const fileInputRef = useRef(null); // Add a ref for file input
   const [isConverting, setIsConverting] = useState(false);
 
-
+   // ✅ Ensure preview persists when navigating back to this step
+   useEffect(() => {
+    if (imageswbs && imageswbs.length > 0) {
+      setwbsiImageShow(imageswbs[0]); // Show the first image or file
+    }
+  }, [imageswbs]);
   const handleFileChange = async (event) => {
     setIsConverting(true);  // Show loading state
 

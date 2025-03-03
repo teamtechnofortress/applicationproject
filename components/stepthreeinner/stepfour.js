@@ -14,7 +14,12 @@ const StepFourInner = ({
   const fileInputRef = useRef(null);
   const [schufaImageShow, setSchufaImageShow] = useState(null); // ✅ For preview display
   const [openIndex, setOpenIndex] = useState(0); // ✅ For FAQ accordion
-
+ // ✅ Ensure preview persists when navigating back to this step
+ useEffect(() => {
+  if (schufa && schufa.length > 0) {
+    setSchufaImageShow(schufa[0]); // Show the first image or file
+  }
+}, [schufa]);
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];

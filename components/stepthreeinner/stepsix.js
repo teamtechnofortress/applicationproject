@@ -13,7 +13,12 @@ const StepSixInner = ({
   const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
   const fileInputRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null); // ✅ For preview display
-
+ // ✅ Ensure preview persists when navigating back to this step
+ useEffect(() => {
+  if (mietschuldenfreiheitimg && mietschuldenfreiheitimg.length > 0) {
+    setPreviewImage(mietschuldenfreiheitimg[0]); // Show the first image or file
+  }
+}, [mietschuldenfreiheitimg]);
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];

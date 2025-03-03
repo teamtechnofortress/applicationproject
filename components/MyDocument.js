@@ -676,7 +676,7 @@ const MyDocument = ({ profileData }) => {
             {/* Body */}
             <View style={styles.bodyWhite}>
               <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>einkommensbescheinigungimg</Text>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
                 <View style={styles.secondPagesection}>
                   <View style={styles.greyCardBg}>
                     <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
@@ -712,7 +712,7 @@ const MyDocument = ({ profileData }) => {
             {/* Body */}
             <View style={styles.bodyWhite}>
               <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>personal</Text>
+                <Text style={styles.titleBorder}>Ausweiskopie</Text>
                 <View style={styles.secondPagesection}>
                   <View style={styles.greyCardBg}>
                     <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
@@ -747,7 +747,7 @@ const MyDocument = ({ profileData }) => {
             {/* Body */}
             <View style={styles.bodyWhite}>
               <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>mietschuldenfreiheitimg</Text>
+                <Text style={styles.titleBorder}>Mietschuldenfreiheitsbescheinigung</Text>
                 <View style={styles.secondPagesection}>
                   <View style={styles.greyCardBg}>
                     <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
@@ -782,7 +782,7 @@ const MyDocument = ({ profileData }) => {
             {/* Body */}
             <View style={styles.bodyWhite}>
               <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>schufa</Text>
+                <Text style={styles.titleBorder}>Schufa - Bonität</Text>
                 <View style={styles.secondPagesection}>
                   <View style={styles.greyCardBg}>
                     <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
@@ -817,7 +817,7 @@ const MyDocument = ({ profileData }) => {
             {/* Body */}
             <View style={styles.bodyWhite}>
               <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>bwaimages</Text>
+                <Text style={styles.titleBorder}>BWA</Text>
                 <View style={styles.secondPagesection}>
                   <View style={styles.greyCardBg}>
                     <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
@@ -852,7 +852,7 @@ const MyDocument = ({ profileData }) => {
             {/* Body */}
             <View style={styles.bodyWhite}>
               <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>employcontract</Text>
+                <Text style={styles.titleBorder}>Arbeitsvertrag</Text>
                 <View style={styles.secondPagesection}>
                   <View style={styles.greyCardBg}>
                     <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
@@ -887,7 +887,7 @@ const MyDocument = ({ profileData }) => {
             {/* Body */}
             <View style={styles.bodyWhite}>
               <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>salaryslip</Text>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
                 <View style={styles.secondPagesection}>
                   <View style={styles.greyCardBg}>
                     <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />

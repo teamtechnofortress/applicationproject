@@ -5,18 +5,18 @@ const nodemailer = require("nodemailer");
 
 var CryptoJS = require("crypto-js");
 
-const generateRandomPassword = () => {
-    // Generate a random password (you can customize this logic as needed)
-    const length = 10;
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let password = "";
-    for (let i = 0; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    return password;
-};
+// const generateRandomPassword = () => {
+//     // Generate a random password (you can customize this logic as needed)
+//     const length = 10;
+//     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//     let password = "";
+//     for (let i = 0; i < length; i++) {
+//         password += charset.charAt(Math.floor(Math.random() * charset.length));
+//     }
+//     return password;
+// };
 
-const sendWelcomeEmail = async (firstname, lastname, email, password) => {
+const sendWelcomeEmail = async (email, password) => {
     try {
         const transporter = nodemailer.createTransport({
           host: process.env.SMTP_HOST,
@@ -319,7 +319,8 @@ const handler = async (req, res) => {
     try {
         await connectDb();
         if (req.method == "POST") {
-            const { firstname, lastname, email } = req.body;
+            console.log(req.body)
+            const { email, password } = req.body;
            // Check if email is empty
             if (!email) {
                 return res.status(400).json({status: 'error' , msg: "Email is required" });
@@ -331,20 +332,12 @@ const handler = async (req, res) => {
                 return res.status(400).json({ status: 'error', msg: "Email already exists" });
             }
 
-            // Check if name is empty
-            if (!firstname) {
-                return res.status(400).json({ status: 'error', msg: "First Name is required" });
-            }
-            if (!lastname) {
-                return res.status(400).json({ status: 'error', msg: "Last Name is required" });
-            }
-
             // Generate a random password
-            const generatedPassword = generateRandomPassword();
+            // const generatedPassword = generateRandomPassword();
             // Send welcome email
-            await sendWelcomeEmail(firstname, lastname, email, generatedPassword);
+            // await sendWelcomeEmail(firstname, lastname, email, generatedPassword);
             
-            const u = new User({firstname, lastname, email, password: CryptoJS.AES.encrypt(generatedPassword, process.env.AES_SECRET).toString()});
+            const u = new User({email, password: CryptoJS.AES.encrypt(password, process.env.AES_SECRET).toString()});
             await u.save();
 
             res.status(200).json({ status:"success", msg: "Your Account has been created!" });

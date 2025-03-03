@@ -22,17 +22,20 @@ const handler = async (req, res) => {
 
       // Create a transporter for sending emails
       const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST,
-          port: process.env.SMTP_PORT,
-          auth: {
-              user: process.env.SMTP_USERNAME,
-              pass: process.env.SMTP_PASSWORD
-          }
+        host:  process.env.SMTP_HOST,
+        port:  process.env.SMTP_PORT,
+        secure: true,
+        auth: {
+          user:  process.env.SMTP_USERNAME, // Your Gmail
+          pass:  process.env.SMTP_PASSWORD, // Use App Password
+        },
       });
+      
+
 
       // Create the email options
       const mailOptions = {
-        from: '"Wohnungs Guru" <maddison53@ethereal.email>',
+        from: "Wohnungsmappe",
         to: email,
         subject: 'Password Reset Request',
         html: `
