@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
 import Image from 'next/image';
@@ -7,8 +8,6 @@ import styles from '../../styles/applications.module.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import Pdfpopup from '@/components/Pdfsettings';
-import MyDocument from '@/components/MyDocument';
 
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then(mod => mod.PDFDownloadLink),
@@ -20,27 +19,42 @@ const AllApplications = () => {
   const [loading, setLoading] = useState(true);
   const [isEmpty, setIsEmpty] = useState(false);
   const [user, setUser] = useState({ firstname: '', lastname: '' });
+  const router = useRouter();
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
+
+  /** Fetches all apartment applications */
   const fetchProfileData = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/user/allapplications`);
       if (response.data && Array.isArray(response.data)) {
-        setCvdata(response.data);
-        setIsEmpty(response.data.length === 0);
+        // Get only parent applications (no parentId)
+        const parentApplications = response.data.filter(app => !app.parentId);
+        
+        // Create a map to check if an application is a parent
+        const childParentMap = new Set(response.data.map(app => app.parentId).filter(Boolean));
+
+        // Update state
+        setCvdata(parentApplications.map(app => ({
+          ...app,
+          hasChild: childParentMap.has(app._id) // Check if this application has a child
+        })));
+        setIsEmpty(parentApplications.length === 0);
       } else {
-        setCvdata([]); // Ensure it's always an array
+        setCvdata([]);
         setIsEmpty(true);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      setCvdata([]); // Ensure cvdata is always an array
+      setCvdata([]);
       setIsEmpty(true);
     } finally {
       setLoading(false);
     }
   };
-  
 
+  /** Fetches logged-in user details */
   const fetchUserData = async () => {
     try {
       const res = await fetch('/api/user/get', {
@@ -84,71 +98,152 @@ const AllApplications = () => {
               </div>
 
               <div className={`${styles['flex-sec']} gap-8`}>
-              {loading ? (
-                <div>Loading...</div> // Show a loading state until data is fetched
-              ) : isEmpty ? (
-                <div>No data available</div>
-              ) : (
-                cvdata.map((profile) => (
-                  <div key={profile._id} className={`${styles['pdf-sec']} relative`}>
-                    <div className={`${styles['pdf-btn-grp']}`}>
-                      <Link href="/account/application" legacyBehavior>
-                        <button className={`${styles['pdf-person']}`}>
-                          Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg" />
-                        </button>
-                      </Link>
-                      <Link href="/account/application" legacyBehavior>
-                        <button className={`${styles['pdf-btn']}`}>
-                          <img src="/images/write.svg" />
-                        </button>
-                      </Link>
-                      <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
-                      <button className={`${styles['pdf-btn']}`}>
-                        <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
-                      </button>
-                    </a>
+                {loading ? (
+                  <div>Loading...</div>
+                ) : isEmpty ? (
+                  <div>No data available</div>
+                ) : (
+                  cvdata.map((profile) => {
+                    return (
+                      <div key={profile._id} className={`${styles['pdf-sec']} relative`}>
+                        <div className={`${styles['pdf-btn-grp']}`}>
+                          
+                          {/* Hide "Person hinzufügen" if this application already has a child */}
+                          {!profile.hasChild && (
+                            <button
+                              type="button"
+                              onClick={() => router.push(`/account/application?parentId=${profile._id}`)}
+                              className={`${styles['pdf-person']}`}
+                            >
+                              Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg" />
+                            </button>
+                          )}
 
-                    </div>
-                    
-                  
-                    {/* Dynamic PDF Banner */}
-                    <div className={`${styles['pdf-layout']}`}>
-                      <div className={`${styles['pdf-body']}`}>
-                        <img src="/images/pdfbanner.png" alt="PDF Banner" />
-                        <img src="/images/logo.png" className={`${styles['logoimage']}`} alt="Logo" />
-                        <p className={`${styles['bannersmall']}`}>Die</p>
-                        <p className={`${styles['bannertitle']}`}>Bewerbermappe</p>
-                        <p className={`${styles['para']}`}>Von</p>
-                        <p className={`${styles['para']}`}>{profile.vorname} {profile.nachname}</p>
-                      </div>
+                         
+                          <button
+                            className={`${styles['pdf-btn']}`}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
 
-                      {/* Footer Section */}
-                      <div className={`${styles['footer-pdf']}`}>
-                        <div className={`${styles['footerRow']}`}>
-                          <div className={`${styles['footerColOne']}`}>
-                            <p className={`${styles['footerTextOne']}`}>{profile.strabe} {profile.hausnummer}{"\n"} {profile.postleitzahl}, {profile.Ort}</p>
+                              if (profile.hasChild) {
+                                setSelectedApplication(profile);
+                                setShowPopup(true);
+                              } else {
+                                router.push(`/edit/${profile._id}`);
+                              }
+                            }}
+                          >
+                            <img src="/images/write.svg" />
+                          </button>
+
+
+                       
+
+
+                          <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
+                            <button className={`${styles['pdf-btn']}`}>
+                              <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+                            </button>
+                          </a>
+                        </div>
+
+                        {/* Dynamic PDF Banner */}
+                        <div className={`${styles['pdf-layout']}`}>
+                          <div className={`${styles['pdf-body']}`}>
+                            <img src="/images/pdfbanner.png" alt="PDF Banner" />
+                            <img src="/images/logo.png" className={`${styles['logoimage']}`} alt="Logo" />
+                            <p className={`${styles['bannersmall']}`}>Die</p>
+                            <p className={`${styles['bannertitle']}`}>Bewerbermappe</p>
+                            <p className={`${styles['para']}`}>Von</p>
+                            <p className={`${styles['para']}`}>{profile.vorname} {profile.nachname}</p>
                           </div>
-                          <div className={`${styles['footerColCenter']}`}>
-                            <img className={`${styles['footerlogo']}`} src="/images/barcode.png" alt="Barcode" />
-                          </div>
-                          <div className={`${styles['footerCol']}`}>
-                            <p className={`${styles['footerText']}`}>{profile.phonenumber}</p>
-                            <p className={`${styles['footerText']}`}>{profile.email}</p>
+
+                          {/* Footer Section */}
+                          <div className={`${styles['footer-pdf']}`}>
+                            <div className={`${styles['footerRow']}`}>
+                              <div className={`${styles['footerColOne']}`}>
+                                <p className={`${styles['footerTextOne']}`}>
+                                  {profile.strabe} {profile.hausnummer}
+                                  <br />
+                                  {profile.postleitzahl}, {profile.Ort}
+                                </p>
+                              </div>
+                              <div className={`${styles['footerColCenter']}`}>
+                                <img className={`${styles['footerlogo']}`} src="/images/barcode.png" alt="Barcode" />
+                              </div>
+                              <div className={`${styles['footerCol']}`}>
+                                <p className={`${styles['footerText']}`}>{profile.phonenumber}</p>
+                                <p className={`${styles['footerText']}`}>{profile.email}</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
+
+                        {/* PDF Settings */}
+                        {/* <Pdfpopup pdfID={profile._id} handleFormSubmit={fetchProfileData} /> */}
                       </div>
-                    </div>
-                    {/* PDF Settings */}
-                    {/* <Pdfpopup pdfID={profile._id} handleFormSubmit={fetchProfileData} /> */}
-                  </div>
-                ))
-              )}
-              
+                    );
+                  })
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+      {showPopup && selectedApplication && (
+        <div
+        id="tip-modal"
+        className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
+        onClick={() => setisTipModal(false)} 
+        >
+        
+        <div
+          className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
+          <button
+              type="button"
+              className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
+              onClick={() => setShowPopup(false)}
+            >
+              ✖
+            </button>
+            <h3 className={`${styles["modal-h3"]}`}>
+              <div className="flex gap-4 justify-center">
+              <img className="" src="/images/tip.svg" alt="Tip Icon" />  Select which application to edit
+              </div>
+            </h3>
+          </div>
+          <div className="p-4 md:p-5 space-y-4">
+           {/* Edit Parent */}
+           <button
+              className={styles['popup-btn']}
+              onClick={() => {
+                router.push(`/edit/${selectedApplication._id}`);
+                setShowPopup(false);
+              }}
+            >
+              Edit Parent Application
+            </button>
+              {/* Edit Child */}
+              <button
+              className={styles['popup-btn']}
+              onClick={() => {
+                const childId = cvdata.find(app => app.parentId === selectedApplication._id)?._id;
+                if (childId) {
+                  router.push(`/edit/${childId}`);
+                  setShowPopup(false);
+                }
+              }}
+            >
+              Edit Child Application
+            </button>
+          </div>
+        </div>
+      </div>
+      )}
     </>
   );
 };

@@ -12,9 +12,14 @@ import Steptwo from "@/components/steptwo";
 import StepOne from "@/components/stepone";
 import Stepthree from "@/components/stepthree";
 import LoadingSpinner from "@/components/loading";
+import { useRouter } from 'next/router';
+
 
 
 const application = () => {
+  const router = useRouter();
+  const { parentId } = router.query;
+
   const [vorname, setVorname] = useState("");
   const [nachname, setNachname] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -383,6 +388,7 @@ const application = () => {
       if (name === "bwaimages") setBwaimages(value);
       if (name === "einkommensbescheinigungimg") seteinkommensbescheinigungimg(value);
       if (name === "imageswbs") setImageswbs(value);
+      if (name === "mietverhaltnis") setMietverhaltnis(value);
       if (name === "mietschuldenfreiheitimg") setMietschuldenfreiheitimg(value);
       if (name === "personal") setPersonal(value);
       if (name === "schufa") setPersonal(value);
@@ -492,6 +498,11 @@ const application = () => {
     // formData.append("schufa", schufa);
     // console.log('schufa', schufa);
     // formData.append("noofpeople", people);
+     // 🔹 Append Parent Form ID if available
+     if (parentId) {
+      formData.append("parentId", parentId); 
+      console.log(parentId);
+    }
     formData.append("status", status);
     formData.append("currentactivity", currentactivity);
     formData.append("currentemployer", currentemployer);
@@ -509,7 +520,11 @@ const application = () => {
     formData.append("rentalschoolfree", rentalschoolfree);
     formData.append("signatureData", signatureData);
     formData.append('componentImage', applicationimg);
+    formData.append('componentImage', applicationimg);
     formData.append('salarySlip1', salarySlip1);
+    formData.append("mietschuldenfreiheit", mietschuldenfreiheit);
+    formData.append("mietverhaltnis", mietverhaltnis);
+    
     // Convert Base64 images to File objects before appending
     if (imageswbs && imageswbs.length > 0) {
       for (const [index, image] of imageswbs.entries()) {

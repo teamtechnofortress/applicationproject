@@ -39,13 +39,14 @@ export default async function handler(req, res) {
 
     // Configure nodemailer transporter
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
+      host:  process.env.SMTP_HOST,
+      port:  process.env.SMTP_PORT,
+      secure: true,
       auth: {
-        user: process.env.SMTP_USERNAME,
-        pass: process.env.SMTP_PASSWORD,
+        user:  process.env.SMTP_USERNAME, // Your Gmail
+        pass:  process.env.SMTP_PASSWORD, // Use App Password
       },
-    });
+    });;
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -57,7 +58,6 @@ export default async function handler(req, res) {
     await transporter.sendMail(mailOptions);
 
     const user1 = await User.findOne({ _id: decodedToken.id });
-    console.log('as',user1)
     user1.newEmail = newEmail;
     user1.emailOtp = otp;
     await user1.save();

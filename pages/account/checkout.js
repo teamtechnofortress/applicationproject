@@ -1,12 +1,36 @@
 import React, { useState } from 'react';
 import SidebarHeader from '@/components/SidebarHeader';
 import styles from '../../styles/subscription.module.css';
+import { useRouter } from "next/router";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CheckoutForm from "@/components/CheckoutForm";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISH_KEY);
 
 const Checkout = () => {
-    const [buttonTwo, setbuttonTwo] = useState(false);
-    const [visibleSection, setVisibleSection] = useState("section1");
+  const router = useRouter();
+  let { selectedPlan } = router.query;
+
+  // Default to 6-month plan if no plan is selected
+  if (!selectedPlan || !["price_one_time","price_3_month", "price_6_month", "price_12_month"].includes(selectedPlan)) {
+      selectedPlan = "price_6_month";
+  }
+
+  // Mapping selected plan to the correct Stripe Price ID
+  const priceIdMap = {
+      price_3_month: "price_1R2oilIBEl0UnhG5tD4M6hb7",
+      price_6_month: "price_1R2oilIBEl0UnhG5qLbyj6Qc",
+      price_12_month: "price_1R2oilIBEl0UnhG5NqQwt5GU",
+      price_one_time: "price_1R3x3mIBEl0UnhG5T8lqLHvW",
+  };
+
+  const priceId = priceIdMap[selectedPlan];
+  
   return (
     <>
       <SidebarHeader />
@@ -22,227 +46,37 @@ const Checkout = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-20 pt-20">
                 {/* Card 1 */}
                 <div className={`${styles['payment-card']} bg-white p-4`}>
-                <div className="bg-gray-100 p-6 mt-4 flex flex-col sm:flex-row gap-4">
-
+                  <div className="bg-gray-100 p-6 mt-4 flex flex-col sm:flex-row gap-4">
                     <div className={`${styles['circle-sec']}`}>
                       <p className={`${styles['deine']}`}>Deine Bestellung: </p>
-                      <p className={`${styles['wohnungmappe']}`}>Wohnungmappe 6 Monate</p>
+                      <p className={`${styles['wohnungmappe']}`}>Wohnungmappe {
+                                  selectedPlan === "price_3_month"
+                                    ? "3 Monate"
+                                    : selectedPlan === "price_6_month"
+                                    ? "6 Monate"
+                                    : selectedPlan === "price_one_time"
+                                    ? "One Time"
+                                    : "12 Monate"}{" "}</p>
                     </div>
                     <div className={`${styles['text-sec']}`}>
-                      <h3 className={`${styles['price']}`}>19,99€ <span>/ Monat</span></h3>
+                      <h3 className={`${styles['price']}`}> {selectedPlan === "price_3_month"
+                                    ? "29,99€"
+                                    : selectedPlan === "price_6_month"
+                                    ? "19,99€"
+                                    : selectedPlan === "price_one_time"
+                                    ? "30,99€"
+                                    : "12,99€"}{" "} <span>/ Monat</span></h3>
                     </div>
                   </div>
-                  {/* Toggle Buttons */}
-                  <h3 className={`${styles['deine']} mt-10`}>Zahlungsmethode:</h3>
-                    <div className="flex gap-4 border-b border-gray-300">
-                      <button
-                        className={`w-1/5  ${
-                          visibleSection === "section1" 
-                        }`}
-                        onClick={() => setVisibleSection("section1")}
-                      >
-                        <img src="/images/credit-card.png" alt="icon" className='p-2 sm:p-4'/>
-                      </button>
-                      <button
-                        className={`w-1/5 ${
-                          visibleSection === "section2" 
-                        }`}
-                        onClick={() => setVisibleSection("section2")}
-                      >
-                       <img src="/images/credit-card.png" alt="icon" className='p-2 sm:p-4' />
-                      </button>
-                      <button
-                        className={`w-1/5  ${
-                          visibleSection === "section3"
-                        }`}
-                        onClick={() => setVisibleSection("section3")}
-                      >
-                       <img src="/images/credit-card.png" alt="icon" className='p-2 sm:p-4' />
-                      </button>
-                      <button
-                        className={`w-1/5 ${
-                          visibleSection === "section4"
-                        }`}
-                        onClick={() => setVisibleSection("section4")}
-                      >
-                       <img src="/images/credit-card.png" alt="icon" className='p-2 sm:p-4' />
-                      </button>
-                    </div>
-
                     {/* Section Content */}
-                    <div className="p-4 mt-4 rounded">
-                      {visibleSection === "section1" && 
-                      <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
-                      {/* Full-width Input */}
-                      <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Kartennummer</label>
-                        <input
-                          type="text"
-                          className={`${styles["form-input"]} form-input w-full`}
-                          id="kartennummer"
-                          name="Kartennummer"
-                          placeholder="121312313212"
-                        />
-                      </div>
-                    
-                      {/* Two Inputs Side by Side */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Ablaufdatum</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="ablaufdatum"
-                            name="ablaufdatum"
-                            placeholder="Ablaufdatum"
-                          />
+                  <div className="p-4 mt-4 rounded">
+                    <Elements stripe={stripePromise}>
+                        <div className="container mx-auto">
+
+                          <CheckoutForm priceId={priceId} />
                         </div>
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Sicherheitdscode</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="sicherheitdscode"
-                            name="sicherheitdscode"
-                            placeholder="Sicherheitdscode"
-                          />
-                        </div>
-                      </div>
-                      <div className='text-center mb-20'>
-                      <button className={`${styles['jetzt-tip']}`}>Jetzt Kaufen</button>
-                    </div>
-                    </div>
-                    
-                    
-                      }
-                      {visibleSection === "section2" && 
-                      <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
-                      {/* Full-width Input */}
-                      <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Kartennummer</label>
-                        <input
-                          type="text"
-                          className={`${styles["form-input"]} form-input w-full`}
-                          id="kartennummer"
-                          name="Kartennummer"
-                          placeholder="121312313212"
-                        />
-                      </div>
-                    
-                      {/* Two Inputs Side by Side */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Ablaufdatum</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="ablaufdatum"
-                            name="ablaufdatum"
-                            placeholder="Ablaufdatum"
-                          />
-                        </div>
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Sicherheitdscode</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="sicherheitdscode"
-                            name="sicherheitdscode"
-                            placeholder="Sicherheitdscode"
-                          />
-                        </div>
-                      </div>
-                      <div className='text-center mb-20'>
-                      <button className={`${styles['jetzt-tip']}`}>Jetzt Kaufen</button>
-                    </div>
-                    </div>
-                      }
-                      {visibleSection === "section3" && 
-                      <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
-                      {/* Full-width Input */}
-                      <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Kartennummer</label>
-                        <input
-                          type="text"
-                          className={`${styles["form-input"]} form-input w-full`}
-                          id="kartennummer"
-                          name="Kartennummer"
-                          placeholder="121312313212"
-                        />
-                      </div>
-                    
-                      {/* Two Inputs Side by Side */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Ablaufdatum</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="ablaufdatum"
-                            name="ablaufdatum"
-                            placeholder="Ablaufdatum"
-                          />
-                        </div>
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Sicherheitdscode</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="sicherheitdscode"
-                            name="sicherheitdscode"
-                            placeholder="Sicherheitdscode"
-                          />
-                        </div>
-                      </div>
-                      <div className='text-center mb-20'>
-                      <button className={`${styles['jetzt-tip']}`}>Jetzt Kaufen</button>
-                    </div>
-                    </div>
-                      }
-                      {visibleSection === "section4" && 
-                      <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
-                      {/* Full-width Input */}
-                      <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Kartennummer</label>
-                        <input
-                          type="text"
-                          className={`${styles["form-input"]} form-input w-full`}
-                          id="kartennummer"
-                          name="Kartennummer"
-                          placeholder="121312313212"
-                        />
-                      </div>
-                    
-                      {/* Two Inputs Side by Side */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Ablaufdatum</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="ablaufdatum"
-                            name="ablaufdatum"
-                            placeholder="Ablaufdatum"
-                          />
-                        </div>
-                        <div className="input-field mt-2">
-                        <label className={`${styles["label"]}`}>Sicherheitdscode</label>
-                          <input
-                            type="text"
-                            className={`${styles["form-input"]} form-input w-full`}
-                            id="sicherheitdscode"
-                            name="sicherheitdscode"
-                            placeholder="Sicherheitdscode"
-                          />
-                        </div>
-                      </div>
-                      <div className='text-center mb-20'>
-                      <button className={`${styles['jetzt-tip']}`}>Jetzt Kaufen</button>
-                    </div>
-                    </div>
-                      }
-                    </div>
-                   
+                    </Elements>
+                  </div>
                 </div>
 
                 {/* Card 2 */}

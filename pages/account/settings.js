@@ -63,10 +63,10 @@ const Account = () => {
 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      toast.error('New password and confirm password do not match.');
-      return;
-    }
+    // if (newPassword !== confirmPassword) {
+    //   toast.error('New password and confirm password do not match.');
+    //   return;
+    // }
     try {
       const res = await fetch('/api/user/update-password', {
         method: 'POST',
@@ -134,6 +134,7 @@ const Account = () => {
                   <div className="flex justify-between items-center">
                     <p className={`${styles['old-email']}`}>Ihre E-Mai-Adresse lautet <span className={`${styles['span-email']}`}>{currentUser ? currentUser.email : ''}</span></p>
                     <button
+                      type="button"
                       onClick={() => setisMailOpen(true)}
                       className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}
                     >
@@ -182,6 +183,7 @@ const Account = () => {
                 <div className="flex justify-between items-center">
                     <h3 className={`${styles['heading-personl']}`}>Passwort</h3>
                     <button
+                     type="button"
                       onClick={() => setisPasswordOpen(true)}
                       className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}
                     >
@@ -203,8 +205,8 @@ const Account = () => {
                             <input
                               type="password"
                               placeholder="Neue Passwort"
-                              value={confirmPassword}
-                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
                               className="w-full p-2 border border-gray-300 rounded mb-4"
                               required
                             />

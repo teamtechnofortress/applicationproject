@@ -76,6 +76,8 @@
 }
 .flex-sec{
     display: flex;
+    flex-wrap: wrap;
+    gap: 70px;
 }
 .logoimage{
     width: 35%;
@@ -175,3 +177,22 @@
         font-size: 11px;
     }
 }
+
+
+
+.popup-btn {
+    font-family: "Montserrat", sans-serif;
+  display: block;
+  width: 70%;
+  margin: auto;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 11px 34px 11px 53px;
+  background: #E7FC41;
+  color: #333333;
+  border: none;
+  cursor: pointer;
+}
+
+

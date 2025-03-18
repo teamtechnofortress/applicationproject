@@ -25,6 +25,7 @@ export default async function handler(req, res) {
 
   const { newPassword } = req.body;
 
+
   try {
     await connectDb();
 

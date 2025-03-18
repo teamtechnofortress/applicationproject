@@ -5,12 +5,10 @@ import styles from '../styles/new.module.css';
 
 const Nav = () => {
     const [currentUser, setCurrentUser] = useState(null);
-   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+   
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-   const toggleSignupModal = () => {
-       setIsSignupModalOpen(!isSignupModalOpen);
-   };
+   
 
    const toggleMobileMenu = () => {
        setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -78,19 +76,30 @@ const Nav = () => {
                            <li className="p-2 border-b-2 border-white">
                                <a href="#" className={`${styles['nav-item']} block text-center`}>Layouts</a>
                            </li>
+                           {currentUser ? (
                            <li className={`${styles['btn-login']} p-2 border-b-2 border-white`}>
-                               <Link href="/login" legacyBehavior>
+                               <Link href="/account/allapplications" legacyBehavior>
                                    <div>
-                                       <a className={`${styles['nav-item']} block text-center`}>Login</a>
+                                       <a className={`${styles['nav-item']} block text-center`}>Mein Konto</a>
                                        <img src="/images/loginbg.png"/>
                                    </div>
                                </Link>
                            </li>
+                           ) : (
+                            <li className={`${styles['btn-login']} p-2 border-b-2 border-white`}>
+                                    <Link href="/login" legacyBehavior>
+                                        <div>
+                                            <a className={`${styles['nav-item']} block text-center`}>Login</a>
+                                            <img src="/images/loginbg.png"/>
+                                        </div>
+                                    </Link>
+                                </li>
+                           )}
+                           
                        </ul>
                    </div>
                </div>
            </nav>
-           {isSignupModalOpen && <Signup onClose={toggleSignupModal} />}
        </section>
    );
 }
