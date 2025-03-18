@@ -672,48 +672,8 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
       )}
-
-     
-      {/* page 3 end*/}
-      {[...(parent.salaryslip || []).map(image => ({ image, owner: parent })), 
-        ...(child.salaryslip || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
-          <Page key={index} style={styles.page}>
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.headerText}>
-                <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
-                <Text style={styles.headerPhone}>{parent.tel}</Text>
-                <Text style={styles.headerEmail}>{parent.email}</Text>
-              </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
-              <Image 
-                style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
-              />
-            </View>
-
-            {/* Body */}
-            <View style={styles.bodyWhite}>
-              <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
-                <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
-                  <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            {/* Page Number */}
-            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-          </Page>
-      ))}
-
-      {[...(parent.einkommensbescheinigungimg || []).map(image => ({ image, owner: parent })), 
-        ...(child.einkommensbescheinigungimg || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
+      {parent.salaryslip && parent.salaryslip.length > 0 &&
+        parent.salaryslip.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
@@ -727,6 +687,7 @@ const MyDocumentTwo = ({ profileData }) => {
                 style={styles.headerImage} 
                 src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
               />
+
             </View>
 
             {/* Body */}
@@ -734,9 +695,8 @@ const MyDocumentTwo = ({ profileData }) => {
               <View style={styles.secondPageBody}>
                 <Text style={styles.titleBorder}>Einkommensnachweis</Text>
                 <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
                   <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
                   </View>
                 </View>
               </View>
@@ -745,11 +705,10 @@ const MyDocumentTwo = ({ profileData }) => {
             {/* Page Number */}
             <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
-      ))}
-
-      {[...(parent.employcontract || []).map(image => ({ image, owner: parent })), 
-        ...(child.employcontract || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
+        ))
+      }
+      {parent.einkommensbescheinigungimg && parent.einkommensbescheinigungimg.length > 0 &&
+        parent.einkommensbescheinigungimg.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
@@ -763,6 +722,42 @@ const MyDocumentTwo = ({ profileData }) => {
                 style={styles.headerImage} 
                 src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
               />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {parent.employcontract && parent.employcontract.length > 0 &&
+        parent.employcontract.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+                <Text style={styles.headerPhone}>{parent.tel}</Text>
+                <Text style={styles.headerEmail}>{parent.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
             </View>
 
             {/* Body */}
@@ -770,9 +765,8 @@ const MyDocumentTwo = ({ profileData }) => {
               <View style={styles.secondPageBody}>
                 <Text style={styles.titleBorder}>Arbeitsvertrag</Text>
                 <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
                   <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
                   </View>
                 </View>
               </View>
@@ -781,10 +775,10 @@ const MyDocumentTwo = ({ profileData }) => {
             {/* Page Number */}
             <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
-      ))}
-      {[...(parent.bwaimages || []).map(image => ({ image, owner: parent })), 
-        ...(child.bwaimages || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
+        ))
+      }
+      {parent.bwaimages && parent.bwaimages.length > 0 &&
+        parent.bwaimages.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
@@ -798,6 +792,7 @@ const MyDocumentTwo = ({ profileData }) => {
                 style={styles.headerImage} 
                 src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
               />
+
             </View>
 
             {/* Body */}
@@ -805,9 +800,8 @@ const MyDocumentTwo = ({ profileData }) => {
               <View style={styles.secondPageBody}>
                 <Text style={styles.titleBorder}>BWA</Text>
                 <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
                   <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
                   </View>
                 </View>
               </View>
@@ -816,12 +810,10 @@ const MyDocumentTwo = ({ profileData }) => {
             {/* Page Number */}
             <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
-      ))}
-
-
-      {[...(parent.bwaimages || []).map(image => ({ image, owner: parent })), 
-        ...(child.bwaimages || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
+        ))
+      }
+      {parent.imageswbs && parent.imageswbs.length > 0 &&
+        parent.imageswbs.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
@@ -835,42 +827,7 @@ const MyDocumentTwo = ({ profileData }) => {
                 style={styles.headerImage} 
                 src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
               />
-            </View>
 
-            {/* Body */}
-            <View style={styles.bodyWhite}>
-              <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>BWA</Text>
-                <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
-                  <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            {/* Page Number */}
-            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-          </Page>
-      ))}
-
-      {[...(parent.imageswbs || []).map(image => ({ image, owner: parent })), 
-        ...(child.imageswbs || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
-          <Page key={index} style={styles.page}>
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.headerText}>
-                <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
-                <Text style={styles.headerPhone}>{parent.tel}</Text>
-                <Text style={styles.headerEmail}>{parent.email}</Text>
-              </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
-              <Image 
-                style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
-              />
             </View>
 
             {/* Body */}
@@ -878,9 +835,8 @@ const MyDocumentTwo = ({ profileData }) => {
               <View style={styles.secondPageBody}>
                 <Text style={styles.titleBorder}>WBS</Text>
                 <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
                   <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
                   </View>
                 </View>
               </View>
@@ -889,11 +845,10 @@ const MyDocumentTwo = ({ profileData }) => {
             {/* Page Number */}
             <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
-      ))}
-
-      {[...(parent.personal || []).map(image => ({ image, owner: parent })), 
-        ...(child.personal || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
+        ))
+      }
+      {parent.personal && parent.personal.length > 0 &&
+        parent.personal.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
@@ -907,6 +862,7 @@ const MyDocumentTwo = ({ profileData }) => {
                 style={styles.headerImage} 
                 src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
               />
+
             </View>
 
             {/* Body */}
@@ -914,9 +870,8 @@ const MyDocumentTwo = ({ profileData }) => {
               <View style={styles.secondPageBody}>
                 <Text style={styles.titleBorder}>Ausweiskopie</Text>
                 <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
                   <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
                   </View>
                 </View>
               </View>
@@ -925,11 +880,10 @@ const MyDocumentTwo = ({ profileData }) => {
             {/* Page Number */}
             <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
-      ))}
-
-      {[...(parent.mietschuldenfreiheitimg || []).map(image => ({ image, owner: parent })), 
-        ...(child.mietschuldenfreiheitimg || []).map(image => ({ image, owner: child }))]
-        .map(({ image, owner }, index) => (
+        ))
+      }
+      {parent.mietschuldenfreiheitimg && parent.mietschuldenfreiheitimg.length > 0 &&
+        parent.mietschuldenfreiheitimg.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
@@ -943,6 +897,7 @@ const MyDocumentTwo = ({ profileData }) => {
                 style={styles.headerImage} 
                 src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
               />
+
             </View>
 
             {/* Body */}
@@ -950,9 +905,8 @@ const MyDocumentTwo = ({ profileData }) => {
               <View style={styles.secondPageBody}>
                 <Text style={styles.titleBorder}>Mietschuldenfreiheitsbescheinigung</Text>
                 <View style={styles.secondPagesection}>
-                  <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
                   <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
                   </View>
                 </View>
               </View>
@@ -961,12 +915,78 @@ const MyDocumentTwo = ({ profileData }) => {
             {/* Page Number */}
             <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
-      ))}
+        ))
+      }
+      {parent.schufa && parent.schufa.length > 0 &&
+          parent.schufa.map((image, index) => (
+            <Page key={index} style={styles.page}>
+              {/* Header */}
+              <View style={styles.header}>
+                <View style={styles.headerText}>
+                  <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+                  <Text style={styles.headerPhone}>{parent.tel}</Text>
+                  <Text style={styles.headerEmail}>{parent.email}</Text>
+                </View>
+                <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+                <Image 
+                  style={styles.headerImage} 
+                  src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                />
 
-     
-     {[...(parent.schufa || []).map(image => ({ image, owner: parent })), 
-      ...(child.schufa || []).map(image => ({ image, owner: child }))]
-      .map(({ image, owner }, index) => (
+              </View>
+
+              {/* Body */}
+              <View style={styles.bodyWhite}>
+                <View style={styles.secondPageBody}>
+                  <Text style={styles.titleBorder}>Schufa - Bonität</Text>
+                  <View style={styles.secondPagesection}>
+                    <View style={styles.greyCardBg}>
+                      <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                    </View>
+                  </View>
+                </View>
+              </View>
+
+              {/* Page Number */}
+              <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+            </Page>
+          ))  
+      }  
+    {/* second person */}
+    {child?.coverletter && (
+        <Page style={styles.page}>
+          {/* header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+
+          </View>
+          {/* header */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Über mich</Text>
+              <View style={styles.secondPagesection}>
+                <Text style={styles.titleCapital}>{child.vorname} {child.nachname}</Text>
+                <Text style={styles.descriptionText}>{child.coverletter}  </Text>
+              
+              </View>
+            </View> 
+            </View>
+              {/* Page Number */}
+              <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      )}
+    {child.salaryslip && child.salaryslip.length > 0 &&
+      child.salaryslip.map((image, index) => (
         <Page key={index} style={styles.page}>
           {/* Header */}
           <View style={styles.header}>
@@ -975,21 +995,21 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} />
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
             <Image 
               style={styles.headerImage} 
               src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
             />
+
           </View>
 
           {/* Body */}
           <View style={styles.bodyWhite}>
             <View style={styles.secondPageBody}>
-              <Text style={styles.titleBorder}>Schufa - Bonität</Text>
+              <Text style={styles.titleBorder}>Einkommensnachweis</Text>
               <View style={styles.secondPagesection}>
-              <Text style={styles.titleCapital}>{owner.vorname} {owner.nachname}</Text>
                 <View style={styles.greyCardBg}>
-                  <Image style={{ maxHeight: "450px", objectFit: "contain" }} src={image} />
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
                 </View>
               </View>
             </View>
@@ -998,8 +1018,253 @@ const MyDocumentTwo = ({ profileData }) => {
           {/* Page Number */}
           <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
         </Page>
-    ))}
-    
+      ))
+    }
+    {child.einkommensbescheinigungimg && child.einkommensbescheinigungimg.length > 0 &&
+      child.einkommensbescheinigungimg.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.employcontract && child.employcontract.length > 0 &&
+      child.employcontract.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Arbeitsvertrag</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.bwaimages && child.bwaimages.length > 0 &&
+      child.bwaimages.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>BWA</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.imageswbs && child.imageswbs.length > 0 &&
+      child.imageswbs.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>WBS</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.personal && child.personal.length > 0 &&
+      child.personal.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Ausweiskopie</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.mietschuldenfreiheitimg && child.mietschuldenfreiheitimg.length > 0 &&
+      child.mietschuldenfreiheitimg.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Mietschuldenfreiheitsbescheinigung</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.schufa && child.schufa.length > 0 &&
+      child.schufa.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Schufa - Bonität</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
 
    
     </Document>
