@@ -130,7 +130,7 @@ const AllApplications = () => {
                                 setSelectedApplication(profile);
                                 setShowPopup(true);
                               } else {
-                                router.push(`/edit/${profile._id}`);
+                                router.push(`/account/editapplication?id=${profile._id}`);
                               }
                             }}
                           >
@@ -221,7 +221,7 @@ const AllApplications = () => {
            <button
               className={styles['popup-btn']}
               onClick={() => {
-                router.push(`/edit/${selectedApplication._id}`);
+                router.push(`/account/editapplication?id=${selectedApplication._id}`);
                 setShowPopup(false);
               }}
             >
@@ -232,8 +232,9 @@ const AllApplications = () => {
               className={styles['popup-btn']}
               onClick={() => {
                 const childId = cvdata.find(app => app.parentId === selectedApplication._id)?._id;
-                if (childId) {
-                  router.push(`/edit/${childId}`);
+                console.log(selectedApplication.parentId)
+                if (selectedApplication.parentId) {
+                  router.push(`/account/editapplication?id=${selectedApplication.parentId}`);
                   setShowPopup(false);
                 }
               }}

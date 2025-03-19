@@ -41,11 +41,18 @@ const StepThreeInner = ({
       console.log("Converted PDF to images:", images);
 
       updatedImages = images; // Store all images from the PDF
-      setPreviewImage(file); // Show first page preview
+      setPreviewImage(updatedImages[0]); // Show first page preview
     } else {
       // ✅ Directly add uploaded image
       updatedImages = [file];
-      setPreviewImage(file); // Show image preview
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setPreviewImage(result);
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
     // ✅ Ensure `personal` state is always an array (multiple PDF pages or single image)
@@ -119,9 +126,11 @@ const StepThreeInner = ({
           {/* ✅ Image Preview */}
           {previewImage && !isConverting && (
             <div className="relative w-24 h-24 mt-4">
-              {previewImage instanceof File && previewImage.type.startsWith("image/") ? (
+
+            {typeof previewImage === "string" && previewImage.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(previewImage) ? (
+
                 <img
-                  src={URL.createObjectURL(previewImage)}
+                  src={(previewImage)}
                   alt="Personalausweis Preview"
                   className="w-full h-full object-cover rounded-lg"
                 />

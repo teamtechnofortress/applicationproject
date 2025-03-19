@@ -672,8 +672,78 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
           </Page>
       )}
-      {parent.salaryslip && parent.salaryslip.length > 0 &&
-        parent.salaryslip.map((image, index) => (
+      {parent.salarySlip1 && parent.salarySlip1.length > 0 &&
+        parent.salarySlip1.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+                <Text style={styles.headerPhone}>{parent.tel}</Text>
+                <Text style={styles.headerEmail}>{parent.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {parent.salarySlip2 && parent.salarySlip2.length > 0 &&
+        parent.salarySlip2.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+                <Text style={styles.headerPhone}>{parent.tel}</Text>
+                <Text style={styles.headerEmail}>{parent.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {parent.salarySlip3 && parent.salarySlip3.length > 0 &&
+        parent.salarySlip3.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>
@@ -985,8 +1055,78 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
         </Page>
       )}
-    {child.salaryslip && child.salaryslip.length > 0 &&
-      child.salaryslip.map((image, index) => (
+    {child.salarySlip1 && child.salarySlip1.length > 0 &&
+      child.salarySlip1.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.salarySlip2 && child.salarySlip2.length > 0 &&
+      child.salarySlip2.map((image, index) => (
+        <Page key={index} style={styles.page}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
+            </View>
+            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+            />
+
+          </View>
+
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <View style={styles.secondPageBody}>
+              <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+              <View style={styles.secondPagesection}>
+                <View style={styles.greyCardBg}>
+                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      ))
+    }
+    {child.salarySlip3 && child.salarySlip3.length > 0 &&
+      child.salarySlip3.map((image, index) => (
         <Page key={index} style={styles.page}>
           {/* Header */}
           <View style={styles.header}>

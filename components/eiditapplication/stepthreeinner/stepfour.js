@@ -14,19 +14,44 @@ const StepFourInner = ({
   const fileInputRef = useRef(null);
   const [schufaImageShow, setSchufaImageShow] = useState(null); // ✅ For preview display
   const [openIndex, setOpenIndex] = useState(0); // ✅ For FAQ accordion
+  const [updatedImages, setUpdatedImages] = useState([]);
+
  // ✅ Ensure preview persists when navigating back to this step
- useEffect(() => {
-  if (schufa && schufa.length > 0) {
-    setSchufaImageShow(schufa[0]); // Show the first image or file
+//  useEffect(() => {
+//   if (schufa && schufa.length > 0) {
+//     setSchufaImageShow(schufa[0]); // Show the first image or file
+//   }
+// }, [schufa]);
+
+
+useEffect(() => {
+  if (schufa && Array.isArray(schufa) && schufa.length > 0) {
+    // Check if the first item is a File object
+    if (schufa[0] instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSchufaImageShow(reader.result); // ✅ Show file preview
+      };
+      reader.readAsDataURL(schufa[0]);
+    } else {
+      setSchufaImageShow(schufa[0]); // ✅ Show URL if stored images exist
+    }
   }
 }, [schufa]);
+
+
+
+
+
+
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];
 
     if (!file) return;
+    let imagesArray = []; // ✅ Store processed images
 
-    let updatedImages = []; // ✅ Store processed images
 
     if (file.type === "application/pdf") {
       // ✅ Convert PDF to images
@@ -34,11 +59,11 @@ const StepFourInner = ({
       const images = await convertPdfToImages(fileURL);
       console.log("Converted PDF to images:", images);
 
-      updatedImages = images; // Store all images from the PDF
-      setSchufaImageShow(file); // Show first page preview
+      imagesArray = images; // Store all images from the PDF
+      setSchufaImageShow(imagesArray[0]); // Show first page preview
     } else {
       // ✅ Directly add uploaded image
-      updatedImages = [file];
+      imagesArray = [file];
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -47,15 +72,17 @@ const StepFourInner = ({
         };
         reader.readAsDataURL(file);
       }
+      // setSchufaImageShow(file); // Show image preview
     }
+    setUpdatedImages(imagesArray);
 
     // ✅ Ensure schufa state is always an array (multiple PDF pages or single image)
-    setSchufa(updatedImages);
     setIsConverting(false); // ✅ Stop loading state
   };
 
   const removeImage = () => {
     setSchufa([]);
+    setUpdatedImages([]);
     setSchufaImageShow(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset input field
@@ -64,10 +91,22 @@ const StepFourInner = ({
 
   const validateFields = () => {
     const newErrors = {};
-    if (!schufa || schufa.length === 0) {
-      newErrors.schufa = "Schufa ist erforderlich.";
-    }
 
+     // If updatedImages has new images, update imageswbs
+     if (updatedImages.length !== 0) {
+      console.log("Updating imageswbs with new images from updatedImages");
+      setSchufa(updatedImages);
+      return true;
+    }
+    // If imageswbs already contains images, no need to update
+    if (schufa && schufa.length > 0) {
+      console.log("Validation passed, images already assigned:", schufa);
+      return true;
+    } 
+    newErrors.schufa = "Schufa ist erforderlich.";
+    // if (!schufa || schufa.length === 0) {
+    //   newErrors.schufa = "Schufa ist erforderlich.";
+    // }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
   };
@@ -105,7 +144,9 @@ const StepFourInner = ({
             ref={fileInputRef}
             onChange={handleFileChange}
           />
-
+          {errors.schufa && (
+            <p className="text-red-500 text-sm">{errors.schufa}</p>
+          )}
           {/* ✅ Show Spinner when Converting PDF */}
           {isConverting && (
             <div className="flex justify-center mt-4">
@@ -116,10 +157,9 @@ const StepFourInner = ({
           {/* ✅ Image Preview */}
           {schufaImageShow && !isConverting && (
             <div className="relative w-24 h-24 mt-4">
-            {typeof schufaImageShow === "string" && schufaImageShow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(schufaImageShow) ? (
-
+              {typeof schufaImageShow === "string" && schufaImageShow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(schufaImageShow) ? (
                 <img
-                  src={(schufaImageShow)}
+                  src={schufaImageShow}
                   alt="Schufa Preview"
                   className="w-full h-full object-cover rounded-lg"
                 />
@@ -142,18 +182,18 @@ const StepFourInner = ({
             Hier Schufaauskunft erhalten
           </a>
         </div>
-
-       
-
-        <div className="flex justify-between mt-10">
-          <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => setCurrentStep(16)}>
+        <div className="flex justify-between mt-10">    
+         <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => {setCurrentStep(16)}}>
             Zurück
           </button>
-
           <button
             type="button"
             className={`bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
-            onClick={() => setCurrentStep(18)}
+            onClick={() => {
+              if(validateFields()){
+                setCurrentStep(18)}
+              }
+            }
             disabled={isConverting} // ✅ Disable while converting PDF
           >
             {isConverting ? "Verarbeiten..." : "Weiter"}

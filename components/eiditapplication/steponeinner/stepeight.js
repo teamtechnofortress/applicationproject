@@ -12,19 +12,46 @@ const StepEightInner = ({
   const fileInputRef = useRef(null);
   const [einkommensbescheinigungimgshow, seteinkommensbescheinigungimgshow] = useState(null);
   const [isConverting, setIsConverting] = useState(false);
+  const [updatedImages, setUpdatedImages] = useState([]);
+  
  // ✅ Ensure preview persists when navigating back to this step
- useEffect(() => {
-  if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
-    seteinkommensbescheinigungimgshow(einkommensbescheinigungimg[0]); // Show the first image or file
+
+
+//  useEffect(() => {
+//   if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
+//     seteinkommensbescheinigungimgshow(einkommensbescheinigungimg[0]); // Show the first image or file
+//   }
+// }, [einkommensbescheinigungimg]);
+
+
+
+useEffect(() => {
+  if (einkommensbescheinigungimg && Array.isArray(einkommensbescheinigungimg) && einkommensbescheinigungimg.length > 0) {
+    // Check if the first item is a File object
+    if (einkommensbescheinigungimg[0] instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        seteinkommensbescheinigungimgshow(reader.result); // ✅ Show file preview
+      };
+      reader.readAsDataURL(einkommensbescheinigungimg[0]);
+    } else {
+      seteinkommensbescheinigungimgshow(einkommensbescheinigungimg[0]); // ✅ Show URL if stored images exist
+    }
   }
 }, [einkommensbescheinigungimg]);
+
+
+
+
+
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // Show loading state
 
     const file = event.target.files[0];
     if (!file) return;
+    let imagesArray = [];
 
-    let updatedImages = [];
 
     if (file.type === "application/pdf") {
       // Convert PDF to images
@@ -32,10 +59,12 @@ const StepEightInner = ({
       const images = await convertPdfToImages(fileURL);
       console.log("Converted PDF to images:", images);
 
-      updatedImages = images;
-      seteinkommensbescheinigungimgshow(updatedImages[0]); // Show first page preview
+      imagesArray = images;
+      seteinkommensbescheinigungimgshow(imagesArray[0]); // Show first page preview
     } else {
-      updatedImages = [file];
+
+      imagesArray = [file];
+
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -44,9 +73,10 @@ const StepEightInner = ({
         };
         reader.readAsDataURL(file);
       }
+      // seteinkommensbescheinigungimgshow(file);
     }
 
-    seteinkommensbescheinigungimg(updatedImages);
+    setUpdatedImages(imagesArray);
     setIsConverting(false); // Hide loading state
   };
 
@@ -58,9 +88,26 @@ const StepEightInner = ({
 
   const validateFields = () => {
     const newErrors = {};
-    if (!einkommensbescheinigungimg || einkommensbescheinigungimg.length === 0) {
-      newErrors.einkommensbescheinigungimg = "Einkommensbescheinigung ist erforderlich.";
+    // if (!einkommensbescheinigungimg || einkommensbescheinigungimg.length === 0) {
+    //   newErrors.einkommensbescheinigungimg = "Einkommensbescheinigung ist erforderlich.";
+    // }
+    // setErrors(newErrors);
+    // return Object.keys(newErrors).length === 0;
+
+
+
+    if (updatedImages.length !== 0) {
+      console.log("Updating imageswbs with new images from updatedImages");
+      seteinkommensbescheinigungimg(updatedImages);
+      return true;
     }
+    // If imageswbs already contains images, no need to update
+    if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
+      console.log("Validation passed, images already assigned:", einkommensbescheinigungimg);
+      return true;
+    } 
+    newErrors.einkommensbescheinigungimg = "Einkommensbescheinigung ist erforderlich.";
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -101,10 +148,9 @@ const StepEightInner = ({
               {/* ✅ Show Image or PDF Preview */}
               {einkommensbescheinigungimgshow && !isConverting && (
                 <div className="relative w-24 h-24">
-                 
-                 {typeof einkommensbescheinigungimgshow === "string" && einkommensbescheinigungimgshow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(einkommensbescheinigungimgshow) ? (
+                  {typeof einkommensbescheinigungimgshow === "string" && einkommensbescheinigungimgshow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(einkommensbescheinigungimgshow) ? (
                     <img
-                      src={(einkommensbescheinigungimgshow)}
+                      src={einkommensbescheinigungimgshow}
                       alt="Einkommensbescheinigung Preview"
                       className="object-cover w-full h-full rounded-lg"
                     />

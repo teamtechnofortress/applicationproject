@@ -638,8 +638,78 @@ const MyDocument = ({ profileData }) => {
           <Text style={styles.pageNumber} render={({ pageNumber ,totalPages }) => `${pageNumber}/${totalPages}`} fixed />
       </Page>
       {/* page 3 end*/}
-      {profileData.salaryslip && profileData.salaryslip.length > 0 &&
-        profileData.salaryslip.map((image, index) => (
+      {profileData.salarySlip1 && profileData.salarySlip1.length > 0 &&
+        profileData.salarySlip1.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.salarySlip2 && profileData.salarySlip2.length > 0 &&
+        profileData.salarySlip2.map((image, index) => (
+          <Page key={index} style={styles.page}>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerText}>
+                <Text style={styles.headerName}>{profileData.vorname} {profileData.nachname}</Text>
+                <Text style={styles.headerPhone}>{profileData.tel}</Text>
+                <Text style={styles.headerEmail}>{profileData.email}</Text>
+              </View>
+              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image 
+                style={styles.headerImage} 
+                src={profileData.inputfoto ? profileData.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              />
+
+            </View>
+
+            {/* Body */}
+            <View style={styles.bodyWhite}>
+              <View style={styles.secondPageBody}>
+                <Text style={styles.titleBorder}>Einkommensnachweis</Text>
+                <View style={styles.secondPagesection}>
+                  <View style={styles.greyCardBg}>
+                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* Page Number */}
+            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+          </Page>
+        ))
+      }
+      {profileData.salarySlip3 && profileData.salarySlip3.length > 0 &&
+        profileData.salarySlip3.map((image, index) => (
           <Page key={index} style={styles.page}>
             {/* Header */}
             <View style={styles.header}>

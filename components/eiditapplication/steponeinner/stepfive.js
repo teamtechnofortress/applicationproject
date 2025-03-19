@@ -12,14 +12,12 @@ const StepFiveInner = ({
 }) => {
   const [errors, setErrors] = useState({});
   const [isTipModal, setisTipModal] = useState(false);
-
   // Set the default open index to 0 (first FAQ item)
   const [openIndex, setOpenIndex] = useState(0);
   // Toggle Accordion Item
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
   };
-
   const validateFields = () => {
     const newErrors = {};
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
@@ -40,14 +38,14 @@ const StepFiveInner = ({
                 <div>
                     <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
                       Wo arbeitest du?
-                    </p>  
+                    </p>     
                     <button
-                    type="button" 
-                    className={`${styles["tips"]} mx-auto mb-10`}
-                    id="tip_btn"
-                    onClick={() => setisTipModal(true)}>
-                    <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
-                  </button>      
+                        type="button"
+                        className={`${styles["tips"]} mx-auto mb-10`}
+                        id="tip_btn"
+                        onClick={() => setisTipModal(true)}>
+                        <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
+                      </button> 
                     <div className="grid grid-cols-2 gap-4 mt-5">
                       <div className="...">
                         <div className="input-field">

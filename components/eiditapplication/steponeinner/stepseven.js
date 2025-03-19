@@ -13,27 +13,51 @@ const StepSevenInner = ({
   const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
   const fileInputRef = useRef(null);
   const [bwaImageShow, setBwaImageShow] = useState(null); // ✅ For preview display
+  const [updatedImages, setUpdatedImages] = useState([]);
   const [isTipModal, setisTipModal] = useState(false);
-   // Set the default open index to 0 (first FAQ item)
-   const [openIndex, setOpenIndex] = useState(0);
-   // Toggle Accordion Item
-   const toggleAccordion = (index) => {
-     setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
-   };
-
+  // Set the default open index to 0 (first FAQ item)
+  const [openIndex, setOpenIndex] = useState(0);
+  // Toggle Accordion Item
+  const toggleAccordion = (index) => {
+    setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
+  };
+  
  // ✅ Ensure preview persists when navigating back to this step
- useEffect(() => {
-  if (bwaimages && bwaimages.length > 0) {
-    setBwaImageShow(bwaimages[0]); // Show the first image or file
+
+
+//  useEffect(() => {
+//   if (bwaimages && bwaimages.length > 0) {
+//     setBwaImageShow(bwaimages[0]); // Show the first image or file
+//   }
+// }, [bwaimages]);
+
+useEffect(() => {
+  if (bwaimages && Array.isArray(bwaimages) && bwaimages.length > 0) {
+    // Check if the first item is a File object
+    if (bwaimages[0] instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBwaImageShow(reader.result); // ✅ Show file preview
+      };
+      reader.readAsDataURL(bwaimages[0]);
+    } else {
+      setBwaImageShow(bwaimages[0]); // ✅ Show URL if stored images exist
+    }
   }
 }, [bwaimages]);
+
+
+
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];
 
     if (!file) return;
+    let imagesArray = []; // ✅ Store processed images
 
-    let imagesArray = []; // :white_check_mark: Store processed images
+
+
     if (file.type === "application/pdf") {
       // ✅ Convert PDF to images
       const fileURL = URL.createObjectURL(file);
@@ -43,6 +67,7 @@ const StepSevenInner = ({
       imagesArray = images; // Store all images from the PDF
       setBwaImageShow(imagesArray[0]); // Show first page preview
     } else {
+      // ✅ Directly add uploaded image
       imagesArray = [file];
       if (file) {
         const reader = new FileReader();
@@ -52,15 +77,17 @@ const StepSevenInner = ({
         };
         reader.readAsDataURL(file);
       }
+      // setBwaImageShow(file); // Show image preview
     }
+    setUpdatedImages(imagesArray);
 
     // ✅ Ensure bwaimages state is always an array (multiple PDF pages or single image)
-    setBwaimages(imagesArray);
     setIsConverting(false); // ✅ Stop loading state
   };
 
   const removeImage = () => {
     setBwaimages([]);
+    setUpdatedImages([]);
     setBwaImageShow(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset input field
@@ -69,12 +96,30 @@ const StepSevenInner = ({
 
   const validateFields = () => {
     const newErrors = {};
-    if (!bwaimages || bwaimages.length === 0) {
-      newErrors.bwaimages = "BWA ist erforderlich.";
+    // setBwaimages(updatedImages);
+
+    // if (!bwaimages || bwaimages.length === 0) {
+    //   newErrors.bwaimages = "BWA ist erforderlich.";
+    // }
+
+    // setErrors(newErrors);
+    // return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
+
+     // If updatedImages has new images, update imageswbs
+     if (updatedImages.length !== 0) {
+      console.log("Updating imageswbs with new images from updatedImages");
+      setBwaimages(updatedImages);
+      return true;
     }
+    // If imageswbs already contains images, no need to update
+    if (bwaimages && bwaimages.length > 0) {
+      console.log("Validation passed, images already assigned:", bwaimages);
+      return true;
+    } 
+    newErrors.bwaimages = "BWA ist erforderlich.";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
+    return Object.keys(newErrors).length === 0;
   };
 
   return (
@@ -89,12 +134,13 @@ const StepSevenInner = ({
               (Solltest du noch keine Vorliegen haben gehe zum nächsten Schritt)
             </p>
             <button
-                    type="button" 
+                    type="button"
                     className={`${styles["tips"]} mx-auto mb-10`}
                     id="tip_btn"
                     onClick={() => setisTipModal(true)}>
                     <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
-                  </button>      
+                  </button>
+
             <div className="flex flex-col w-full justify-center mx-auto">
               <label
                 htmlFor="image-upload"
@@ -111,7 +157,6 @@ const StepSevenInner = ({
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-
               {/* ✅ Show Spinner when Converting PDF */}
               {isConverting && (
                 <div className="flex justify-center mt-4">
@@ -122,9 +167,9 @@ const StepSevenInner = ({
               {/* ✅ Image Preview */}
               {bwaImageShow && !isConverting && (
                 <div className="relative w-24 h-24 mt-4">
-                 {typeof bwaImageShow === "string" && bwaImageShow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(bwaImageShow) ? (
+                  {typeof bwaImageShow === "string" && bwaImageShow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(bwaImageShow) ? (
                     <img
-                      src={(bwaImageShow)}
+                      src={bwaImageShow}
                       alt="BWA Preview"
                       className="w-full h-full object-cover rounded-lg"
                     />

@@ -13,19 +13,43 @@ const StepSixInner = ({
   const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
   const fileInputRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null); // ✅ For preview display
+  const [updatedImages, setUpdatedImages] = useState([]);
+
  // ✅ Ensure preview persists when navigating back to this step
- useEffect(() => {
-  if (mietschuldenfreiheitimg && mietschuldenfreiheitimg.length > 0) {
-    setPreviewImage(mietschuldenfreiheitimg[0]); // Show the first image or file
+
+//  useEffect(() => {
+//   if (mietschuldenfreiheitimg && mietschuldenfreiheitimg.length > 0) {
+//     setPreviewImage(mietschuldenfreiheitimg[0]); // Show the first image or file
+//   }
+// }, [mietschuldenfreiheitimg]);
+
+
+useEffect(() => {
+  if (mietschuldenfreiheitimg && Array.isArray(mietschuldenfreiheitimg) && mietschuldenfreiheitimg.length > 0) {
+    // Check if the first item is a File object
+    if (mietschuldenfreiheitimg[0] instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result); // ✅ Show file preview
+      };
+      reader.readAsDataURL(mietschuldenfreiheitimg[0]);
+    } else {
+      setPreviewImage(mietschuldenfreiheitimg[0]); // ✅ Show URL if stored images exist
+    }
   }
 }, [mietschuldenfreiheitimg]);
+
+
+
+
+
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];
 
     if (!file) return;
-
-    let updatedImages = []; // ✅ Store processed images
+    let imagesArray = []; 
 
     if (file.type === "application/pdf") {
       // ✅ Convert PDF to images
@@ -33,11 +57,11 @@ const StepSixInner = ({
       const images = await convertPdfToImages(fileURL);
       console.log("Converted PDF to images:", images);
 
-      updatedImages = images; // Store all images from the PDF
-      setPreviewImage(updatedImages[0]); // Show first page preview
+      imagesArray = images; // Store all images from the PDF
+      setPreviewImage(imagesArray[0]); // Show first page preview
     } else {
       // ✅ Directly add uploaded image
-      updatedImages = [file];
+      imagesArray = [file];
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -46,15 +70,16 @@ const StepSixInner = ({
         };
         reader.readAsDataURL(file);
       }
+      // setPreviewImage(file); // Show image preview
     }
-
+    setUpdatedImages(imagesArray);
     // ✅ Ensure mietschuldenfreiheitimg state is always an array (multiple PDF pages or single image)
-    setMietschuldenfreiheitimg(updatedImages);
     setIsConverting(false); // ✅ Stop loading state
   };
 
   const removeImage = () => {
     setMietschuldenfreiheitimg([]);
+    setUpdatedImages([]);
     setPreviewImage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset input field
@@ -62,14 +87,35 @@ const StepSixInner = ({
   };
 
   const validateFields = () => {
-    console.log(mietschuldenfreiheitimg)
     const newErrors = {};
-    if (!mietschuldenfreiheitimg) {
-      newErrors.mietschuldenfreiheitimg = "Mietschuldenfreiheitsbescheinigung ist erforderlich.";
-    }
 
+    if (updatedImages.length !== 0) {
+      console.log("Updating imageswbs with new images from updatedImages");
+      setMietschuldenfreiheitimg(updatedImages);
+      return true;
+    }
+    // If imageswbs already contains images, no need to update
+    if (mietschuldenfreiheitimg && mietschuldenfreiheitimg.length > 0) {
+      console.log("Validation passed, images already assigned:", mietschuldenfreiheitimg);
+      return true;
+    } 
+    newErrors.mietschuldenfreiheitimg = "Mietschuldenfreiheitsbescheinigung ist erforderlich.";
+  
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
+    return Object.keys(newErrors).length === 0;
+
+
+
+    // console.log(mietschuldenfreiheitimg)
+    // const newErrors = {};
+    // if (!mietschuldenfreiheitimg) {
+    //   newErrors.mietschuldenfreiheitimg = "Mietschuldenfreiheitsbescheinigung ist erforderlich.";
+    // }
+    // setMietschuldenfreiheitimg(updatedImages);
+
+
+    // setErrors(newErrors);
+    // return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
   };
 
   return (
@@ -113,7 +159,7 @@ const StepSixInner = ({
             <div className="relative w-24 h-24 mt-4">
               {typeof previewImage === "string" && previewImage.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(previewImage) ? (
                 <img
-                  src={(previewImage)}
+                  src={previewImage}
                   alt="Mietschuldenfreiheit Preview"
                   className="w-full h-full object-cover rounded-lg"
                 />

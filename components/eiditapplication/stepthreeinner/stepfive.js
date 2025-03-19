@@ -26,6 +26,10 @@ const StepFiveInner = ({
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
+  useEffect(()=>{
+    console.log("Mietschuldenfreiheit",mietschuldenfreiheit)
+
+  },[mietschuldenfreiheit])
   setCurrentStep(18);
 
   return (
@@ -34,7 +38,6 @@ const StepFiveInner = ({
         <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>
         Mietschuldenfreiheitsbescheinigung
         </p>
-
         <button
               type="button" 
               className={`${styles["tips"]} mx-auto`}
@@ -88,8 +91,6 @@ const StepFiveInner = ({
                         {errors.mietschuldenfreiheit && <p className="text-red-500 text-sm">{errors.mietschuldenfreiheit}</p>}
                     </div>
               </div>
-                  
-
         <div className="flex justify-between mt-10">
           <button
             type="button"

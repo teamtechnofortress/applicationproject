@@ -2,31 +2,58 @@ import { useEffect, useState, useRef } from "react";
 import styles from "@/styles/latest.module.css";
 import usePdfToImages from "@/hooks/usePdfToImages"; // ✅ Import the PDF conversion hook
 
-const StepFourInner = ({
-  schufa, 
-  setSchufa, 
-  setCurrentStep
+const StepThreeInner = ({
+  personal, 
+  setPersonal, 
+  setCurrentStep,
 }) => {
   const { convertPdfToImages } = usePdfToImages(); // ✅ Use the hook for PDF conversion
   const [errors, setErrors] = useState({});
   const [isTipModal, setisTipModal] = useState(false);
+  const [openIndex, setOpenIndex] = useState(0);
   const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
   const fileInputRef = useRef(null);
-  const [schufaImageShow, setSchufaImageShow] = useState(null); // ✅ For preview display
-  const [openIndex, setOpenIndex] = useState(0); // ✅ For FAQ accordion
- // ✅ Ensure preview persists when navigating back to this step
- useEffect(() => {
-  if (schufa && schufa.length > 0) {
-    setSchufaImageShow(schufa[0]); // Show the first image or file
+  const [previewImage, setPreviewImage] = useState(null); // ✅ For preview display
+  const [updatedImages, setUpdatedImages] = useState([]);
+
+
+
+   // Toggle Accordion Item
+   const toggleAccordion = (index) => {
+    setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
+  };
+
+   // ✅ Ensure preview persists when navigating back to this step
+//  useEffect(() => {
+//   if (personal && personal.length > 0) {
+//     setPreviewImage(personal[0]); // Show the first image or file
+//   }
+// }, [personal]);
+
+
+useEffect(() => {
+  if (personal && Array.isArray(personal) && personal.length > 0) {
+    // Check if the first item is a File object
+    if (personal[0] instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result); // ✅ Show file preview
+      };
+      reader.readAsDataURL(personal[0]);
+    } else {
+      setPreviewImage(personal[0]); // ✅ Show URL if stored images exist
+    }
   }
-}, [schufa]);
+}, [personal]);
+
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];
 
     if (!file) return;
+    let imagesArray = []; // ✅ Store processed images
 
-    let updatedImages = []; // ✅ Store processed images
 
     if (file.type === "application/pdf") {
       // ✅ Convert PDF to images
@@ -34,29 +61,30 @@ const StepFourInner = ({
       const images = await convertPdfToImages(fileURL);
       console.log("Converted PDF to images:", images);
 
-      updatedImages = images; // Store all images from the PDF
-      setSchufaImageShow(file); // Show first page preview
+      imagesArray = images; // Store all images from the PDF
+      setPreviewImage(imagesArray[0]); // Show first page preview
     } else {
       // ✅ Directly add uploaded image
-      updatedImages = [file];
+      imagesArray = [file];
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
           const result = reader.result;
-          setSchufaImageShow(result);
+          setPreviewImage(result);
         };
         reader.readAsDataURL(file);
       }
+      // setPreviewImage(file); // Show image preview
     }
-
-    // ✅ Ensure schufa state is always an array (multiple PDF pages or single image)
-    setSchufa(updatedImages);
+    setUpdatedImages(imagesArray);
+    // ✅ Ensure `personal` state is always an array (multiple PDF pages or single image)
     setIsConverting(false); // ✅ Stop loading state
   };
 
   const removeImage = () => {
-    setSchufa([]);
-    setSchufaImageShow(null);
+    setUpdatedImages([]);
+    setPersonal([]);
+    setPreviewImage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset input field
     }
@@ -64,48 +92,66 @@ const StepFourInner = ({
 
   const validateFields = () => {
     const newErrors = {};
-    if (!schufa || schufa.length === 0) {
-      newErrors.schufa = "Schufa ist erforderlich.";
-    }
 
+    if (updatedImages.length !== 0) {
+      console.log("Updating imageswbs with new images from updatedImages");
+      setPersonal(updatedImages);
+      return true;
+    }
+    // If imageswbs already contains images, no need to update
+    if (personal && personal.length > 0) {
+      console.log("Validation passed, images already assigned:", personal);
+      return true;
+    } 
+      newErrors.personal = "Personalausweis ist erforderlich.";
+  
+    // if (!personal || personal.length === 0) {
+    //   newErrors.personal = "Personalausweis ist erforderlich.";
+    // }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
-  };
-
-  // ✅ Toggle Accordion Item
-  const toggleAccordion = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
-        <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>Schufa</p>
+        <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>Personalausweis</p>
         <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
-          Diese kannst du auch später hochladen, solltest du sie gerade nicht zur Hand haben.
+          Bitte lade nun eine Kopie deines Personalausweises hoch. In dem Beispiel siehst du, welche Stellen du schwärzen darfst.
         </p>
 
         <button type="button" className={`${styles["tips"]} mx-auto`} onClick={() => setisTipModal(true)}>
           <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
         </button>
 
+        <div className="grid grid-cols-2 mt-5 gap-10 mt-3 mb-3">
+          <div className="col-span-1 flex items-center justify-end">
+            <img src="/idfront.png" alt="ID Front" className="w-[53%] h-auto" />
+          </div>
+          <div className="col-span-1 flex items-center">
+            <img src="/idback.png" alt="ID Back" className="w-[55%] h-auto" />
+          </div>
+        </div>
+
         <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
           <label
             htmlFor="image-upload"
             className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
           >
-            <i className="fa fa-upload mr-2"></i> Uploads Schufa
+            <i className="fa fa-upload mr-2"></i> Upload Personalausweis
           </label>
           <input
             type="file"
             id="image-upload"
-            name="schufa"
+            name="personal"
             className="hidden"
             accept="image/*, application/pdf"
             ref={fileInputRef}
             onChange={handleFileChange}
           />
-
+          {errors.personal && (
+            <p className="text-red-500 text-sm">{errors.personal}</p>
+          )}
           {/* ✅ Show Spinner when Converting PDF */}
           {isConverting && (
             <div className="flex justify-center mt-4">
@@ -114,13 +160,12 @@ const StepFourInner = ({
           )}
 
           {/* ✅ Image Preview */}
-          {schufaImageShow && !isConverting && (
+          {previewImage && !isConverting && (
             <div className="relative w-24 h-24 mt-4">
-            {typeof schufaImageShow === "string" && schufaImageShow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(schufaImageShow) ? (
-
+              {typeof previewImage === "string" && previewImage.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(previewImage) ? (
                 <img
-                  src={(schufaImageShow)}
-                  alt="Schufa Preview"
+                  src={previewImage}
+                  alt="Personalausweis Preview"
                   className="w-full h-full object-cover rounded-lg"
                 />
               ) : (
@@ -137,42 +182,57 @@ const StepFourInner = ({
               </button>
             </div>
           )}
-            <div class="mt-4 grid grid-cols-3 gap-4"></div>
-            <a href="#" className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg text-center`}>
-            Hier Schufaauskunft erhalten
-          </a>
         </div>
 
-       
-
         <div className="flex justify-between mt-10">
-          <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => setCurrentStep(16)}>
+    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => {setCurrentStep(15)} }>
             Zurück
           </button>
 
           <button
             type="button"
             className={`bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
-            onClick={() => setCurrentStep(18)}
-            disabled={isConverting} // ✅ Disable while converting PDF
+            onClick={() => {
+              if(validateFields()){
+                setCurrentStep(17)}}
+              }
+            disabled={isConverting}
           >
             {isConverting ? "Verarbeiten..." : "Weiter"}
           </button>
         </div>
       </div>
 
-      {/* ✅ Modal - Conditional Rendering */}
+      {/* Modal - Conditional Rendering */}
       {isTipModal && (
-        <div id="tip-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900">
-          <div className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}>
-            <button type="button" className="absolute top-0 right-0 text-lg font-bold text-gray-700 hover:text-gray-900" onClick={() => setisTipModal(false)}>
-              ✖
-            </button>
-            <h3 className={`${styles["modal-h3"]} flex gap-4 justify-center`}>
-              <img src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
-            </h3>
+          <div
+            id="tip-modal"
+            className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
+            onClick={() => setisTipModal(false)} 
+          >
+            
+            <div
+              className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
+              <button
+                  type="button"
+                  className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
+                  onClick={() => setisTipModal(false)}
+                >
+                  ✖
+                </button>
+                <h3 className={`${styles["modal-h3"]}`}>
+                  <div className="flex gap-4 justify-center">
+                  <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
+                  </div>
+              
+                </h3>
+              
+              </div>
 
-            <div className="p-4 md:p-5 space-y-4">
+              <div className="p-4 md:p-5 space-y-4">
                  {/* FAQ Item 1 */}
                  <div className={`${styles['faq-item']} p-4`}>
                         <button
@@ -189,7 +249,7 @@ const StepFourInner = ({
                         {openIndex === 0 && (
                           <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                             <p>
-                            Bite nutze ausschließlich die Schufa-Auskunft welche extra für den Vermieter gedacht ist und nutze dafür den unten zur verfügung stehend Link. Viele Vermieter akzeptieren die kostenlose Schufa-Auskunft nicht                              </p>
+                            Achte auf die Gültigkeit deines Ausweisdokuments. Sollte dieser Abgelaufen sein, oder noch eine alte Meldeadresse aufweisen, erkläre dies in deinem Anschreiben                            </p>
                           </div>
                         )}
                   </div>
@@ -210,7 +270,7 @@ const StepFourInner = ({
                     {openIndex === 1 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Achte auf die gültigkeit deiner Schufaauskunft. Diese ist nur 3 Monate gültig und wird danach nicht mehr von den Vermietern akzeptiert.                         </p>
+                        Solltest du deinen Reisepass, Aufenthaltstitel o. Ä. anstatt deines Ausweises Hochladen musst du zwingend eine Meldebescheinigung deines Bürgeramts mit hochladen                        </p>
                       </div>
                     )}
                   </div>
@@ -231,16 +291,16 @@ const StepFourInner = ({
                     {openIndex === 2 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Solltest du die Schufa-Auskunft per post zugeschickt bekommen dich aber bereits vor eintrefffen auf eine Wohnung bewerden wollen, kannst du eine veraltete Schufaauskunft einreichen und den hinweis auf die getätigte bestellung der neuen geben.                        </p>
+                        Schwärze auch hier alle sensiblen Daten/ Zahlen die der Vermieter nicht einsehen muss. Siehe Beispielbild. Gerne kannst du auch einen großen KOPIE schriftzug üder deinen Ausweis legen.                        </p>
                       </div>
                     )}
                   </div>
               </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };
 
-export default StepFourInner;
+export default StepThreeInner;

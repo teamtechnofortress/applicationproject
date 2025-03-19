@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "@/styles/latest.module.css";
 import usePdfToImages from "@/hooks/usePdfToImages";
+
 const StepSixInner = ({
   employment,
   salarySlip,
@@ -15,8 +16,10 @@ const StepSixInner = ({
   setSalarySlip2,
   setSalarySlip3,
 }) => {
+  const { convertPdfToImages } = usePdfToImages(); // ✅ PDF Conversion Hook
+  const [errors, setErrors] = useState({});
+  const fileInputRef = useRef(null);
   const [isTipModal, setisTipModal] = useState(false);
-
   // Set the default open index to 0 (first FAQ item)
   const [openIndex, setOpenIndex] = useState(0);
   // Toggle Accordion Item
@@ -24,110 +27,255 @@ const StepSixInner = ({
     setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
   };
 
-  const { convertPdfToImages } = usePdfToImages(); // :white_check_mark: PDF Conversion Hook
-  const [errors, setErrors] = useState({});
-  const fileInputRef = useRef(null);
- // :white_check_mark: Separate loading states
+ // ✅ Separate loading states
  const [isConvertingEmploycontract, setIsConvertingEmploycontract] = useState(false);
  const [isConvertingSalarySlip, setIsConvertingSalarySlip] = useState(false);
- // :white_check_mark: Separate states for previews & file storage
+
+ // ✅ Separate states for previews & file storage
  const [salarySlipPreview, setSalarySlipPreview] = useState([]);
  const [employcontractPreview, setEmploycontractPreview] = useState(null);
  const [employcontractupdatedFilesstate, setEmploycontractupdatedFilesstate] = useState([]);
- useEffect(() => {
-  if (employcontract && employcontract.length > 0) {
-    setEmploycontractPreview(employcontract[0]);
+ const [updatedImages, setUpdatedImages] = useState([]);
+ const [filledSlots, setFilledSlots] = useState([]);
+ let coutremoveimg = 1; 
+
+
+//  useEffect(() => {
+//   if (employcontract && employcontract.length > 0) {
+//     setEmploycontractPreview(employcontract[0]); 
+//   }
+// }, [employcontract]);
+
+useEffect(() => {
+  if (employcontract && Array.isArray(employcontract) && employcontract.length > 0) {
+    // Check if the first item is a File object
+    if (employcontract[0] instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEmploycontractPreview(reader.result); // ✅ Show file preview
+      };
+      reader.readAsDataURL(employcontract[0]);
+    } else {
+      setEmploycontractPreview(employcontract[0]); // ✅ Show URL if stored images exist
+    }
   }
 }, [employcontract]);
-useEffect(()=>{
-  console.log('employcontractPreview zunu',employcontract);
-},[employcontract]);
+
+
 useEffect(() => {
- console.log(salarySlip1)
+  // Get the first element of each array if it exists
+  const updatedPreview = [
+    salarySlip1?.[0] || null, 
+    salarySlip2?.[0] || null, 
+    salarySlip3?.[0] || null
+  ].filter(Boolean); // Remove null values
+
+
+  const filledArray = [
+    salarySlip1 && salarySlip1.length > 0 ? 1 : 0,
+    salarySlip2 && salarySlip2.length > 0 ? 1 : 0,
+    salarySlip3 && salarySlip3.length > 0 ? 1 : 0,
+  ];
+
+  setFilledSlots(filledArray);
+  setSalarySlipPreview(updatedPreview);
+
+  // console.log("Updated Salary Slip salarySlip1:", salarySlip1);
+  // console.log("Updated Salary Slip salarySlip2:", salarySlip2);
+  console.log("Updated Salary Slip salarySlip3:", salarySlip3);
+
+}, [salarySlip1, salarySlip2, salarySlip3]);
+
+
+// Separate useEffect to log the latest updated state
+useEffect(() => {
+  console.log("Updated filledSlots:", filledSlots);
+}, [filledSlots]);
+
+useEffect(() => {
+  console.log("Updated salarySlipPreview:", salarySlipPreview);
+}, [salarySlipPreview]);
+
+useEffect(() => {
+  console.log("Updated zunu test salarySlip:", salarySlip);
+}, [salarySlip]);
+
+useEffect(() => {
+  console.log("latest Updated salarySlip1:", salarySlip1);
 }, [salarySlip1]);
-let employcontractupdatedFiles = [];
+
+useEffect(() => {
+  console.log("latest Updated salarySlip2:", salarySlip2);
+}, [salarySlip2]);
+
+useEffect(() => {
+  console.log("latest Updated salarySlip3:", salarySlip3);
+}, [salarySlip3]);
+
+
  const handleFileChange = async (event, type) => {
   const files = Array.from(event.target.files);
+  let imagesArray = []; // ✅ Store processed images
+
+
   if (type === "employcontract") {
-    setIsConvertingEmploycontract(true);
-    const file = files[0];
+    setIsConvertingEmploycontract(true); 
+    const file = files[0]; 
     if (!file) return;
+
+
     if (file.type === "application/pdf") {
-      // :white_check_mark: Convert PDF to images
+      // ✅ Convert PDF to images
       const fileURL = URL.createObjectURL(file);
       const images = await convertPdfToImages(fileURL);
-      console.log("Converted Employcontract PDF to images:", images);
+      // console.log("Converted Employcontract PDF to images:", images);
+
       if (images.length > 0) {
-        employcontractupdatedFiles = images; // :white_check_mark: Store only images, not the PDF
-        setEmploycontractPreview(employcontractupdatedFiles[0]); // :white_check_mark: Show PDF name as preview
-        setEmploycontractupdatedFilesstate(employcontractupdatedFiles);
+        imagesArray = images; // ✅ Store only images, not the PDF
+        setEmploycontractPreview(imagesArray[0]); // ✅ Show PDF name as preview
       }
     } else {
-      setEmploycontractPreview(URL.createObjectURL(file)); // :white_check_mark: Show image preview
-      employcontractupdatedFiles.push(file);
-      setEmploycontractupdatedFilesstate(employcontractupdatedFiles);
+      setEmploycontractPreview(URL.createObjectURL(file)); // ✅ Show image preview
+      imagesArray.push(file);
+
     }
-    setIsConvertingEmploycontract(false); // :white_check_mark: Hide loader for employcontract
-  }
+    setEmploycontractupdatedFilesstate(imagesArray);
+    setIsConvertingEmploycontract(false); // ✅ Hide loader for employcontract
+  } 
+  
   else if (type === "salarySlip") {
-    setIsConvertingSalarySlip(true); // :white_check_mark: Show loader
-    let updatedPreviews = [...salarySlipPreview]; // :white_check_mark: Store first image previews
-    let updatedFiles = [...salarySlip]; // :white_check_mark: Store all images in a nested array
-    // :white_check_mark: Process each file asynchronously
+    setIsConvertingSalarySlip(true); // ✅ Show loader
+
+    let updatedPreviews = [...salarySlipPreview]; // ✅ Store first image previews
+    let updatedFiles = [...salarySlip]; // ✅ Store all images in a nested array
+
+    // ✅ Process each file asynchronously
     await Promise.all(files.map(async (file) => {
-      let fileImages = []; // :white_check_mark: Store images for this file
+      let fileImages = []; // ✅ Store images for this file
+
       if (file.type === "application/pdf") {
-        // :white_check_mark: Convert PDF to images
+        // ✅ Convert PDF to images
         const fileURL = URL.createObjectURL(file);
         const images = await convertPdfToImages(fileURL);
-        console.log("Converted PDF to images:", images);
+        // console.log("Converted PDF to images:", images);
+
         if (images.length > 0) {
-          fileImages.push(...images); // :white_check_mark: Store all images from PDF
-          updatedPreviews.push(images[0]); // :white_check_mark: Use first image as preview
+          fileImages.push(...images); // ✅ Store all images from PDF
+          updatedPreviews.push(images[0]); // ✅ Use first image as preview
         }
       } else {
-        // :white_check_mark: Handle Image Upload (Wait for FileReader to finish)
+        // ✅ Handle Image Upload (Wait for FileReader to finish)
         const fileURL = URL.createObjectURL(file);
+
         const imageBase64 = await new Promise((resolve) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result);
           reader.readAsDataURL(file);
         });
-        fileImages.push(imageBase64); // :white_check_mark: Store base64 image in array
-        updatedPreviews.push(imageBase64); // :white_check_mark: Use image for preview
+
+        fileImages.push(imageBase64); // ✅ Store base64 image in array
+        updatedPreviews.push(imageBase64); // ✅ Use image for preview
       }
-      updatedFiles.push(fileImages); // :white_check_mark: Add images from this file to nested array
+
+      updatedFiles.push(fileImages); // ✅ Add images from this file to nested array
     }));
-    // :white_check_mark: Ensure only 3 files are stored
+
+    // ✅ Ensure only 3 files are stored
     setSalarySlipPreview(updatedPreviews.slice(0, 3));
     setsalarySlip(updatedFiles.slice(0, 3));
-    console.log("Updated Salary Slip Files:", updatedFiles);
-    setIsConvertingSalarySlip(false); // :white_check_mark: Hide loader
+
+    // console.log("Updated Salary Slip Files:", updatedFiles);
+
+    setIsConvertingSalarySlip(false); // ✅ Hide loader
   }
 };
-  const removeSalarySlip = (index) => {
+
+  const removeSalarySlip = (index,preview) => {
+
+    console.log("Removed index Slip Files:", preview);
+
+    // console.log("salarySlip3",salarySlip3[0]);
+
+
+    let updatedFilledSlots = [...filledSlots]; // Copy of filled slots array
+
+  // Ensure correct index is cleared
+  if (salarySlip1 && salarySlip1[0] && preview === salarySlip1[0]) {
+    setSalarySlip1(null);
+    updatedFilledSlots[0] = 0; // Mark slot as empty
+  } else if (salarySlip2 && salarySlip2[0] && preview === salarySlip2[0]) {
+    setSalarySlip2(null);
+    updatedFilledSlots[1] = 0; // Mark slot as empty
+  } else if (salarySlip3 && salarySlip3[0] && preview === salarySlip3[0]) {
+    setSalarySlip3(null);
+    updatedFilledSlots[2] = 0; // Mark slot as empty
+  }
+
+  setFilledSlots(updatedFilledSlots); // ✅ Update filled slots array
+    
     setSalarySlipPreview((prev) => prev.filter((_, i) => i !== index));
-    setsalarySlip((prev) => prev.filter((_, i) => i !== index));
+
+    setsalarySlip((prev) => {
+      let newArray = [...prev];
+      newArray[index] = null; // Set the removed index to null
+      return newArray.filter(Boolean); // Remove null values
+    });
+
+
   };
+
+
   const removeEmployContract = () => {
     setEmploycontractPreview(null);
     setemploycontract(null);
+    setEmploycontractupdatedFilesstate([]);
     if (fileInputRef.current) fileInputRef.current.value = ""; // Reset input
   };
+
   const validateFields = () => {
     const newErrors = {};
-    const totalFiles = salarySlip.length; // Count each uploaded file (PDF or image) as 1
-    console.log("Total Salary Slip Files Uploaded:", totalFiles);
-    if (totalFiles < 1 || totalFiles > 3) {
-      newErrors.salarySlip = "Bitte laden Sie zwischen 1 und 3 Gehaltsnachweise hoch.";
-    }
-    if (employcontractPreview) {
-      setemploycontract(employcontractupdatedFilesstate);
-      console.log("Validation passed, updated images assigned to state:", employcontract);
-    }
+  
+    // Merge stored and newly uploaded salary slips into one array with exact indexes
+    let mergedFiles = [salarySlip1, salarySlip2, salarySlip3];
+  
+    // Fill empty slots with uploaded salarySlip values in the correct order
+    salarySlip.forEach((file) => {
+      const emptyIndex = mergedFiles.findIndex((item) => !item); // Find first empty slot
+      if (emptyIndex !== -1) {
+        mergedFiles[emptyIndex] = file;
+      }
+    });
+  
+    console.log("Final Merged Salary Slips:", mergedFiles);
+  
+    // Ensure all 3 slots are filled
+    const isAnyIndexMissing = mergedFiles.some((file) => !file);
+  
+    // if (isAnyIndexMissing) {
+    //   newErrors.salarySlip = "Bitte stellen Sie sicher, dass genau 3 Gehaltsnachweise vorhanden sind.";
+    // }
+  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  const validateFieldsemploy = () => {
+    const newErrors = {};
+  
+    if (employcontractupdatedFilesstate.length !== 0) {
+      // console.log("Updating imageswbs with new images from updatedImages");
+      setemploycontract(employcontractupdatedFilesstate);
+      return true;
+    }
+    // If imageswbs already contains images, no need to update
+    if (employcontract && employcontract.length > 0) {
+      // console.log("Validation passed, images already assigned:", employcontract);
+      return true;
+    } 
+    newErrors.employcontract = "employcontract vorhanden sind.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
   return (
     <div>
       <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
@@ -136,13 +284,14 @@ let employcontractupdatedFiles = [];
           : "Dein Beschäftigungsverhältnis besteht kürzer als 6 Monate."}
       </p>
       <button
-                    type="button" 
-                    className={`${styles["tips"]} mx-auto mb-10`}
-                    id="tip_btn"
-                    onClick={() => setisTipModal(true)}>
-                    <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
-                  </button>      
-      {/* :white_check_mark: Upload Salary Slips */}
+        type="button"
+        className={`${styles["tips"]} mx-auto mb-10`}
+        id="tip_btn"
+        onClick={() => setisTipModal(true)}>
+        <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
+      </button>
+
+      {/* ✅ Upload Salary Slips */}
       <div className="flex flex-col items-center justify-center w-[40%] mx-auto">
         <label
           htmlFor="salarySlip-upload"
@@ -162,17 +311,22 @@ let employcontractupdatedFiles = [];
           accept="image/*, application/pdf"
           onChange={(e) => handleFileChange(e, "salarySlip")}
         />
-        {/* :white_check_mark: Show Loader only for Salary Slip */}
+
+        {/* ✅ Show Loader only for Salary Slip */}
         {isConvertingSalarySlip && (
           <div className="flex justify-center mt-4">
             <div className="loader"></div>
           </div>
         )}
-        {/* :white_check_mark: Salary Slips Preview */}
+
+
+        {/* ✅ Salary Slips Preview */}
         <div className="mt-4 grid grid-cols-3 gap-4">
           {salarySlipPreview.map((preview, index) => (
             <div key={index} className="relative w-24 h-24">
-              {preview.startsWith("data:image") || preview.startsWith("blob:") ? (
+             {/* {typeof employcontractPreview === "string" && (employcontractPreview.startsWith("data:image") || employcontractPreview.startsWith("blob:") || /\.(png|jpe?g|gif|webp)$/i.test(employcontractPreview) ) ? ( */}
+
+              {preview.startsWith("data:image") || preview.startsWith("blob:") || /\.(png|jpe?g|gif|webp)$/i.test(preview) ? (
                 <img src={preview} alt={`Gehaltsnachweis Preview ${index + 1}`} className="object-cover w-full h-full rounded-lg" />
               ) : (
                 <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
@@ -182,7 +336,7 @@ let employcontractupdatedFiles = [];
               <button
                 type="button"
                 className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                onClick={() => removeSalarySlip(index)}
+                onClick={() => removeSalarySlip(index,preview)}
               >
                 ×
               </button>
@@ -191,7 +345,8 @@ let employcontractupdatedFiles = [];
         </div>
         {errors.salarySlip && <p className="text-red-500 text-sm">{errors.salarySlip}</p>}
       </div>
-      {/* :white_check_mark: Upload Employment Contract */}
+
+      {/* ✅ Upload Employment Contract */}
       <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
         <label
           htmlFor="employcontract-upload"
@@ -209,13 +364,14 @@ let employcontractupdatedFiles = [];
           ref={fileInputRef}
           onChange={(e) => handleFileChange(e, "employcontract")}
         />
-       {/* :white_check_mark: Show Loader only for Employ Contract */}
+          {errors.employcontract && <p className="text-red-500 text-sm">{errors.employcontract}</p>}
+       {/* ✅ Show Loader only for Employ Contract */}
        {isConvertingEmploycontract && (
           <div className="flex justify-center mt-4">
             <div className="loader"></div>
           </div>
         )}
-        {/* :white_check_mark: Employment Contract Preview */}
+        {/* ✅ Employment Contract Preview */}
         {employcontractPreview && !isConvertingEmploycontract && (
           <div className="relative w-24 h-24 mt-4">
              {typeof employcontractPreview === "string" && (employcontractPreview.startsWith("data:image") || employcontractPreview.startsWith("blob:") || /\.(png|jpe?g|gif|webp)$/i.test(employcontractPreview) ) ? (
@@ -238,8 +394,10 @@ let employcontractupdatedFiles = [];
             </button>
           </div>
         )}
+
       </div>
-      {/* :white_check_mark: Navigation Buttons */}
+
+      {/* ✅ Navigation Buttons */}
       <div className="flex justify-between mt-10">
         <button
           type="button"
@@ -253,10 +411,25 @@ let employcontractupdatedFiles = [];
             type="button"
             className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
             onClick={() => {
-              if (validateFields()) {
-                setSalarySlip1(salarySlip[0]);
-                setSalarySlip2(salarySlip[1]);
-                setSalarySlip3(salarySlip[2]);
+              if (validateFields() && validateFieldsemploy()) {
+                if (salarySlip.length !== 0) {
+                  let updatedFilledSlots = [...filledSlots]; // Copy of current filled slots array
+            
+                  salarySlip.forEach((file) => {
+                    // Assign to first empty slot
+                    if (salarySlip1.length === 0 && updatedFilledSlots[0] === 0) {
+                      setSalarySlip1(file);
+                      updatedFilledSlots[0] = 1; // Mark slot as filled
+                    } else if (salarySlip2.length === 0 && updatedFilledSlots[1] === 0) {
+                      setSalarySlip2(file);
+                      updatedFilledSlots[1] = 1;
+                    } else if (salarySlip3.length === 0 && updatedFilledSlots[2] === 0) {
+                      setSalarySlip3(file);
+                      updatedFilledSlots[2] = 1;
+                    }
+                  });
+                  setFilledSlots(updatedFilledSlots); // ✅ Update the filledSlots array
+                }
                 setCurrentStep(8);
               }
             }}
@@ -387,4 +560,5 @@ let employcontractupdatedFiles = [];
     </div>
   );
 };
+
 export default StepSixInner;

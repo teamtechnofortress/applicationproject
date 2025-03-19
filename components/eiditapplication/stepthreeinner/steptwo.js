@@ -18,32 +18,60 @@ const StepTwoInner = ({
   const [wbsiImageShow, setwbsiImageShow] = useState(false);
   const fileInputRef = useRef(null); // Add a ref for file input
   const [isConverting, setIsConverting] = useState(false);
+  const [updatedImages, setUpdatedImages] = useState([]);
 
    // ✅ Ensure preview persists when navigating back to this step
-   useEffect(() => {
-    if (imageswbs && imageswbs.length > 0) {
-      setwbsiImageShow(imageswbs[0]); // Show the first image or file
+  //  useEffect(() => {
+  //   if (imageswbs && imageswbs.length > 0) {
+  //     setwbsiImageShow(imageswbs[0]); 
+  //   }
+  // }, [imageswbs]);
+
+
+
+  useEffect(() => {
+    if (imageswbs && Array.isArray(imageswbs) && imageswbs.length > 0) {
+      // Check if the first item is a File object
+      if (imageswbs[0] instanceof File) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setwbsiImageShow(reader.result); // ✅ Show file preview
+        };
+        reader.readAsDataURL(imageswbs[0]);
+      } else {
+        setwbsiImageShow(imageswbs[0]); // ✅ Show URL if stored images exist
+      }
     }
   }, [imageswbs]);
+  
+
+  // let updatedImages = []; // To store processed images
+  useEffect(() => {
+    console.log("updatedImages zunu", updatedImages);
+  }, [updatedImages]);
+
+  useEffect(() => {
+    console.log("imageswbs zunu", imageswbs);
+  }, [imageswbs]);
+
   const handleFileChange = async (event) => {
     setIsConverting(true);  // Show loading state
-
     const file = event.target.files[0];
     if (!file) return; // Exit if no file is selected
   
-    let updatedImages = []; // To store processed images
-  
+    let imagesArray = [];
     if (file.type === "application/pdf") {
       // Convert PDF to images
       const fileURL = URL.createObjectURL(file);
       const images = await convertPdfToImages(fileURL);
       console.log("Converted PDF to images:", images);
   
-      updatedImages = images; // Store all images from the PDF
-      setwbsiImageShow(updatedImages[0]); // Show first page preview if available
+      imagesArray  = images; // Store all images from the PDF
+      setwbsiImageShow(imagesArray[0]); // Show first page preview if available
     } else {
       // Directly add uploaded image
-      updatedImages = [file];
+      imagesArray  = [file];
+      // setwbsiImageShow(file); // Show image preview
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -52,21 +80,54 @@ const StepTwoInner = ({
         };
         reader.readAsDataURL(file);
       }
+
     }
-  
+    setUpdatedImages(imagesArray);
     // Ensure imageswbs state is always an array (either multiple images from PDF or single image)
-    setImageswbs(updatedImages);
     setIsConverting(false);  // Hide loading state
   };
   
   
   const removeImage = () => {
-    setImageswbs([]);
-    setwbsiImageShow(null);
+    setImageswbs(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset file input field
     }
   };
+
+  const validateFields = () => {
+    const newErrors = {};
+
+    console.log("validateFields called");
+    console.log("imageswbs before setting state:", imageswbs);
+    console.log("updatedImages before setting state:", updatedImages);
+    console.log("wbsiImageShow before setting state:", wbsiImageShow);
+  
+
+    if(fläche === ""){
+      newErrors.fläche = "Fläche is required.";
+    }
+    if(zimerzahl === ""){
+      newErrors.zimerzahl = "Zimerzahl is required.";
+    }
+    // If updatedImages has new images, update imageswbs
+    if (updatedImages.length !== 0) {
+      console.log("Updating imageswbs with new images from updatedImages");
+      setImageswbs(updatedImages);
+      return true;
+    }
+    // If imageswbs already contains images, no need to update
+    if (imageswbs && imageswbs.length > 0) {
+      console.log("Validation passed, images already assigned:", imageswbs);
+      return true;
+    } 
+    newErrors.imageswbs = "imageswbs is required.";
+  
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+
 
   setCurrentStep(15);
   if(setCurrentStep(15)){
@@ -106,6 +167,9 @@ const StepTwoInner = ({
                     value={fläche}
                     onChange={handleChange}
                   />
+                  {errors.fläche && (
+                    <p className="text-red-500 text-sm">{errors.fläche}</p>
+                  )}
                 </div>
               </div>
               <div className="...">
@@ -119,6 +183,9 @@ const StepTwoInner = ({
                     value={zimerzahl}
                     onChange={handleChange}
                   />
+                  {errors.zimerzahl && (
+                    <p className="text-red-500 text-sm">{errors.zimerzahl}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -141,6 +208,9 @@ const StepTwoInner = ({
               ref={fileInputRef} // Attach ref here
               onChange={(e) => handleFileChange(e, "imageswbs")}
             />
+            {errors.imageswbs && (
+              <p className="text-red-500 text-sm">{errors.imageswbs}</p>
+            )}
           {/* ✅ Show Spinner when Converting PDF */}
             {isConverting && (
                 <div className="flex justify-center mt-4">
@@ -151,12 +221,10 @@ const StepTwoInner = ({
             {wbsiImageShow && !isConverting && (
               <div className="relative w-24 h-24">
                 {/* Check if the file is an image or PDF */}
-
                 {typeof wbsiImageShow === "string" && wbsiImageShow.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(wbsiImageShow) ? (
-
                   // Render Image for Image files
                   <img
-                    src={(wbsiImageShow)}
+                    src={wbsiImageShow}
                     alt="Gehaltsnachweis Preview"
                     className="object-cover w-full h-full rounded-lg"
                   />
@@ -169,7 +237,11 @@ const StepTwoInner = ({
                 <button
                   type="button"
                   className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full text-xs"
-                  onClick={removeImage}
+                  onClick={() => {
+                    setUpdatedImages([]);      // Clear the images array
+                    setImageswbs([]);      // Clear the images array
+                    setwbsiImageShow(null); // Clear the preview state
+                  }}
                 >
                   ×
                 </button>
@@ -183,7 +255,10 @@ const StepTwoInner = ({
           <button
             type="button"
             className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-            onClick={() => setCurrentStep(14)}
+            onClick={() => {
+              setCurrentStep(14);
+            }}
+            
           >
             Zurück
           </button>
@@ -192,7 +267,11 @@ const StepTwoInner = ({
             <button
               type="button"
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
-              onClick={() => setCurrentStep(16)}
+              onClick={() => {
+                if (validateFields()) {
+                  setCurrentStep(16)
+                }
+              }}
               disabled={isConverting}
             >
               Weiter

@@ -8,29 +8,31 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-phone-input-2/lib/style.css";
 import styles from "../../styles/latest.module.css";
 import DashboardHeader from '@/components/DashboardHeader';
-import Steptwo from "@/components/steptwo";
-import StepOne from "@/components/stepone";
-import Stepthree from "@/components/stepthree";
+import Steptwo from "@/components/eiditapplication/steptwo";
+import StepOne from "@/components/eiditapplication/stepone";
+import Stepthree from "@/components/eiditapplication/stepthree";
 import LoadingSpinner from "@/components/loading";
-import { useRouter } from 'next/router';
-
+import { useRouter } from "next/router";
 
 
 const application = () => {
-  const router = useRouter();
-  const { parentId } = router.query;
 
+  const router = useRouter();
+  const { id } = router.query;
+  console.log(id);
+
+  
+  const [loading, setLoading] = useState(true);
+
+  const [applicationidforupdate, setApplicationidforupdate] = useState("");
   const [vorname, setVorname] = useState("");
   const [nachname, setNachname] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
   const [strabe, setStrabe] = useState("");
   const [postleitzahl, setPostleitzahl] = useState("");
   const [hausnummer, sethausnummer] = useState("");
   const [ort, setOrt] = useState("");
   const [geburtsdatum, setGeburtsdatum] = useState("");
   const [email, setEmail] = useState("");
-  const [email2, setEmail2] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
   const [ausgeubterBeruf, setausgeubterBeruf] = useState("");
   const [arbeitgeber, setarbeitgeber] = useState("");
@@ -86,7 +88,6 @@ const application = () => {
   const [applicationimg, setApplicationimg] = useState(null);
   const [selectedImg, setSelectedImg] = useState("../image.png");
   
-  const [loading, setLoading] = useState(false);
   const [components, setComponents] = useState(1);
 
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -104,25 +105,114 @@ const application = () => {
 
 
 
+
+
+  const fetchuserdataforedit = async () => {
+    try{
+        const res = await fetch("/api/user/getsingelapplication", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id }),
+          });
+
+        const response = await res.json();
+
+        if (res.status == 200) {
+            console.log('is side',response)
+            setApplicationidforupdate(response._id);
+            setVorname(response.vorname);
+            setNachname(response.nachname);
+            setStrabe(response.strabe);
+            setPostleitzahl(response.postleitzahl);
+            sethausnummer(response.hausnummer);
+            setOrt(response.Ort);
+            setGeburtsdatum(response.geburtsdatum);
+            setEmail(response.email);
+            setPhoneNumber(response.phonenumber);
+            setausgeubterBeruf(response.ausgeubterBeruf);
+            setarbeitgeber(response.arbeitgeber);
+            setincome(response.income);
+            setEmployment(response.employment);
+            setemploycontract(response.employcontract);
+            setSalarySlip1(response.salarySlip1);
+            console.log('salarySlip1',response.salarySlip1);
+            console.log('salarySlip2',response.salarySlip2);
+            setSalarySlip2(response.salarySlip2);
+            setSalarySlip3(response.salarySlip3);
+            setPets(response.pets);
+            setRentarea(response.rentarea);
+            setProceedings(response.proceedings);
+            setprofession(response.profession);
+            setApartment(response.apartment);
+            if(response.inputfoto){
+              // setinputfoto(response.inputfoto);
+              setshowinputfoto(response.inputfoto);
+            }
+            setCoverletter(response.coverletter);
+            setFläche(response.fläche);
+            setZimerzahl(response.zimerzahl);
+            setImageswbs(response.imageswbs);
+            setPersonal(response.personal);
+            setSchufa(response.schufa);
+            setMietschuldenfreiheit(response.mietschuldenfreiheit);
+            setMietverhaltnis(response.mietverhaltnis);
+            setMietschuldenfreiheitimg(response.mietschuldenfreiheitimg);
+            setBwaimages(response.bwaimages);
+            seteinkommensbescheinigungimg(response.einkommensbescheinigungimg);
+
+
+
+        } else {
+            toast.error(response.error, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+        }
+    } catch (error) {
+        console.log(error)
+        toast.error("Error getting data: An error occurred");
+    }finally{
+        setLoading(false);
+    }
+  }
+  useEffect(()=>{
+    if(id){
+        fetchuserdataforedit();
+      }
+  },[id]);
+
+  useEffect(()=>{
+    console.log('imageswbs zunu',imageswbs);
+  },[imageswbs]);
+
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     const newErrors = {};
 
-    // if(name === "inputfoto"){
-    //   setinputfoto(files[0])
-    //   if (files[0]) {
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //       const result = reader.result;
-    //       setshowinputfoto(result);
-    //       console.log(selectedImg);
-    //     };
-    //     reader.readAsDataURL(files[0]);
-    //   }
-    // }
+    if(name === "inputfoto"){
+      setinputfoto(files[0])
+      if (files[0]) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result;
+          setshowinputfoto(result);
+          console.log(selectedImg);
+        };
+        reader.readAsDataURL(files[0]);
+      }
+    }
     if(name === "bwaimages"){
       setBwaimages(files[0])
       if (files[0]) {
@@ -364,8 +454,6 @@ const application = () => {
     } else {
       if (name === "vorname") setVorname(value);
       if (name === "nachname") setNachname(value);
-      if (name === "firstname") setFirstname(value);
-      if (name === "lastname") setLastname(value);
       if (name === "strabe") setStrabe(value);
       if (name === "postleitzahl") setPostleitzahl(value);
       if (name === "hausnummer") sethausnummer(value);
@@ -374,7 +462,6 @@ const application = () => {
       if (name === "income") setincome(value);
       if (name === "email") setEmail(value);
       if (name === "inputfoto")setinputfoto(value);
-      if (name === "email2") setEmail2(value);
       if (name === "phonenumber") setPhoneNumber(value);
       if (name === "ausgeubterBeruf") setausgeubterBeruf(value);
       if (name === "arbeitgeber") setarbeitgeber(value);
@@ -388,7 +475,6 @@ const application = () => {
       if (name === "bwaimages") setBwaimages(value);
       if (name === "einkommensbescheinigungimg") seteinkommensbescheinigungimg(value);
       if (name === "imageswbs") setImageswbs(value);
-      if (name === "mietverhaltnis") setMietverhaltnis(value);
       if (name === "mietschuldenfreiheitimg") setMietschuldenfreiheitimg(value);
       if (name === "personal") setPersonal(value);
       if (name === "schufa") setPersonal(value);
@@ -404,6 +490,7 @@ const application = () => {
       if (name === "fläche") setFläche(value);
       if (name === "zimerzahl") setZimerzahl(value);
       if (name === "mietschuldenfreiheit") setMietschuldenfreiheit(value);
+      if (name === "mietverhaltnis") setMietverhaltnis(value);
     }
   };
  
@@ -465,10 +552,9 @@ const application = () => {
     setLoading(true);
     try {
     const formData = new FormData();
+    formData.append("formid", id);
     formData.append("vorname", vorname);
     formData.append("nachname", nachname);
-    formData.append("firstname", firstname);
-    formData.append("lastname", lastname);
     formData.append("strabe", strabe);
     formData.append("hausnummer", hausnummer);
     formData.append("postleitzahl", postleitzahl);
@@ -498,18 +584,8 @@ const application = () => {
     // formData.append("schufa", schufa);
     // console.log('schufa', schufa);
     // formData.append("noofpeople", people);
-     // 🔹 Append Parent Form ID if available
-     if (parentId) {
-      formData.append("parentId", parentId); 
-      console.log(parentId);
-    }
-    formData.append("status", status);
-    formData.append("currentactivity", currentactivity);
-    formData.append("currentemployer", currentemployer);
-    formData.append("incomee", incomee);
     formData.append("fläche", fläche);
     formData.append("zimerzahl", zimerzahl);
-    formData.append("anzahlderzimmer", anzahlderzimmer);
     formData.append("salarystatementlast", salarystatementlast);
     formData.append("salarystatementbefore", salarystatementbefore);
     formData.append("salarystatementago", salarystatementago);
@@ -520,11 +596,9 @@ const application = () => {
     formData.append("rentalschoolfree", rentalschoolfree);
     formData.append("signatureData", signatureData);
     formData.append('componentImage', applicationimg);
-    formData.append('componentImage', applicationimg);
     formData.append('salarySlip1', salarySlip1);
-    formData.append("mietschuldenfreiheit", mietschuldenfreiheit);
-    formData.append("mietverhaltnis", mietverhaltnis);
-    
+    formData.append('mietschuldenfreiheit', mietschuldenfreiheit);
+    formData.append('mietverhaltnis', mietverhaltnis);
     // Convert Base64 images to File objects before appending
     if (imageswbs && imageswbs.length > 0) {
       for (const [index, image] of imageswbs.entries()) {
@@ -701,43 +775,40 @@ const application = () => {
         }
       }
     }
-    if (salarySlip && salarySlip.length > 0) {
-      for (const [index, image] of salarySlip.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `salarySlip_${index}.png`);
-            formData.append("salarySlip", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `salarySlip_${index}.png`);
-            formData.append("salarySlip", file);
-            console.log("salarySlip blob:", file);
-          } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for salarySlip:", image);
-          }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("salarySlip", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
-        }
-      }
+    console.log("salarySlip1", salarySlip1);
+    console.log("salarySlip2", salarySlip2);
+    console.log("salarySlip3", salarySlip3);
+
+    // return;
+    
+    // Check if salarySlip1 is not Base64 and not a File object, then reset it
+    if (!(salarySlip1 && (typeof salarySlip1 === "string" && salarySlip1.startsWith("data:image")) || salarySlip1 instanceof File)) {
+      setSalarySlip1(null);
     }
+    
+    // Check if salarySlip2 is not Base64 and not a File object, then reset it
+    if (!(salarySlip2 && (typeof salarySlip2 === "string" && salarySlip2.startsWith("data:image")) || salarySlip2 instanceof File)) {
+      setSalarySlip2(null);
+    }
+    
+    // Check if salarySlip3 is not Base64 and not a File object, then reset it
+    if (!(salarySlip3 && (typeof salarySlip3 === "string" && salarySlip3.startsWith("data:image")) || salarySlip3 instanceof File)) {
+      setSalarySlip3(null);
+    }
+    
 
     if (salarySlip1 && salarySlip1.length > 0) {
       for (const [index, image] of salarySlip1.entries()) {
         if (typeof image === "string") {
           if (image.startsWith("data:image")) {
             // Convert Base64 to File
-            const file = base64ToFile(image, `salarySlip1_${index}.png`);
+            const file = base64ToFile(image, `salarySlip1${index}.png`);
             formData.append("salarySlip1", file);
           } else if (image.startsWith("blob:")) {
             // Convert Blob URL to File
-            const file = await blobToFile(image, `salarySlip1_${index}.png`);
+            const file = await blobToFile(image, `salarySlip1${index}.png`);
             formData.append("salarySlip1", file);
+            console.log("salarySlip1 blob:", file);
           } else {
             // Handle other cases (if necessary)
             console.warn("Unexpected format for salarySlip1:", image);
@@ -745,6 +816,7 @@ const application = () => {
         } else if (image instanceof File) {
           // Append File object directly
           formData.append("salarySlip1", image);
+          console.log("Appending file:", image);
         } else {
           console.warn("Unknown image format:", image);
         }
@@ -755,11 +827,11 @@ const application = () => {
         if (typeof image === "string") {
           if (image.startsWith("data:image")) {
             // Convert Base64 to File
-            const file = base64ToFile(image, `salarySlip2_${index}.png`);
+            const file = base64ToFile(image, `salarySlip2${index}.png`);
             formData.append("salarySlip2", file);
           } else if (image.startsWith("blob:")) {
             // Convert Blob URL to File
-            const file = await blobToFile(image, `salarySlip2_${index}.png`);
+            const file = await blobToFile(image, `salarySlip2${index}.png`);
             formData.append("salarySlip2", file);
             console.log("salarySlip2 blob:", file);
           } else {
@@ -780,11 +852,11 @@ const application = () => {
         if (typeof image === "string") {
           if (image.startsWith("data:image")) {
             // Convert Base64 to File
-            const file = base64ToFile(image, `salarySlip3_${index}.png`);
+            const file = base64ToFile(image, `salarySlip3${index}.png`);
             formData.append("salarySlip3", file);
           } else if (image.startsWith("blob:")) {
             // Convert Blob URL to File
-            const file = await blobToFile(image, `salarySlip3_${index}.png`);
+            const file = await blobToFile(image, `salarySlip3${index}.png`);
             formData.append("salarySlip3", file);
             console.log("salarySlip3 blob:", file);
           } else {
@@ -801,16 +873,138 @@ const application = () => {
       }
     }
 
+    console.log("Final FormData:", salarySlip1);
+    console.log("Final FormData:", salarySlip2);
+    console.log("Final FormData:", salarySlip3);
+    // return;
 
-
-
-
-
-
-
-
-
-      const res = await fetch("/api/user/application", {
+    // if (salarySlip && salarySlip.length > 0) {
+    //   let allSalarySlipFiles = []; // ✅ Store all images in a nested array
+    
+    //   for (const [fileIndex, fileImages] of salarySlip.entries()) {
+    //     let fileGroup = []; // ✅ Store images for this file
+    
+    //     for (const [imageIndex, image] of fileImages.entries()) {
+    //       if (typeof image === "string") {
+    //         if (image.startsWith("data:image")) {
+    //           // ✅ Convert Base64 to File
+    //           const file = base64ToFile(image, `salarySlip_${fileIndex}_${imageIndex}.png`);
+    //           fileGroup.push(file);
+    //         } else if (image.startsWith("blob:")) {
+    //           // ✅ Convert Blob URL to File
+    //           const file = await blobToFile(image, `salarySlip_${fileIndex}_${imageIndex}.png`);
+    //           fileGroup.push(file);
+    //         } else {
+    //           console.warn("Unexpected format for salarySlip:", image);
+    //         }
+    //       } else if (image instanceof File) {
+    //         // ✅ Append File object directly
+    //         fileGroup.push(image);
+    //       } else {
+    //         console.warn("Unknown image format:", image);
+    //       }
+    //     }
+    
+    //     allSalarySlipFiles.push(fileGroup); // ✅ Push group of images to nested array
+    //   }
+    //   console.log("Final Nested SalarySlip Files:", allSalarySlipFiles);
+    
+    //   // ✅ Convert to JSON & Append to FormData
+    //   allSalarySlipFiles.forEach((fileGroup, groupIndex) => {
+    //     fileGroup.forEach((file, fileIndex) => {
+    //       formData.append(`salarySlip[${groupIndex}][${fileIndex}]`, file);
+    //     });
+    //   });
+    //   for (let pair of formData.entries()) {
+    //     console.log(pair[0], pair[1]);
+    //   }
+    
+    //   // ✅ Debugging to verify
+    // }
+    
+    
+    // for (const pair of formData.entries()) {
+    //   console.log(pair[0], pair[1]);
+    // }
+    
+    
+    // if (salarySlip1 && salarySlip1.length > 0) {
+    //   for (const [index, image] of salarySlip1.entries()) {
+    //     if (typeof image === "string") {
+    //       if (image.startsWith("data:image")) {
+    //         // Convert Base64 to File
+    //         const file = base64ToFile(image, `salarySlip1_${index}.png`);
+    //         formData.append("salarySlip1 am", file);
+    //       } else if (image.startsWith("blob:")) {
+    //         // Convert Blob URL to File
+    //         const file = await blobToFile(image, `salarySlip1_${index}.png`);
+    //         formData.append("salarySlip1 dfxc", file);
+    //         console.log("salarySlip1 blob fdss:", file);
+    //       } else {
+    //         // Handle other cases (if necessary)
+    //         console.warn("Unexpected format for salarySlip1:", image);
+    //       }
+    //     } else if (image instanceof File) {
+    //       // Append File object directly
+    //       formData.append("salarySlip1", image);
+    //       console.log("Appending file:", image);
+    //     } else {
+    //       console.warn("Unknown image format:", image);
+    //     }
+    //   }
+    // }
+    // if (salarySlip2 && salarySlip2.length > 0) {
+    //   for (const [index, image] of salarySlip2.entries()) {
+    //     if (typeof image === "string") {
+    //       if (image.startsWith("data:image")) {
+    //         // Convert Base64 to File
+    //         const file = base64ToFile(image, `salarySlip2_${index}.png`);
+    //         formData.append("salarySlip2", file);
+    //       } else if (image.startsWith("blob:")) {
+    //         // Convert Blob URL to File
+    //         const file = await blobToFile(image, `salarySlip2_${index}.png`);
+    //         formData.append("salarySlip2", file);
+    //         console.log("salarySlip2 blob:", file);
+    //       } else {
+    //         // Handle other cases (if necessary)
+    //         console.warn("Unexpected format for salarySlip2:", image);
+    //       }
+    //     } else if (image instanceof File) {
+    //       // Append File object directly
+    //       formData.append("salarySlip2", image);
+    //       console.log("Appending file:", image);
+    //     } else {
+    //       console.warn("Unknown image format:", image);
+    //     }
+    //   }
+    // }
+    // if (salarySlip3 && salarySlip3.length > 0) {
+    //   for (const [index, image] of salarySlip3.entries()) {
+    //     if (typeof image === "string") {
+    //       if (image.startsWith("data:image")) {
+    //         // Convert Base64 to File
+    //         const file = base64ToFile(image, `salarySlip3_${index}.png`);
+    //         formData.append("salarySlip3", file);
+    //       } else if (image.startsWith("blob:")) {
+    //         // Convert Blob URL to File
+    //         const file = await blobToFile(image, `salarySlip3_${index}.png`);
+    //         formData.append("salarySlip3", file);
+    //         console.log("salarySlip3 blob:", file);
+    //       } else {
+    //         // Handle other cases (if necessary)
+    //         console.warn("Unexpected format for salarySlip3:", image);
+    //       }
+    //     } else if (image instanceof File) {
+    //       // Append File object directly
+    //       formData.append("salarySlip3", image);
+    //       console.log("Appending file:", image);
+    //     } else {
+    //       console.warn("Unknown image format:", image);
+    //     }
+    //   }
+    // }
+   
+      const res = await fetch("/api/user/editapplication", {
         method: "POST",
         body: formData,
       });
@@ -852,8 +1046,6 @@ const application = () => {
     }
   };
 
-  
-
   return (
     <>
    
@@ -871,8 +1063,8 @@ const application = () => {
      
    
           <div className="mt-7">
-            <ul className="flex justify-around items-center max-w-7xl mx-auto p-10">
-                {/* Step 1 */}
+            {/* <ul className="flex justify-around items-center max-w-7xl mx-auto p-10">
+                //  Step 1 
                 <li className="flex flex-col items-center">
                   <div
                     className={`${styles["color-border"]} rounded-full w-10 h-10 flex items-center justify-center ${
@@ -898,7 +1090,7 @@ const application = () => {
                   </p>
                 </li>
 
-                {/* Line Between Steps */}
+                // Line Between Steps
                 <li className="flex-1">
                   <div
                     className={`h-[2px] mb-6 ${
@@ -907,7 +1099,7 @@ const application = () => {
                   ></div>
                 </li>
 
-                {/* Step 2 */}
+                //  Step 2
                 <li className="flex flex-col items-center">
                 <div
                     className={`rounded-full w-10 h-10 flex items-center justify-center ${
@@ -940,7 +1132,7 @@ const application = () => {
                   </p>
                 </li>
 
-                {/* Line Between Steps */}
+                //  Line Between Steps 
                 <li className="flex-1">
                   <div
                     className={`h-[2px] mb-6 ${
@@ -949,7 +1141,7 @@ const application = () => {
                   ></div>
                 </li>
 
-                {/* Step 3 */}
+                //  Step 3 
                 <li className="flex flex-col items-center">
                 <div
                     className={`rounded-full w-10 h-10 flex items-center justify-center ${
@@ -981,6 +1173,142 @@ const application = () => {
                     Uploads
                   </p>
                 </li>
+            </ul> */}
+            <ul className="flex justify-around items-center max-w-7xl mx-auto p-10">
+                {/* Step 1 */}
+                <li className="flex flex-col items-center">
+                  <div
+                    className={`${styles["color-border"]} rounded-full w-10 h-10 flex items-center justify-center ${
+                      components >= 1
+                        ? "border-2 border-yellow-500 p-1"
+                        : "border-2 border-yellow-500 p-1"
+                    }`}
+                  >
+                    <div 
+                      onClick={() => {
+                        setCurrentStep(0)
+                        setComponents(1)
+                      }} 
+                    className={`${styles["color-circle"]} flex items-center justify-center cursor-pointer `}>
+                      {components >= 1 ? (
+                        <span className="text-white font-bold">&#10003;</span> // Checkmark icon
+                      ) : (
+                        <span className="text-white font-bold">&#10003;</span>
+                      )}
+                    </div>
+                  </div>
+                  <p
+                   onClick={() => {
+                    setCurrentStep(0)
+                    setComponents(1)
+                  }}
+                  className={`mt-2 cursor-pointer text-sm ${
+                    components >= 1 ?  "text-color" : "text-color"
+                  }`}
+                  >
+                    Persönliches
+                  </p>
+                </li>
+
+                {/* Line Between Steps */}
+                <li className="flex-1">
+                  <div
+                    className={`h-[2px] mb-6 ${
+                      components >= 2 ? "border-color" : "border-color"
+                    }`}
+                  ></div>
+                </li>
+
+                {/* Step 2 */}
+                <li className="flex flex-col items-center">
+                <div
+                    className={`rounded-full w-10 h-10 flex items-center justify-center ${
+                      components >= 2
+                        ? "color-border border-2 border-yellow-500 p-1"
+                        : "color-border border-2 border-yellow-500 p-1"
+                    }`}
+                  >
+
+                  <div
+                    onClick={() => {
+                      setCurrentStep(12)
+                      setComponents(2)
+                    }}
+                    className={`${
+                      components >= 2 ? "color-circle" : "color-circle"
+                    } flex items-center justify-center cursor-pointer`}
+                  >
+                    {components >= 2 ? (
+                      <span className="text-white font-bold">&#10003;</span> // Checkmark icon
+                    ) : (
+                      <span className="text-white font-bold">&#10003;</span> // Fallback number
+                    )}
+                  </div>
+
+                  
+                  </div>
+                  <p
+                  onClick={() => {
+                    setCurrentStep(12)
+                    setComponents(2)
+                  }}
+                    className={`mt-2 cursor-pointer text-sm ${
+                      components >= 2 ? "text-color" : "text-color"
+                    }`}
+                  >
+                  Anschreiben
+                  </p>
+                </li>
+
+                {/* Line Between Steps */}
+                <li className="flex-1">
+                  <div
+                    className={`h-[2px]  mb-6 ${
+                      components >= 3 ? "border-color" : "border-color"
+                    }`}
+                  ></div>
+                </li>
+
+                {/* Step 3 */}
+                <li className="flex flex-col items-center">
+                <div
+                    className={`rounded-full w-10 h-10 flex items-center justify-center ${
+                      components >= 3
+                        ? "color-border border-2 border-yellow-500 p-1"
+                        : "color-border border-2 border-yellow-500 p-1"
+                    }`}
+                  >
+
+                  <div
+                    onClick={() => {
+                      setCurrentStep(14)
+                      setComponents(3)
+                    }}
+                    className={`${ 
+                      components >= 3 ? "color-circle" : "color-circle"
+                    } flex items-center justify-center cursor-pointer`}
+                  >
+                    {components >= 3 ? (
+                      <span className="text-white font-bold">&#10003;</span> // Checkmark icon
+                    ) : (
+                      <span className="text-white font-bold">&#10003;</span> // Fallback number
+                    )}
+                  </div>
+
+                  
+                  </div>
+                  <p
+                    onClick={() => {
+                      setCurrentStep(14)
+                      setComponents(3)
+                    }}
+                    className={`mt-2 cursor-pointer text-sm ${
+                      components >= 3 ? "text-color" : "text-color"
+                    }`}
+                  >
+                    Uploads
+                  </p>
+                </li>
             </ul>
 
           </div>
@@ -1003,6 +1331,7 @@ const application = () => {
                   email={email}
                   inputfoto={inputfoto}
                   showinputfoto = {showinputfoto}
+                  setshowinputfoto = {setshowinputfoto}
                   setinputfoto={setinputfoto}
                   phonenumber={phonenumber}
                   setPhoneNumber={setPhoneNumber}
@@ -1021,12 +1350,12 @@ const application = () => {
                   proceedings={proceedings}
                   apartment={apartment}
                   salarySlip={salarySlip}
-                  salarySlip1={salarySlip1}
-                  salarySlip2={salarySlip2}
-                  salarySlip3={salarySlip3}
                   employcontract={employcontract}
                   setemploycontract={setemploycontract}
                   setsalarySlip={setsalarySlip}
+                  salarySlip1={salarySlip1}
+                  salarySlip2={salarySlip2}
+                  salarySlip3={salarySlip3}
                   setSalarySlip1={setSalarySlip1}
                   setSalarySlip2={setSalarySlip2}
                   setSalarySlip3={setSalarySlip3}
@@ -1060,9 +1389,6 @@ const application = () => {
                   mietschuldenfreiheitimg ={mietschuldenfreiheitimg}
                   setMietschuldenfreiheitimg ={setMietschuldenfreiheitimg}
                   currentStep={currentStep}
-                  firstname={firstname}
-                  lastname={lastname}
-                  email2={email2}
                   setCurrentStep={setCurrentStep}
                   handleChange={handleChange}
                   setComponents={setComponents}

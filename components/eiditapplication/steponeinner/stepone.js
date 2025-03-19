@@ -35,6 +35,11 @@ const StepOneInner = ({
     }
   };
 
+  useEffect(()=>{
+    setGeburtsdatum(initialGeburtsdatum);
+  },[initialGeburtsdatum]);
+
+  
   useEffect(() => {
     const element = document.querySelector("#geburtsdatum");
     if (!element) return;
@@ -163,7 +168,7 @@ const StepOneInner = ({
                 </button>
                 <h3 className={`${styles["modal-h3"]}`}>
                   <div className="flex gap-4 justify-center">
-                  <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipp
+                  <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
                   </div>
               
                 </h3>
@@ -171,7 +176,7 @@ const StepOneInner = ({
               </div>
 
               <div className="p-4 md:p-5 space-y-4">
-                <div>Du suchst eine Wohnung als Paar? Kein Problem! Gib zuerst deine Daten ein – danach kannst du die Infos für deinen Partner oder deine Partnerin hinzufügen. Am Ende erhaltet ihr eine gemeinsame Bewerbungsmappe.</div>
+                <div>Achte darauf, dass die Adresse die du hier angibst die selbe ist wie auf deinem Ausweis und deiner Schufa sowie auf deinen Gehaltsnachweisen. Sollten es bei den Adressen Abweichungen geben erkläre diese Unbedingt in deinem Anschreiben !!!</div>
               </div>
             </div>
           </div>
