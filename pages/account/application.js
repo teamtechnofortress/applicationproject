@@ -801,19 +801,18 @@ const application = () => {
       }
     }
 
-
-
-
-
-
-
-
-
-
-      const res = await fetch("/api/user/application", {
+    let res;
+    if (parentId) {
+      res = await fetch("/api/user/childapplication", {
         method: "POST",
         body: formData,
       });
+    } else {
+      res = await fetch("/api/user/application", {
+        method: "POST",
+        body: formData,
+      });
+    }
 
       const response = await res.json();
       if (response.success) {

@@ -30,6 +30,7 @@ const Sidebar = () => {
         </div>
         <p className={`${styles['progress-p']} font-bold text-gray-700 text-center`}>Applicant folder</p>
       </div>
+     
       <button className={`${styles['btn-tip']}`}>Tipps</button>
     </div>
   </div>

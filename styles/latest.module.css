@@ -10,14 +10,14 @@
     font-weight: 900; 
 }
 .main-heading-2{
-    font-family: 'Poppins Bold';
-    font-size: 50px;
-    padding-top: 15%;
-    padding-bottom: 15%;
+    font-family: 'Poppins Regular';
+    font-size: 23px;
+    /* padding-top: 15%;
+    padding-bottom: 15%; */
 }
 .second-heading{
     font-family: 'Poppins Bold';
-    font-size: 50px;  
+    font-size: 40px;  
 }
 
 .form-input{
@@ -124,6 +124,10 @@
 .bg-heading{
     background: url(/images/baner4.png);
     background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 115%;
+    padding-bottom: 9%;
+    padding-top: 9%;
 }
 label.file_up {
     display: flex;
@@ -218,9 +222,18 @@ label.file_up {
     background: #ededed66 !important;
 }
 .profession-btn{
-    padding: 20px;
+    padding: 28px 16px;
+    /* padding: 20px; */
     background-color: transparent;
-    border: 1px solid #e7fc42;
+    border: 2px solid #c7c7c78a;
+}
+.profession-btn img{
+    width:32%;
+}
+.profession-btn p{
+    font-size: 17px;
+    font-weight: 800;
+    color: #000;
 }
 .p-copy{
     width: 100%;

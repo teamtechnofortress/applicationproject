@@ -26,11 +26,11 @@ const StepFourInner = ({
                     <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
                      Wie ist deine Berufliche Situation
                     </p>    
-                    <p className={`${styles["p-address"]} mb-10 text-center`}>
+                    <p className={`${styles["p-address"]} mb-4 text-center`}>
                       Bitte walhle enie
                     </p> 
 
-                    <div className="grid grid-cols-2 mt-5 gap-10 w-[80%] mx-auto">
+                    <div className="grid grid-cols-2 mt-5 gap-4 w-[80%] mx-auto">
                         <div className="col-span-1 flex items-center">
                         <input
                               className={`${styles["form-check-input"]}  mr-2`}
@@ -40,7 +40,7 @@ const StepFourInner = ({
                               value="Ja"
                               onChange={handleChange}
                               checked={profession === "Ja"}
-                              onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
+                              // onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
                             />
                             <label
                               className={`${styles["form-check-label"]} ${styles["profession-btn"]} ${styles["radio-btn"]} ${
@@ -48,7 +48,7 @@ const StepFourInner = ({
                               } flex flex-col items-center justify-center text-center gap-2`}
                               htmlFor="profession1"
                             >
-                             <img src="/images/emp.svg" alt="icon" className="w-1/5" />
+                             <img src="/images/emp.svg" alt="icon"/>
                               <p>Angestellt</p>
                             </label>
                           </div>
@@ -61,7 +61,7 @@ const StepFourInner = ({
                               value="Nein"
                               onChange={handleChange}
                               checked={profession === "Nein"}
-                              onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
+                              // onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
                             />
                             <label
                               className={`${styles["form-check-label"]} ${styles["profession-btn"]} ${styles["radio-btn"]} ${
@@ -69,7 +69,7 @@ const StepFourInner = ({
                               } flex flex-col items-center justify-center text-center gap-2`}
                               htmlFor="profession2"
                             >
-                              <img src="/images/self-emp.svg" alt="icon" className="w-1/5" />
+                              <img src="/images/self-emp.svg" alt="icon" />
                               <p>Selbstsändig</p>
                               
                             </label>
@@ -80,14 +80,30 @@ const StepFourInner = ({
                   
 
   
-                    <button type="button" className={`${styles["back-btn"]} mt-10 px-6 py-3 rounded-lg bg-blue-500 mx-auto block flex items-center justify-between`}
+                    <div className="flex justify-between mt-10">
+                        <button
+                          type="button"
+                          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
                           onClick={() => {
                             setCurrentStep(2); 
                           }}
-                            > 
-                               <img src="/images/back.svg" alt="icon"  />
-                               Zurück 
-                    </button>
+                        >
+                          Zurück
+                        </button>
+                        <div className="col-span-2">
+                        <button
+                            type="button"
+                            className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+                            onClick={() => {
+                              if (validateFields()) {
+                                setCurrentStep((prevStep) => prevStep + 1);
+                              }
+                            }}
+                          >
+                            Weiter
+                          </button>
+                        </div>
+                    </div> 
                          
                 </div>
               </div>

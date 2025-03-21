@@ -434,7 +434,7 @@ const MyDocumentTwo = ({ profileData }) => {
               <View style={styles.footerColCenter}>
                 <View style={styles.barcodeSec}>
                 <Image
-                  source={{ uri: child.qrCode }} 
+                  source={{ uri: parent.qrCode }} 
                   style={{ width: 50, height: 50 }}
                 />
                 <Text style={styles.scanMe}>Scan Me</Text>

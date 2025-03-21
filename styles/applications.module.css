@@ -150,12 +150,39 @@
     align-items: center;
   }
   .footerlogo {
-    width: 58%;
+    width: 68%;
+    display: flex;
+    flex-direction: column;
+    width: 68%;
     height: auto;
     margin-top: -34px;
-    background: #ffff;
+    background: #e7fc42;
     align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    justify-content: center;
   }
+  .scanMe{
+    font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform:uppercase;
+  margin-top: 3px;
+  }
+.popup-btn {
+    font-family: "Montserrat", sans-serif;
+  display: block;
+  width: 70%;
+  margin: auto;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 11px 34px 11px 53px;
+  background: #E7FC41;
+  color: #333333;
+  border: none;
+  cursor: pointer;
+}
   @media (max-width: 1080px) {
     .flex-sec{
         display: block;
@@ -180,19 +207,5 @@
 
 
 
-.popup-btn {
-    font-family: "Montserrat", sans-serif;
-  display: block;
-  width: 70%;
-  margin: auto;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 20px;
-  padding: 11px 34px 11px 53px;
-  background: #E7FC41;
-  color: #333333;
-  border: none;
-  cursor: pointer;
-}
 
 

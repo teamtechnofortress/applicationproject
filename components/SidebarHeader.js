@@ -101,7 +101,8 @@ export const DashboardHeader = () => {
             </div>
             <p className={`${styles['progress-p']} font-bold text-gray-700 text-center`}>Applicant folder</p>
           </div>
-          <button className={`${styles['btn-tip']}`}>Tipps</button>
+          <Link href="/account/tipps" legacyBehavior><button className={`${styles['btn-tip']}`}>Tipps</button></Link>
+          
         </div>
         <div className={`${styles['faq-sec']} absolute bottom-0 left-0 w-full pt-5 p-5`}>
         <Link href="/account/faq" legacyBehavior>

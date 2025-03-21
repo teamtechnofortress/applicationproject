@@ -29,10 +29,9 @@ const handler = async (req, res) => {
       }
 
       // Fetch the profile for the user
-      const profile = await Application.find({ userId: user._id });
+      const profile = await Application.find({ userId: user._id, parent:"0" });
 
       if (!profile || profile.length === 0) {
-        console.log('testing')
         return res.status(200).json({ success: false, message: 'Application not found' });
       }
 

@@ -16,43 +16,41 @@ const PDFDownloadLink = dynamic(
 
 const AllApplications = () => {
   const [cvdata, setCvdata] = useState([]);
+  const [applicationCount, setApplicationCount] = useState(0);
+
+
   const [loading, setLoading] = useState(true);
   const [isEmpty, setIsEmpty] = useState(false);
   const [user, setUser] = useState({ firstname: '', lastname: '' });
   const router = useRouter();
-  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [selectedApplication, setSelectedApplication] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
 
   /** Fetches all apartment applications */
   const fetchProfileData = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/user/allapplications`);
-      if (response.data && Array.isArray(response.data)) {
-        // Get only parent applications (no parentId)
-        const parentApplications = response.data.filter(app => !app.parentId);
-        
-        // Create a map to check if an application is a parent
-        const childParentMap = new Set(response.data.map(app => app.parentId).filter(Boolean));
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/user/allapplications`);
 
-        // Update state
-        setCvdata(parentApplications.map(app => ({
-          ...app,
-          hasChild: childParentMap.has(app._id) // Check if this application has a child
-        })));
-        setIsEmpty(parentApplications.length === 0);
-      } else {
-        setCvdata([]);
-        setIsEmpty(true);
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    if (response.data && Array.isArray(response.data)) {
+      setApplicationCount(response.data.length); 
+      setCvdata(response.data)
+     
+    } else {
       setCvdata([]);
+      setApplicationCount(0);
       setIsEmpty(true);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    setCvdata([]);
+    setApplicationCount(0);
+    setIsEmpty(true);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   /** Fetches logged-in user details */
   const fetchUserData = async () => {
@@ -90,11 +88,14 @@ const AllApplications = () => {
               </h2>
               <div className={`${styles['application-flex-div']}`}>
                 <h2 className={`${styles['application-h4']}`}>Your apartment applications</h2>
-                <Link href="/account/application" legacyBehavior>
-                  <button className={`${styles['or-button']} mt-10`}>
-                    New <img className={`${styles['img-button']}`} src="/images/plus.svg" />
-                  </button>
-                </Link>
+                {/* Get applications where parent === 0 and check if there are 2 */}
+                {applicationCount < 2 && ( // ✅ Only show if there are less than 2 applications
+                  <Link href="/account/application" legacyBehavior>
+                    <button className={`${styles['or-button']} mt-10`}>
+                      New <img className={`${styles['img-button']}`} src="/images/plus.svg" />
+                    </button>
+                  </Link>
+                )}
               </div>
 
               <div className={`${styles['flex-sec']} gap-8`}>
@@ -109,7 +110,7 @@ const AllApplications = () => {
                         <div className={`${styles['pdf-btn-grp']}`}>
                           
                           {/* Hide "Person hinzufügen" if this application already has a child */}
-                          {!profile.hasChild && (
+                          {!profile.childId && (
                             <button
                               type="button"
                               onClick={() => router.push(`/account/application?parentId=${profile._id}`)}
@@ -126,8 +127,8 @@ const AllApplications = () => {
                               event.preventDefault();
                               event.stopPropagation();
 
-                              if (profile.hasChild) {
-                                setSelectedApplication(profile);
+                              if (profile.childId) {
+                                setSelectedApplication({ childId: profile.childId, parentId: profile._id });
                                 setShowPopup(true);
                               } else {
                                 router.push(`/account/editapplication?id=${profile._id}`);
@@ -136,10 +137,6 @@ const AllApplications = () => {
                           >
                             <img src="/images/write.svg" />
                           </button>
-
-
-                       
-
 
                           <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
                             <button className={`${styles['pdf-btn']}`}>
@@ -170,7 +167,10 @@ const AllApplications = () => {
                                 </p>
                               </div>
                               <div className={`${styles['footerColCenter']}`}>
-                                <img className={`${styles['footerlogo']}`} src="/images/barcode.png" alt="Barcode" />
+                                <div className={`${styles['footerlogo']}`} >
+                                  <img src={profile.qrCode} alt="Barcode" />
+                                  <p className={`${styles['scanMe']}`}>Scan Me</p>
+                                </div>
                               </div>
                               <div className={`${styles['footerCol']}`}>
                                 <p className={`${styles['footerText']}`}>{profile.phonenumber}</p>
@@ -221,7 +221,7 @@ const AllApplications = () => {
            <button
               className={styles['popup-btn']}
               onClick={() => {
-                router.push(`/account/editapplication?id=${selectedApplication._id}`);
+                router.push(`/account/editapplication?id=${selectedApplication.parentId}`);
                 setShowPopup(false);
               }}
             >
@@ -231,12 +231,10 @@ const AllApplications = () => {
               <button
               className={styles['popup-btn']}
               onClick={() => {
-                const childId = cvdata.find(app => app.parentId === selectedApplication._id)?._id;
-                console.log(selectedApplication.parentId)
-                if (selectedApplication.parentId) {
-                  router.push(`/account/editapplication?id=${selectedApplication.parentId}`);
+               
+                  router.push(`/account/editapplication?id=${selectedApplication.childId}`);
                   setShowPopup(false);
-                }
+              
               }}
             >
               Edit Child Application

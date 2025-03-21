@@ -92,10 +92,10 @@ const StepThreeInner = ({
 
         <div className="grid grid-cols-2 mt-5 gap-10 mt-3 mb-3">
           <div className="col-span-1 flex items-center justify-end">
-            <img src="/idfront.png" alt="ID Front" className="w-[53%] h-auto" />
+            <img src="/idfront.jpeg" alt="ID Front" className="w-[53%] h-auto" />
           </div>
           <div className="col-span-1 flex items-center">
-            <img src="/idback.png" alt="ID Back" className="w-[55%] h-auto" />
+            <img src="/idback.jpeg" alt="ID Back" className="w-[55%] h-auto" />
           </div>
         </div>
 
