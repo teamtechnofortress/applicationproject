@@ -104,24 +104,24 @@ const StepTwoInner = ({
     console.log("wbsiImageShow before setting state:", wbsiImageShow);
   
 
-    if(fläche === ""){
-      newErrors.fläche = "Fläche is required.";
-    }
-    if(zimerzahl === ""){
-      newErrors.zimerzahl = "Zimerzahl is required.";
-    }
+    // if(fläche === ""){
+    //   newErrors.fläche = "Fläche is required.";
+    // }
+    // if(zimerzahl === ""){
+    //   newErrors.zimerzahl = "Zimerzahl is required.";
+    // }
     // If updatedImages has new images, update imageswbs
     if (updatedImages.length !== 0) {
       console.log("Updating imageswbs with new images from updatedImages");
       setImageswbs(updatedImages);
-      return true;
+      // return true;
     }
     // If imageswbs already contains images, no need to update
-    if (imageswbs && imageswbs.length > 0) {
-      console.log("Validation passed, images already assigned:", imageswbs);
-      return true;
-    } 
-    newErrors.imageswbs = "imageswbs is required.";
+    // if (imageswbs && imageswbs.length > 0) {
+    //   console.log("Validation passed, images already assigned:", imageswbs);
+    //   return true;
+    // } 
+    // newErrors.imageswbs = "imageswbs is required.";
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

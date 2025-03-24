@@ -104,9 +104,6 @@ const application = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
 
-
-
-
   const fetchuserdataforedit = async () => {
     try{
         const res = await fetch("/api/user/getsingelapplication", {
@@ -600,282 +597,354 @@ const application = () => {
     formData.append('mietschuldenfreiheit', mietschuldenfreiheit);
     formData.append('mietverhaltnis', mietverhaltnis);
     // Convert Base64 images to File objects before appending
-    if (imageswbs && imageswbs.length > 0) {
-      for (const [index, image] of imageswbs.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `imageswbs_${index}.png`);
-            formData.append("imageswbs", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `imageswbs_${index}.png`);
-            formData.append("imageswbs", file);
-            console.log("imageswbs blob:", file);
+    // console.log('imageswbs start',imageswbs);
+
+    if (Array.isArray(imageswbs) && imageswbs.length > 0 && imageswbs.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
+      if (imageswbs && imageswbs.length > 0) {
+        for (const [index, image] of imageswbs.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `imageswbs_${index}.png`);
+              formData.append("imageswbs", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `imageswbs_${index}.png`);
+              formData.append("imageswbs", file);
+              console.log("imageswbs blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("imageswbs", image);
+            console.log("Appending file:", image);
           } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for imageswbs:", image);
+            console.warn("Unknown image format:", image);
           }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("imageswbs", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
         }
       }
     }
-    if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
-      for (const [index, image] of einkommensbescheinigungimg.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `einkommensbescheinigungimg_${index}.png`);
-            formData.append("einkommensbescheinigungimg", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `einkommensbescheinigungimg_${index}.png`);
-            formData.append("einkommensbescheinigungimg", file);
-            console.log("einkommensbescheinigungimg blob:", file);
+    else{
+      formData.append("imageswbs", imageswbs);
+    }
+    // console.log('imageswbs end',imageswbs);
+    // console.log('einkommensbescheinigungimg start',einkommensbescheinigungimg);
+    if (Array.isArray(einkommensbescheinigungimg) && einkommensbescheinigungimg.length > 0 && einkommensbescheinigungimg.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
+      if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
+        for (const [index, image] of einkommensbescheinigungimg.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `einkommensbescheinigungimg_${index}.png`);
+              formData.append("einkommensbescheinigungimg", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `einkommensbescheinigungimg_${index}.png`);
+              formData.append("einkommensbescheinigungimg", file);
+              console.log("einkommensbescheinigungimg blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("einkommensbescheinigungimg", image);
+            console.log("Appending file:", image);
           } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for imageswbs:", image);
+            console.warn("Unknown image format:", image);
           }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("einkommensbescheinigungimg", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
         }
       }
+    }else{
+      formData.append("einkommensbescheinigungimg", einkommensbescheinigungimg);
     }
+    // console.log('einkommensbescheinigungimg end',einkommensbescheinigungimg);
+
+
+    // console.log('personal start',personal);
+
+  if (Array.isArray(personal) && personal.length > 0 && personal.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
     if (personal && personal.length > 0) {
-      for (const [index, image] of personal.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `personal_${index}.png`);
-            formData.append("personal", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `personal_${index}.png`);
-            formData.append("personal", file);
-            console.log("personal blob:", file);
+        for (const [index, image] of personal.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `personal_${index}.png`);
+              formData.append("personal", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `personal_${index}.png`);
+              formData.append("personal", file);
+              console.log("personal blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("personal", image);
+            console.log("Appending file:", image);
           } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for imageswbs:", image);
+            console.warn("Unknown image format:", image);
           }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("personal", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
+        }
+    }
+  }
+  else{
+    formData.append("personal", personal);
+  }
+  // console.log('personal end',personal);
+  // return;
+
+    if (Array.isArray(mietschuldenfreiheitimg) && mietschuldenfreiheitimg.length > 0 && mietschuldenfreiheitimg.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
+      if (mietschuldenfreiheitimg.length > 0) {
+        for (const [index, image] of mietschuldenfreiheitimg.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `mietschuldenfreiheitimg_${index}.png`);
+              formData.append("mietschuldenfreiheitimg", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `mietschuldenfreiheitimg_${index}.png`);
+              formData.append("mietschuldenfreiheitimg", file);
+              console.log("mietschuldenfreiheitimg blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("mietschuldenfreiheitimg", image);
+            console.log("Appending file:", image);
+          } else {
+            console.warn("Unknown image format:", image);
+          }
+        }
+      }
+    }else{
+      formData.append("mietschuldenfreiheitimg", mietschuldenfreiheitimg);
+    }
+    // console.log('employment contracet start',employcontract);
+    if (Array.isArray(employcontract) && employcontract.length > 0 && employcontract.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
+      if (employcontract && employcontract.length > 0) {
+        console.log('Eter in if employment contract');
+        for (const [index, image] of employcontract.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `employcontract_${index}.png`);
+              formData.append("employcontract", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `employcontract_${index}.png`);
+              formData.append("employcontract", file);
+              console.log("employcontract blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("employcontract", image);
+            console.log("Appending file:", image);
+          } else {
+            console.warn("Unknown image format:", image);
+          }
+        }
+      }
+    }else{
+      formData.append("employcontract", employcontract);
+    }
+
+    // console.log('employment contracet end',employcontract);
+    // return;
+
+    // console.log('schufa start',schufa);
+    if (Array.isArray(schufa) && schufa.length > 0 && schufa.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
+      if (schufa && schufa.length > 0) {
+        for (const [index, image] of schufa.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `schufa_${index}.png`);
+              formData.append("schufa", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `schufa_${index}.png`);
+              formData.append("schufa", file);
+              console.log("schufa blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("schufa", image);
+            console.log("Appending file:", image);
+          } else {
+            console.warn("Unknown image format:", image);
+          }
         }
       }
     }
-    if (mietschuldenfreiheitimg.length > 0) {
-      for (const [index, image] of mietschuldenfreiheitimg.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `mietschuldenfreiheitimg_${index}.png`);
-            formData.append("mietschuldenfreiheitimg", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `mietschuldenfreiheitimg_${index}.png`);
-            formData.append("mietschuldenfreiheitimg", file);
-            console.log("mietschuldenfreiheitimg blob:", file);
+    else{
+      formData.append("schufa", schufa);
+    }
+    // console.log('schufa end',schufa);
+    // console.log('bwaimages start',bwaimages);
+    if (Array.isArray(bwaimages) && bwaimages.length > 0 && bwaimages.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
+      if (bwaimages && bwaimages.length > 0) {
+        for (const [index, image] of bwaimages.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `bwaimages_${index}.png`);
+              formData.append("bwaimages", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `bwaimages_${index}.png`);
+              formData.append("bwaimages", file);
+              console.log("bwaimages blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("bwaimages", image);
+            console.log("Appending file:", image);
           } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for imageswbs:", image);
+            console.warn("Unknown image format:", image);
           }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("mietschuldenfreiheitimg", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
         }
       }
     }
-    if (employcontract && employcontract.length > 0) {
-      for (const [index, image] of employcontract.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `employcontract_${index}.png`);
-            formData.append("employcontract", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `employcontract_${index}.png`);
-            formData.append("employcontract", file);
-            console.log("employcontract blob:", file);
-          } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for imageswbs:", image);
-          }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("employcontract", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
-        }
-      }
+    else{
+      formData.append("bwaimages", bwaimages);
     }
-    if (schufa && schufa.length > 0) {
-      for (const [index, image] of schufa.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `schufa_${index}.png`);
-            formData.append("schufa", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `schufa_${index}.png`);
-            formData.append("schufa", file);
-            console.log("schufa blob:", file);
-          } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for imageswbs:", image);
-          }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("schufa", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
-        }
-      }
-    }
-    if (bwaimages && bwaimages.length > 0) {
-      for (const [index, image] of bwaimages.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `bwaimages_${index}.png`);
-            formData.append("bwaimages", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `bwaimages_${index}.png`);
-            formData.append("bwaimages", file);
-            console.log("bwaimages blob:", file);
-          } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for imageswbs:", image);
-          }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("bwaimages", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
-        }
-      }
-    }
-    console.log("salarySlip1", salarySlip1);
-    console.log("salarySlip2", salarySlip2);
-    console.log("salarySlip3", salarySlip3);
+    // console.log('bwaimages end',bwaimages);
+    // console.log("salarySlip1", salarySlip1);
+    // console.log("salarySlip2", salarySlip2);
+    // console.log("salarySlip3", salarySlip3);
 
     // return;
     
     // Check if salarySlip1 is not Base64 and not a File object, then reset it
-    if (!(salarySlip1 && (typeof salarySlip1 === "string" && salarySlip1.startsWith("data:image")) || salarySlip1 instanceof File)) {
-      setSalarySlip1(null);
-    }
+    // if (!(salarySlip1 && (typeof salarySlip1 === "string" && salarySlip1.startsWith("data:image")) || salarySlip1 instanceof File)) {
+    //   setSalarySlip1(null);
+    // }
     
     // Check if salarySlip2 is not Base64 and not a File object, then reset it
-    if (!(salarySlip2 && (typeof salarySlip2 === "string" && salarySlip2.startsWith("data:image")) || salarySlip2 instanceof File)) {
-      setSalarySlip2(null);
-    }
+    // if (!(salarySlip2 && (typeof salarySlip2 === "string" && salarySlip2.startsWith("data:image")) || salarySlip2 instanceof File)) {
+    //   setSalarySlip2(null);
+    // }
     
     // Check if salarySlip3 is not Base64 and not a File object, then reset it
-    if (!(salarySlip3 && (typeof salarySlip3 === "string" && salarySlip3.startsWith("data:image")) || salarySlip3 instanceof File)) {
-      setSalarySlip3(null);
-    }
+    // if (!(salarySlip3 && (typeof salarySlip3 === "string" && salarySlip3.startsWith("data:image")) || salarySlip3 instanceof File)) {
+    //   setSalarySlip3(null);
+    // }
     
+    if (Array.isArray(salarySlip1) && salarySlip1.length > 0 && salarySlip1.every(image => typeof image === "string" && image.startsWith("data:image"))) {
+      if (salarySlip1 && salarySlip1.length > 0) {
+        console.log("salarySlip1 condition true");
+        for (const [index, image] of salarySlip1.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `salarySlip1${index}.png`);
+              formData.append("salarySlip1", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `salarySlip1${index}.png`);
+              formData.append("salarySlip1", file);
+              console.log("salarySlip1 blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for salarySlip1:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("salarySlip1", image);
+            console.log("Appending file:", image);
+          } else {
+            console.warn("Unknown image format:", image);
+          }
+        }
+      }
+    }else{
+      // setSalarySlip1('not chnage');
+      formData.append("salarySlip1", salarySlip1);
+      // console.log("salarySlip1 condition false");
+    }
+    if (Array.isArray(salarySlip2) && salarySlip2.length > 0 && salarySlip2.every(image => typeof image === "string" && image.startsWith("data:image"))) {
+      if (salarySlip2 && salarySlip2.length > 0) {
+        for (const [index, image] of salarySlip2.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `salarySlip2${index}.png`);
+              formData.append("salarySlip2", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `salarySlip2${index}.png`);
+              formData.append("salarySlip2", file);
+              console.log("salarySlip2 blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for salarySlip2:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("salarySlip2", image);
+            console.log("Appending file:", image);
+          } else {
+            console.warn("Unknown image format:", image);
+          }
+        }
+      }
+    }else{
+      // setSalarySlip2('not chnage');
+      formData.append("salarySlip2", salarySlip2);
+      // console.log("salarySlip2 condition false");
+    }
+    if (Array.isArray(salarySlip3) && salarySlip3.length > 0 && salarySlip3.every(image => typeof image === "string" && image.startsWith("data:image"))) {
+      if (salarySlip3 && salarySlip3.length > 0) {
+        for (const [index, image] of salarySlip3.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `salarySlip3${index}.png`);
+              formData.append("salarySlip3", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `salarySlip3${index}.png`);
+              formData.append("salarySlip3", file);
+              console.log("salarySlip3 blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for salarySlip3:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("salarySlip3", image);
+            console.log("Appending file:", image);
+          } else {
+            console.warn("Unknown image format:", image);
+          }
+        }
+      }
+    }else{
+      // setSalarySlip3('not chnage');
+      formData.append("salarySlip3", salarySlip3);
+      // console.log("salarySlip3 condition false");
+    }
 
-    if (salarySlip1 && salarySlip1.length > 0) {
-      for (const [index, image] of salarySlip1.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `salarySlip1${index}.png`);
-            formData.append("salarySlip1", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `salarySlip1${index}.png`);
-            formData.append("salarySlip1", file);
-            console.log("salarySlip1 blob:", file);
-          } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for salarySlip1:", image);
-          }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("salarySlip1", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
-        }
-      }
-    }
-    if (salarySlip2 && salarySlip2.length > 0) {
-      for (const [index, image] of salarySlip2.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `salarySlip2${index}.png`);
-            formData.append("salarySlip2", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `salarySlip2${index}.png`);
-            formData.append("salarySlip2", file);
-            console.log("salarySlip2 blob:", file);
-          } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for salarySlip2:", image);
-          }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("salarySlip2", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
-        }
-      }
-    }
-    if (salarySlip3 && salarySlip3.length > 0) {
-      for (const [index, image] of salarySlip3.entries()) {
-        if (typeof image === "string") {
-          if (image.startsWith("data:image")) {
-            // Convert Base64 to File
-            const file = base64ToFile(image, `salarySlip3${index}.png`);
-            formData.append("salarySlip3", file);
-          } else if (image.startsWith("blob:")) {
-            // Convert Blob URL to File
-            const file = await blobToFile(image, `salarySlip3${index}.png`);
-            formData.append("salarySlip3", file);
-            console.log("salarySlip3 blob:", file);
-          } else {
-            // Handle other cases (if necessary)
-            console.warn("Unexpected format for salarySlip3:", image);
-          }
-        } else if (image instanceof File) {
-          // Append File object directly
-          formData.append("salarySlip3", image);
-          console.log("Appending file:", image);
-        } else {
-          console.warn("Unknown image format:", image);
-        }
-      }
-    }
-
-    console.log("Final FormData:", salarySlip1);
-    console.log("Final FormData:", salarySlip2);
-    console.log("Final FormData:", salarySlip3);
+    // console.log("salarySlip1 FormData:", salarySlip1);
+    // console.log("Final FormData:", salarySlip2);
+    // console.log("Final FormData:", salarySlip3);
     // return;
 
     // if (salarySlip && salarySlip.length > 0) {

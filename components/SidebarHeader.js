@@ -6,7 +6,9 @@ import styles from '../styles/login.module.css';
 export const DashboardHeader = () => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const menuRef = useRef(null); // Reference for the dropdown menu
+  const menuRef = useRef(null);
+  const [progress, setProgress] = useState(0);
+
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -30,29 +32,91 @@ export const DashboardHeader = () => {
       console.error('Logout failed:', error);
     }
   };
+  const generalFields = [
+    'vorname', 'nachname', 'geburtsdatum', 'strabe', 'postleitzahl',
+    'hausnummer', 'Ort', 'email', 'phonenumber', 'inputfoto', 'profession',
+    'ausgeubterBeruf', 'arbeitgeber', 'income', 'employment', 'pets',
+    'rentarea', 'proceedings', 'apartment', 'coverletter', 'fläche',
+    'zimerzahl', 'imageswbs', 'personal', 'schufa'
+  ];
+  const calculateProgress = async () => {
+    try {
+      const res = await fetch('/api/user/allapplications');
+      const data = await res.json();
+
+      if (Array.isArray(data) && data.length > 0) {
+        const profile = data[0]; // Use the first application
+        let filledFields = 0;
+
+        // ✅ Count filled general fields
+        generalFields.forEach(field => {
+          const value = profile[field];
+          if (Array.isArray(value)) {
+            if (value.length > 0) filledFields++;
+          } else if (typeof value === 'string' && value.trim() !== '') {
+            filledFields++;
+          }
+        });
+
+        // ✅ Count conditional fields
+        if (profile.profession === 'Ja' && profile.employment === 'Ja') {
+          if (profile.salarySlip1?.length > 0) filledFields++;
+        }
+
+        if (profile.profession === 'Ja' && profile.employment === 'Nein') {
+          if (profile.salarySlip1?.length > 0) filledFields++;
+          if (profile.employcontract?.length > 0) filledFields++;
+        }
+
+        if (profile.profession === 'Nein') {
+          if (profile.bwaimages?.length > 0) filledFields++;
+          if (profile.einkommensbescheinigungimg?.length > 0) filledFields++;
+        }
+
+        if (profile.mietschuldenfreiheit === 'Ja') {
+          if (profile.mietschuldenfreiheitimg?.length > 0) filledFields++;
+        }
+
+        // ✅ Calculate total fields dynamically
+        let totalFields = generalFields.length;
+        if (profile.profession === 'Ja' && profile.employment === 'Ja') {
+          totalFields += 1;
+        }
+        if (profile.profession === 'Ja' && profile.employment === 'Nein') {
+          totalFields += 2;
+        }
+        if (profile.profession === 'Nein') {
+          totalFields += 2;
+        }
+        if (profile.mietschuldenfreiheit === 'Ja') {
+          totalFields += 1;
+        }
+        console.log(totalFields, filledFields)
+        const percentage = Math.round((filledFields / totalFields) * 100);
+        setProgress(percentage);
+      }
+    } catch (error) {
+      console.error('Error calculating progress:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch('/api/user/get', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const res = await fetch('/api/user/get');
         const data = await res.json();
         if (res.ok) {
           setCurrentUser(data.user);
-        } else {
-          console.error(data.message || 'Failed to fetch user data');
         }
       } catch (error) {
         console.error('Failed to fetch user data');
       }
     };
-
+  
     fetchUserData();
+    calculateProgress();
   }, []);
+  
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -72,6 +136,7 @@ export const DashboardHeader = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMenuVisible]);
+  const strokeDashoffset = 251.2 - (251.2 * progress) / 100;
 
   return (
     <div className="flex">
@@ -80,7 +145,7 @@ export const DashboardHeader = () => {
           <a href="/">
           <img src="/images/logo.png" alt="Logo" className="h-12" />
           </a>
-          <h1 className={`${styles['sidebar-h1']} mt-10`}>Invite + recommend friends</h1>
+          {/* <h1 className={`${styles['sidebar-h1']} mt-10`}>Invite + recommend friends</h1> */}
           <div className={`${styles['progress-circle']} relative`}>
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               <circle strokeWidth="8" cx="50" cy="50" r="40" fill="none"></circle>
@@ -93,11 +158,11 @@ export const DashboardHeader = () => {
                 r="40"
                 fill="transparent"
                 strokeDasharray="251.2"
-                strokeDashoffset="calc(251.2px - (251.2px * 70) / 100)"
+                strokeDashoffset={strokeDashoffset}
               ></circle>
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xl font-bold mb-10 text-gray-700 progress-text">70%</span>
+              <span className="text-xl font-bold mb-10 text-gray-700 progress-text"> {progress}%</span>
             </div>
             <p className={`${styles['progress-p']} font-bold text-gray-700 text-center`}>Applicant folder</p>
           </div>

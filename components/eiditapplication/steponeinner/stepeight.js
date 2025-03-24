@@ -99,14 +99,14 @@ useEffect(() => {
     if (updatedImages.length !== 0) {
       console.log("Updating imageswbs with new images from updatedImages");
       seteinkommensbescheinigungimg(updatedImages);
-      return true;
+      // return true;
     }
     // If imageswbs already contains images, no need to update
-    if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
-      console.log("Validation passed, images already assigned:", einkommensbescheinigungimg);
-      return true;
-    } 
-    newErrors.einkommensbescheinigungimg = "Einkommensbescheinigung ist erforderlich.";
+    // if (einkommensbescheinigungimg && einkommensbescheinigungimg.length > 0) {
+    //   console.log("Validation passed, images already assigned:", einkommensbescheinigungimg);
+    //   return true;
+    // } 
+    // newErrors.einkommensbescheinigungimg = "Einkommensbescheinigung ist erforderlich.";
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

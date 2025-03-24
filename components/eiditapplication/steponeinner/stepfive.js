@@ -22,9 +22,9 @@ const StepFiveInner = ({
     const newErrors = {};
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
 
-    if (!safeTrim(ausgeubterBeruf)) newErrors.ausgeubterBeruf = "Ausgeübter Beruf is required.";
-    if (!safeTrim(arbeitgeber)) newErrors.arbeitgeber = "Arbeitgeber is required.";
-    if (!safeTrim(income)) newErrors.income = "Monatliches is required.";
+    // if (!safeTrim(ausgeubterBeruf)) newErrors.ausgeubterBeruf = "Ausgeübter Beruf is required.";
+    // if (!safeTrim(arbeitgeber)) newErrors.arbeitgeber = "Arbeitgeber is required.";
+    // if (!safeTrim(income)) newErrors.income = "Monatliches is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors

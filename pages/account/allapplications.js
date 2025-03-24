@@ -143,6 +143,7 @@ const AllApplications = () => {
                               <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
                             </button>
                           </a>
+                          
                         </div>
 
                         {/* Dynamic PDF Banner */}

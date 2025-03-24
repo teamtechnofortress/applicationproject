@@ -82,35 +82,39 @@ useEffect(() => {
 
   // console.log("Updated Salary Slip salarySlip1:", salarySlip1);
   // console.log("Updated Salary Slip salarySlip2:", salarySlip2);
-  console.log("Updated Salary Slip salarySlip3:", salarySlip3);
+  // console.log("Updated Salary Slip salarySlip3:", salarySlip3);
 
 }, [salarySlip1, salarySlip2, salarySlip3]);
 
 
 // Separate useEffect to log the latest updated state
 useEffect(() => {
-  console.log("Updated filledSlots:", filledSlots);
+  // console.log("Updated filledSlots:", filledSlots);
 }, [filledSlots]);
 
 useEffect(() => {
-  console.log("Updated salarySlipPreview:", salarySlipPreview);
+  // console.log("Updated salarySlipPreview:", salarySlipPreview);
 }, [salarySlipPreview]);
 
 useEffect(() => {
-  console.log("Updated zunu test salarySlip:", salarySlip);
+  // console.log("Updated zunu test salarySlip:", salarySlip);
 }, [salarySlip]);
 
 useEffect(() => {
-  console.log("latest Updated salarySlip1:", salarySlip1);
+  // console.log("latest Updated salarySlip1:", salarySlip1);
 }, [salarySlip1]);
 
 useEffect(() => {
-  console.log("latest Updated salarySlip2:", salarySlip2);
+  // console.log("latest Updated salarySlip2:", salarySlip2);
 }, [salarySlip2]);
 
 useEffect(() => {
-  console.log("latest Updated salarySlip3:", salarySlip3);
+  // console.log("latest Updated salarySlip3:", salarySlip3);
 }, [salarySlip3]);
+
+useEffect(() => {
+  console.log("latest Updated employcontract:", employcontract);
+}, [employcontract]);
 
 
  const handleFileChange = async (event, type) => {
@@ -221,7 +225,6 @@ useEffect(() => {
       return newArray.filter(Boolean); // Remove null values
     });
 
-
   };
 
 
@@ -235,29 +238,46 @@ useEffect(() => {
   const validateFields = () => {
     const newErrors = {};
   
-    // Merge stored and newly uploaded salary slips into one array with exact indexes
+    // Merge stored and newly uploaded salary slips into one array
     let mergedFiles = [salarySlip1, salarySlip2, salarySlip3];
   
     // Fill empty slots with uploaded salarySlip values in the correct order
     salarySlip.forEach((file) => {
-      const emptyIndex = mergedFiles.findIndex((item) => !item); // Find first empty slot
+      const emptyIndex = mergedFiles.findIndex(
+        (item) => !item || (Array.isArray(item) && item.length === 0)
+      );
       if (emptyIndex !== -1) {
         mergedFiles[emptyIndex] = file;
       }
     });
   
+    // Ensure empty slots are explicitly set to null
+    mergedFiles = mergedFiles.map((item) =>
+      Array.isArray(item) && item.length === 0 ? null : item
+    );
+  
     console.log("Final Merged Salary Slips:", mergedFiles);
   
-    // Ensure all 3 slots are filled
-    const isAnyIndexMissing = mergedFiles.some((file) => !file);
+    // ✅ Ensure at least 1 file is uploaded
+    const validFiles = mergedFiles.filter((file) => file !== null);
+    if (validFiles.length < 1) {
+      newErrors.salarySlip = "Bitte laden Sie mindestens einen Gehaltsnachweis hoch.";
+    }
   
-    // if (isAnyIndexMissing) {
-    //   newErrors.salarySlip = "Bitte stellen Sie sicher, dass genau 3 Gehaltsnachweise vorhanden sind.";
-    // }
+    // ✅ Ensure no more than 3 files are uploaded
+    if (validFiles.length > 3) {
+      newErrors.salarySlip = "Sie können maximal 3 Gehaltsnachweise hochladen.";
+    }
+
+    if (employcontractupdatedFilesstate.length !== 0) {
+      // console.log("Updating imageswbs with new images from updatedImages");
+      setemploycontract(employcontractupdatedFilesstate);
+    }
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
   const validateFieldsemploy = () => {
     const newErrors = {};
   
@@ -271,7 +291,7 @@ useEffect(() => {
       // console.log("Validation passed, images already assigned:", employcontract);
       return true;
     } 
-    newErrors.employcontract = "employcontract vorhanden sind.";
+    // newErrors.employcontract = "employcontract vorhanden sind.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -411,28 +431,34 @@ useEffect(() => {
             type="button"
             className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
             onClick={() => {
-              if (validateFields() && validateFieldsemploy()) {
+              if (validateFields()) {
                 if (salarySlip.length !== 0) {
-                  let updatedFilledSlots = [...filledSlots]; // Copy of current filled slots array
+                  let updatedFilledSlots = [...filledSlots]; // Copy current filled slots array
             
                   salarySlip.forEach((file) => {
-                    // Assign to first empty slot
-                    if (salarySlip1.length === 0 && updatedFilledSlots[0] === 0) {
+                    if ((!salarySlip1 || salarySlip1.length === 0) && updatedFilledSlots[0] === 0) {
                       setSalarySlip1(file);
                       updatedFilledSlots[0] = 1; // Mark slot as filled
-                    } else if (salarySlip2.length === 0 && updatedFilledSlots[1] === 0) {
+                    } else if ((!salarySlip2 || salarySlip2.length === 0) && updatedFilledSlots[1] === 0) { 
                       setSalarySlip2(file);
                       updatedFilledSlots[1] = 1;
-                    } else if (salarySlip3.length === 0 && updatedFilledSlots[2] === 0) {
+                    } else if ((!salarySlip3 || salarySlip3.length === 0) && updatedFilledSlots[2] === 0) {
                       setSalarySlip3(file);
                       updatedFilledSlots[2] = 1;
                     }
                   });
+            
+                  // console.log("end Updated salarySlip1:", salarySlip1);
+                  // console.log("end Updated salarySlip2:", salarySlip2);
+                  // console.log("end Updated salarySlip3:", salarySlip3);
+                  console.log("end Updated employcontract:", employcontract);
+            
                   setFilledSlots(updatedFilledSlots); // ✅ Update the filledSlots array
                 }
                 setCurrentStep(8);
               }
             }}
+            
           >
             Weiter
           </button>

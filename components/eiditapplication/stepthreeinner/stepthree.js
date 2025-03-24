@@ -96,18 +96,15 @@ useEffect(() => {
     if (updatedImages.length !== 0) {
       console.log("Updating imageswbs with new images from updatedImages");
       setPersonal(updatedImages);
-      return true;
+      // return true;
     }
     // If imageswbs already contains images, no need to update
-    if (personal && personal.length > 0) {
-      console.log("Validation passed, images already assigned:", personal);
-      return true;
-    } 
-      newErrors.personal = "Personalausweis ist erforderlich.";
-  
-    // if (!personal || personal.length === 0) {
-    //   newErrors.personal = "Personalausweis ist erforderlich.";
-    // }
+    // if (personal && personal.length > 0) {
+    //   console.log("Validation passed, images already assigned:", personal);
+    //   return true;
+    // } 
+      // newErrors.personal = "Personalausweis ist erforderlich.";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
   };

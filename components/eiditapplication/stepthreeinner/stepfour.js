@@ -96,17 +96,15 @@ useEffect(() => {
      if (updatedImages.length !== 0) {
       console.log("Updating imageswbs with new images from updatedImages");
       setSchufa(updatedImages);
-      return true;
+      // return true;
     }
     // If imageswbs already contains images, no need to update
-    if (schufa && schufa.length > 0) {
-      console.log("Validation passed, images already assigned:", schufa);
-      return true;
-    } 
-    newErrors.schufa = "Schufa ist erforderlich.";
-    // if (!schufa || schufa.length === 0) {
-    //   newErrors.schufa = "Schufa ist erforderlich.";
-    // }
+    // if (schufa && schufa.length > 0) {
+    //   console.log("Validation passed, images already assigned:", schufa);
+    //   return true;
+    // } 
+    // newErrors.schufa = "Schufa ist erforderlich.";
+   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
   };

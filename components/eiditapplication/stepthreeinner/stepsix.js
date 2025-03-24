@@ -10,9 +10,9 @@ const StepSixInner = ({
   const { convertPdfToImages } = usePdfToImages(); // ✅ Use the hook for PDF conversion
   const [errors, setErrors] = useState({});
   const [isTipModal, setisTipModal] = useState(false);
-  const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
+  const [isConverting, setIsConverting] = useState(false); 
   const fileInputRef = useRef(null);
-  const [previewImage, setPreviewImage] = useState(null); // ✅ For preview display
+  const [previewImage, setPreviewImage] = useState(null); 
   const [updatedImages, setUpdatedImages] = useState([]);
 
  // ✅ Ensure preview persists when navigating back to this step
@@ -38,11 +38,6 @@ useEffect(() => {
     }
   }
 }, [mietschuldenfreiheitimg]);
-
-
-
-
-
 
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
@@ -82,7 +77,7 @@ useEffect(() => {
     setUpdatedImages([]);
     setPreviewImage(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Reset input field
+      fileInputRef.current.value = ""; 
     }
   };
 
@@ -92,14 +87,14 @@ useEffect(() => {
     if (updatedImages.length !== 0) {
       console.log("Updating imageswbs with new images from updatedImages");
       setMietschuldenfreiheitimg(updatedImages);
-      return true;
+      // return true;
     }
     // If imageswbs already contains images, no need to update
-    if (mietschuldenfreiheitimg && mietschuldenfreiheitimg.length > 0) {
-      console.log("Validation passed, images already assigned:", mietschuldenfreiheitimg);
-      return true;
-    } 
-    newErrors.mietschuldenfreiheitimg = "Mietschuldenfreiheitsbescheinigung ist erforderlich.";
+    // if (mietschuldenfreiheitimg && mietschuldenfreiheitimg.length > 0) {
+    //   console.log("Validation passed, images already assigned:", mietschuldenfreiheitimg);
+    //   return true;
+    // } 
+    // newErrors.mietschuldenfreiheitimg = "Mietschuldenfreiheitsbescheinigung ist erforderlich.";
   
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
