@@ -5,7 +5,7 @@ import { connectDb } from "@/helper/db";
 import { DateTime } from "luxon";
 import nodemailer from 'nodemailer';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe("sk_test_51KMSOYIBEl0UnhG58lyeeFO3liqhus1mAOwEvqzlAAuBidKPmA5BEsTMpIm8Drxg7I4Z2jVlU2Qfke0eEu6OUzxg005fGxexFt");
 export const config = { api: { bodyParser: false } };
 
 const transporter = nodemailer.createTransport({
