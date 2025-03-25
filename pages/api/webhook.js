@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import Subscription from "@/models/Subscription";
 import { connectDb } from "@/helper/db";
 import { DateTime } from "luxon";
+import nodemailer from 'nodemailer';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const config = { api: { bodyParser: false } };

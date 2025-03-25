@@ -10,7 +10,7 @@ import { Elements } from "@stripe/react-stripe-js";
 
 
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISH_KEY);
+const stripePromise = loadStripe('pk_test_51KMSOYIBEl0UnhG5zx0cMrm2fvQiMWEhRYaJ58UsniuBX7XRct7CDA5qD3FrGOXJZhf61MhZIYtXO5j2WSrU0Fg200jpLbCMCg');
 
 const Checkout = () => {
   const router = useRouter();
