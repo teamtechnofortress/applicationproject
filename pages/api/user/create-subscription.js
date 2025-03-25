@@ -5,6 +5,8 @@ import { connectDb } from "@/helper/db";
 import Subscription from "@/models/Subscription";
 import { parse } from "cookie";
 import { DateTime } from "luxon"; // Install via `npm install luxon`
+import nodemailer from "nodemailer";
+
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -36,7 +38,6 @@ export default async function handler(req, res) {
 
         // Validate selected plan
         const durationMonths = planDurations[priceId];
-        console.log(priceId)
         if (!durationMonths) return res.status(400).json({ error: "Invalid plan selected." });
 
         // Check if customer already exists
@@ -66,50 +67,60 @@ export default async function handler(req, res) {
         await stripe.customers.update(customer.id, {
             invoice_settings: { default_payment_method: paymentMethodId },
         });
-
-        // Calculate `cancel_at` date (end of subscription)
-        const cancelAt = Math.floor(DateTime.now().plus({ months: durationMonths }).toSeconds());
-
+        const initialTermEnd = DateTime.now().plus({ months: durationMonths });
         // Create subscription with auto-cancel
         const subscription = await stripe.subscriptions.create({
             customer: customer.id,
             items: [{ price: priceId }],
+            metadata: {
+                userId: user._id.toString(),
+                durationMonths: durationMonths.toString(),
+
+            },
             expand: ["latest_invoice.payment_intent"],
-            cancel_at: cancelAt,
         });
 
-        // Determine current plan from priceId
-        const planMap = {
-            "price_1R2oilIBEl0UnhG5tD4M6hb7": "3 Monate",
-            "price_1R2oilIBEl0UnhG5qLbyj6Qc": "6 Monate",
-            "price_1R2oilIBEl0UnhG5NqQwt5GU": "12 Monate",
-        };
-        const currentPlan = planMap[priceId] || "Unknown";
+            // Configure nodemailer transporter
+        const transporter = nodemailer.createTransport({
+            host:  process.env.SMTP_HOST,
+            port:  process.env.SMTP_PORT,
+            secure: true,
+            auth: {
+            user:  process.env.SMTP_USERNAME, // Your Gmail
+            pass:  process.env.SMTP_PASSWORD, // Use App Password
+            },
+        });;
+  
+      const mailOptions = {
+        from: `"Wohnungsmappe" <info@wohnungsmappe.com>`,
+        to: customerEmail,
+        subject: "🎉 Deine Mitgliedschaft ist aktiv",
+        html: `
+          <p>Hallo ${user.firstname},</p>
+          <p>Dein Abonnement über ${durationMonths} Monate wurde erfolgreich aktiviert.</p>
+          <p>Vielen Dank für dein Vertrauen!</p>
+        `,
+      };
+  
+      await transporter.sendMail(mailOptions);
 
-        console.log("Subscription Created:", subscription);
+        // const initialTermEnd = Math.floor(DateTime.now().plus({ months: durationMonths }).toSeconds());
 
-        // Save subscription details to database
-        const newSubscription = await Subscription.create({
+
+        await Subscription.create({
             userId: user._id,
+            userEmail: user.userEmail,
             customerId: customer.id,
             subId: subscription.id,
+            currentplan: durationMonths + " Monate",
+            paymentType : "subscription",
             status: subscription.status,
-            currentplan: currentPlan,
-            paymentType: "subscription",
             current_period_start: new Date(subscription.current_period_start * 1000),
             current_period_end: new Date(subscription.current_period_end * 1000),
-            nextInvoiceDate: new Date(subscription.current_period_end * 1000),
-            cancelAt: new Date(subscription.cancel_at * 1000),
+            initialTermEnd: initialTermEnd.toJSDate(),
+            cancelAtPeriodEnd: false,
         });
-
-        res.status(200).json({
-            success: true,
-            subscriptionId: subscription.id,
-            message: "Subscription successfully created and saved.",
-            nextInvoiceDate: new Date(subscription.current_period_end * 1000).toISOString(),
-            cancelAt: new Date(cancelAt * 1000).toISOString(),
-            status: subscription.status,
-        });
+        res.status(200).json({ success: true, message: "Subscription successfully created and saved.", subscriptionId: subscription.id });
     } catch (error) {
         console.error("Error creating subscription:", error);
         res.status(400).json({ error: error.message });

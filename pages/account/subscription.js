@@ -87,6 +87,25 @@ const Subscription = () => {
       setLoading(false);
     }
   };
+  const handleCancelSubscription = async () => {
+    try {
+      const res = await fetch("/api/user/cancel-subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      const data = await res.json();
+  
+      if (res.ok) {
+        toast.success("Dein Abonnement wird zum Ende des Zeitraums gekündigt.");
+        // Optionally refresh UI or update local state
+      } else {
+        toast.error(data.error || "Fehler beim Kündigen des Abonnements.");
+      }
+    } catch (err) {
+      toast.error("Serverfehler beim Kündigen.");
+    }
+  };
 
   /** ✅ Fetch User Data */
   useEffect(() => {
@@ -159,6 +178,7 @@ const Subscription = () => {
 
                         <button
                           type="button"
+                          onClick= {handleCancelSubscription}
                           className={`${styles["email-btn"]} bg-blue-500 text-white px-4 py-2 rounded`}
                         >
                           Stornieren

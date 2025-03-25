@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     }
 
     // ✅ Return Customer ID
-    res.status(200).json({ customerId: subscription.customerId,  currentplan: subscription.currentplan,  status: subscription.status });
+    res.status(200).json({ customerId: subscription.customerId,  currentplan: subscription.currentplan,  status: subscription.status, d: subscription.initialTermEnd });
 
   } catch (error) {
     console.error("Error fetching customerId:", error);
