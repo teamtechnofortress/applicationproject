@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
   try {
     event = stripe.webhooks.constructEvent(buf.toString(), sig, endpointSecret);
-
+    console.log('1t');
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
@@ -41,7 +41,9 @@ export default async function handler(req, res) {
   switch (event.type) {
     case "invoice.payment_succeeded":
       // Auto-renew logic
+      console.log('2t');
       if (sub.subscription) {
+        console.log('3t');
         const subscription = await stripe.subscriptions.retrieve(sub.subscription);
         const dbSub = await Subscription.findOne({ subId: subscription.id });
         if (!dbSub) break;
@@ -53,6 +55,7 @@ export default async function handler(req, res) {
         console.log('web now', now)
         console.log('web initialEnd', initialEnd)
         if (now >= initialEnd && !dbSub.cancelAtPeriodEnd) {
+          console.log('4t');
           let newDuration = duration;
           let newInitialTermEnd = DateTime.now();
 
@@ -84,7 +87,7 @@ export default async function handler(req, res) {
           subject: "🔁 Dein Abonnement wurde verlängert",
           html: `
             <p>Hallo,</p>
-            <p>Ihr Abonnement wurde erfolgreich verlängert.</p>
+            <p>Ihr ${initialEnd}Abonnement wurde erfolgreich ${now} verlängert ${dbSub.cancelAtPeriodEnd}.</p>
           `,
         });
       }
@@ -109,5 +112,5 @@ export default async function handler(req, res) {
       break;
   }
 
-  res.status(200).json({ received: true, s: sub.subscription });
+  res.status(200).json({ received12: true, s: sub.subscription });
 }

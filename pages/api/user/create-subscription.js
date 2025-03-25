@@ -9,7 +9,7 @@ import nodemailer from "nodemailer";
 
 
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe("sk_test_51KMSOYIBEl0UnhG58lyeeFO3liqhus1mAOwEvqzlAAuBidKPmA5BEsTMpIm8Drxg7I4Z2jVlU2Qfke0eEu6OUzxg005fGxexFt");
 
 export default async function handler(req, res) {
     if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
