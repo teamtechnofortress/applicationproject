@@ -93,7 +93,6 @@ const ThirdStep = ({
 
   return (
     <>
-
       {thirdStepComponent !== null && currentStep !== 23 && (
         <div className="mb-6">
           <div className="w-full bg-gray-200 rounded-full h-2.5">
