@@ -1,7 +1,7 @@
 
 .main-heading{
     font-family: 'Poppins Bold';
-    font-size: 29px;
+    font-size: 32px;
     font-weight: 900;
 }
 .main-upload-heading{
@@ -61,6 +61,22 @@
 .next-btn{
     width: 100%;
     background: #e7fc42;
+    color: #333333;
+}
+.mappe-btn{
+    width: 90%;
+    font-size: 22px;
+    font-weight: 600;
+    padding: 16px 0px;
+    background: #e7fc42;
+    color: #333333;
+}
+.zum-btn{
+    width: 90%;
+    font-size: 22px;
+    font-weight: 600;
+    padding: 16px 0px;
+    background: #efefef;
     color: #333333;
 }
 .upload-btn{

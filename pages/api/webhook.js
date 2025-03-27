@@ -5,7 +5,7 @@ import { connectDb } from "@/helper/db";
 import { DateTime } from "luxon";
 import nodemailer from 'nodemailer';
 
-const stripe = new Stripe("sk_test_51KMSOYIBEl0UnhG58lyeeFO3liqhus1mAOwEvqzlAAuBidKPmA5BEsTMpIm8Drxg7I4Z2jVlU2Qfke0eEu6OUzxg005fGxexFt");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const config = { api: { bodyParser: false } };
 
 const transporter = nodemailer.createTransport({
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
   try {
     event = stripe.webhooks.constructEvent(buf.toString(), sig, endpointSecret);
-    console.log('1t');
+
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
@@ -41,9 +41,9 @@ export default async function handler(req, res) {
   switch (event.type) {
     case "invoice.payment_succeeded":
       // Auto-renew logic
-      console.log('2t');
+
       if (sub.subscription) {
-        console.log('3t');
+
         const subscription = await stripe.subscriptions.retrieve(sub.subscription);
         const dbSub = await Subscription.findOne({ subId: subscription.id });
         if (!dbSub) break;
@@ -52,10 +52,10 @@ export default async function handler(req, res) {
         const initialEndDB = new Date(dbSub.initialTermEnd);
         const initialEnd = initialEndDB.getTime() / 1000; // to seconds
         const duration = parseInt(subscription.metadata.durationMonths || "3");
-        console.log('web now', now)
-        console.log('web initialEnd', initialEnd)
+       
         if (now >= initialEnd && !dbSub.cancelAtPeriodEnd) {
-          console.log('4t');
+        
+         
           let newDuration = duration;
           let newInitialTermEnd = DateTime.now();
 
@@ -76,36 +76,39 @@ export default async function handler(req, res) {
           newInitialTermEnd = DateTime.now().plus({ months: newDuration });
 
           dbSub.initialTermEnd = newInitialTermEnd.toJSDate();
+
+          
           await dbSub.save();
 
           console.log(`📅 New initialTermEnd set for subscription ${subscription.id}: ${newInitialTermEnd.toISO()}`);
         }
-         // ✅ Send email notification for payment success / renewal
-         await transporter.sendMail({
-          from: `"Wohnungsmappe" <info@wohnungsmappe.com>`,
-          to: dbSub.userEmail,
-          subject: "🔁 Dein Abonnement wurde verlängert",
-          html: `
-            <p>Hallo,</p>
-            <p>Ihr ${initialEnd}Abonnement wurde erfolgreich ${now} verlängert ${dbSub.cancelAtPeriodEnd}.</p>
-          `,
-        });
+        // ✅ Send email notification for payment success / renewal
+        //  await transporter.sendMail({
+        //   from: `"Wohnungsmappe" <info@wohnungsmappe.com>`,
+        //   to: dbSub.userEmail,
+        //   subject: "🔁 Dein Abonnement wurde verlängert",
+        //   html: `
+        //     <p>Hallo,</p>
+        //     <p>Ihr ${initialEnd}Abonnement wurde erfolgreich ${now} verlängert ${dbSub.cancelAtPeriodEnd}.</p>
+        //   `,
+        // });
       }
       break;
 
+      
     case "customer.subscription.deleted":
       const canceledSub = await Subscription.findOneAndUpdate(
         { subId: sub.id },
         { status: "canceled" }
       );
-      if (canceledSub) {
-        await transporter.sendMail({
-          from: `"Wohnungsmappe" <info@wohnungsmappe.com>`,
-          to: canceledSub.userEmail,
-          subject: "Abo gekündigt",
-          text: `Ihr Abonnement wurde erfolgreich gekündigt.`,
-        });
-      }
+      // if (canceledSub) {
+      //   await transporter.sendMail({
+      //     from: `"Wohnungsmappe" <info@wohnungsmappe.com>`,
+      //     to: canceledSub.userEmail,
+      //     subject: "Abo gekündigt",
+      //     text: `Ihr Abonnement wurde erfolgreich gekündigt.`,
+      //   });
+      // }
       break;
 
     default:

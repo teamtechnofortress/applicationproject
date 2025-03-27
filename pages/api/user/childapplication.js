@@ -545,7 +545,7 @@ const handler = async (req, res) => {
 
             // ✅ Generate New PDF Name
             const pdfFileName = `${newForm.vorname}_${newForm.nachname}_${Date.now()}.pdf`;
-            const predefinedPdfUrl = `https://ni5rpxtvitzsvqtj.public.blob.vercel-storage.com/${pdfFileName}`;
+            const predefinedPdfUrl = `${process.env.BLOB_UPLOAD_URL}/${pdfFileName}`;
 
             // ✅ Generate QR Code for the PDF
             const qrCodeUrl = await generateAndUploadQRCode(predefinedPdfUrl);

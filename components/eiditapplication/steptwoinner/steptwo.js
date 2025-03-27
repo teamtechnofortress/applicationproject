@@ -20,7 +20,7 @@ const StepTwoInner = ({
     const newErrors = {};
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
 
-    // if (!safeTrim(coverletter)) newErrors.coverletter = "CoverLetter is required.";
+    if (!safeTrim(coverletter)) newErrors.coverletter = "CoverLetter is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors

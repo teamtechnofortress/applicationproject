@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from "@stripe/react-stripe-js";
 import styles from '@/styles/subscription.module.css';
+import { useRouter } from "next/router";
+import { toast } from 'react-toastify';
+import { PLAN_IDS  } from "@/lib/stripePlans";
 
 const CheckoutForm = ({ priceId, customerEmail }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,6 +29,7 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
 
         if (!cardNumberElement || !cardExpiryElement || !cardCvcElement) {
             setError("Card input fields are missing.");
+            
             setLoading(false);
             return;
         }
@@ -39,12 +44,14 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
             setLoading(false);
             return;
         }
-        const isOneTime = priceId === "price_1R3x3mIBEl0UnhG5T8lqLHvW"; // ✅ Check if it's a one-time payment
+        // const isOneTime = priceId === "price_1R3x3mIBEl0UnhG5T8lqLHvW";
+        const isOneTime = priceId === PLAN_IDS.price_one_time;
+
 
         const endpoint = isOneTime 
         ? "/api/user/one-time-payment" // One-Time Payment API
         : "/api/user/create-subscription"; // Subscription API
-
+        try {
         const response = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -60,8 +67,18 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
 
         if (data.error) {
             setError(data.error);
+            toast.error(data.error);
         } else {
-            alert("payment successful!");
+            toast.success("Zahlung erfolgreich!");
+             // redirect after short delay
+            // setTimeout(() => {
+            //     router.push("/account/allapplications");
+            // }, 1500);
+        }
+
+        } catch (err) {
+            console.error("Network error:", err);
+            toast.error("Ein Fehler ist aufgetreten. Bitte versuche es erneut.");
         }
 
         setLoading(false);

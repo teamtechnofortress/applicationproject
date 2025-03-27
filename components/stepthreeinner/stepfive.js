@@ -105,7 +105,11 @@ const StepFiveInner = ({
               className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
               onClick={() => {
                 if (validateFields()) {
-                  setCurrentStep(19);
+                  if (mietschuldenfreiheit === "Nein") {
+                    setCurrentStep((prevStep) => prevStep + 2);
+                  } else {
+                    setCurrentStep((prevStep) => prevStep + 1);
+                  }
                 }
               }}
             >

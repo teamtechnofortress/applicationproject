@@ -27,10 +27,10 @@ const StepTwoInner = ({
   };
 
   const handleNextClick = () => {
-    console.log("Current Step before:", currentStep);
-    setComponents(3);
-    setCurrentStep(14);
-    console.log("Current Step after:", 13);
+    if (validateFields()) { 
+      setComponents(3);
+      setCurrentStep(14);
+    }
   };
 
   return (

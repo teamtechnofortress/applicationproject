@@ -18,12 +18,11 @@ const StepOneInner = ({
 
   return (
     <div className={`${styles["bg-second"]} flex flex-col items-center`}>
-       <div className={`${styles["bg-heading"]} w-full text-center`}>
-         <p className={`${styles["main-heading-2"]} mt-10 mb-10 font-bold`}>Schritt 3</p>
+      <div className={`${styles["bg-heading"]} w-full text-center`}>
+        <p className={`${styles["main-heading-2"]}`}>Schritt 3</p>
+        <p className={`${styles["second-heading"]} font-bold`}>Uploads</p>
        </div>
-     
-       <p className={`${styles["second-heading"]} mt-10 mb-10 font-bold`}>Uploads</p>
-     
+          
        <div className="flex justify-between w-[70%] mx-auto mt-10 px-4">
          <button
            type="button"

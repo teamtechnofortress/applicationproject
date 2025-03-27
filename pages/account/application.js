@@ -102,6 +102,11 @@ const application = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
 
+  const [pdfurltodownloud, setPdfurltodownloud] = useState('');
+  useEffect(() => {
+    console.log('pdfurltodownloud', pdfurltodownloud);
+  }, [pdfurltodownloud]);
+
 
 
   const toggleMenu = () => {
@@ -817,6 +822,8 @@ const application = () => {
       const response = await res.json();
       if (response.success) {
         setLoading(false);
+        setPdfurltodownloud(response.pdfUrl);        
+       
         // 666c3ac22407a94457a9f6e6
         //   localStorage.setItem('token', response.token)
         toast.success("Form submitted successfully", {
@@ -829,6 +836,7 @@ const application = () => {
           progress: undefined,
           theme: "light",
         });
+        setCurrentStep(23);
         
         // router.push(`${process.env.NEXT_PUBLIC_HOST}/account/success`);
       } else {
@@ -1065,6 +1073,7 @@ const application = () => {
                   setCurrentStep={setCurrentStep}
                   handleChange={handleChange}
                   setComponents={setComponents}
+                  pdfurltodownloud={pdfurltodownloud}
                 />
               )}
              

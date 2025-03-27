@@ -17,9 +17,20 @@ const StepFourInner = ({
  // ✅ Ensure preview persists when navigating back to this step
  useEffect(() => {
   if (schufa && schufa.length > 0) {
-    setSchufaImageShow(schufa[0]); // Show the first image or file
+    const first = schufa[0];
+
+    if (typeof first === "string") {
+      // Already a URL or base64 string
+      setSchufaImageShow(first);
+    } else if (first instanceof File) {
+      // Convert File to base64 for consistent preview
+      const reader = new FileReader();
+      reader.onloadend = () => setSchufaImageShow(reader.result);
+      reader.readAsDataURL(first);
+    }
   }
 }, [schufa]);
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];

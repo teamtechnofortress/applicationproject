@@ -112,11 +112,11 @@ useEffect(() => {
       // return true;
     }
     // If imageswbs already contains images, no need to update
-    // if (bwaimages && bwaimages.length > 0) {
-    //   console.log("Validation passed, images already assigned:", bwaimages);
-    //   return true;
-    // } 
-    // newErrors.bwaimages = "BWA ist erforderlich.";
+    if (bwaimages && bwaimages.length > 0) {
+      console.log("Validation passed, images already assigned:", bwaimages);
+      return true;
+    } 
+    newErrors.bwaimages = "BWA ist erforderlich.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

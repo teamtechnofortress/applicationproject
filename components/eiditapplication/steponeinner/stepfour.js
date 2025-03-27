@@ -40,7 +40,7 @@ const StepFourInner = ({
                               value="Ja"
                               onChange={handleChange}
                               checked={profession === "Ja"}
-                              onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
+                              // onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
                             />
                             <label
                               className={`${styles["form-check-label"]} ${styles["profession-btn"]} ${styles["radio-btn"]} ${
@@ -61,7 +61,7 @@ const StepFourInner = ({
                               value="Nein"
                               onChange={handleChange}
                               checked={profession === "Nein"}
-                              onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
+                              // onClick={() => setCurrentStep((prevStep) => prevStep + 1)}
                             />
                             <label
                               className={`${styles["form-check-label"]} ${styles["profession-btn"]} ${styles["radio-btn"]} ${
@@ -79,15 +79,30 @@ const StepFourInner = ({
                     </div>
                   
 
-  
-                    <button type="button" className={`${styles["back-btn"]} mt-10 px-6 py-3 rounded-lg bg-blue-500 mx-auto block flex items-center justify-between`}
+                    <div className="flex justify-between mt-10">
+                        <button
+                          type="button"
+                          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
                           onClick={() => {
                             setCurrentStep(2); 
                           }}
-                            > 
-                               <img src="/images/back.svg" alt="icon"  />
-                               Zurück 
-                    </button>
+                        >
+                          Zurück
+                        </button>
+                        <div className="col-span-2">
+                        <button
+                            type="button"
+                            className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+                            onClick={() => {
+                              if (validateFields()) {
+                                setCurrentStep((prevStep) => prevStep + 1);
+                              }
+                            }}
+                          >
+                            Weiter
+                          </button>
+                        </div>
+                    </div> 
                          
                 </div>
               </div>

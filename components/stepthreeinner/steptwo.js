@@ -19,10 +19,18 @@ const StepTwoInner = ({
   const fileInputRef = useRef(null); // Add a ref for file input
   const [isConverting, setIsConverting] = useState(false);
 
-   // ✅ Ensure preview persists when navigating back to this step
-   useEffect(() => {
+  useEffect(() => {
     if (imageswbs && imageswbs.length > 0) {
-      setwbsiImageShow(imageswbs[0]); // Show the first image or file
+      const first = imageswbs[0];
+      if (typeof first === "string") {
+        // If it's a URL, just use it directly
+        setwbsiImageShow(first);
+      } else if (first instanceof File) {
+        // If it's a File object, convert to base64
+        const reader = new FileReader();
+        reader.onloadend = () => setwbsiImageShow(reader.result);
+        reader.readAsDataURL(first);
+      }
     }
   }, [imageswbs]);
   const handleFileChange = async (event) => {

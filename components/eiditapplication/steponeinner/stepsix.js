@@ -367,55 +367,55 @@ useEffect(() => {
       </div>
 
       {/* ✅ Upload Employment Contract */}
-      <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
-        <label
-          htmlFor="employcontract-upload"
-          className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
-        >
-          <i className="fa fa-upload mr-2"></i>
-          Upload Arbeitsvertrag
-        </label>
-        <input
-          type="file"
-          id="employcontract-upload"
-          name="employcontract"
-          className="hidden"
-          accept="image/*, application/pdf"
-          ref={fileInputRef}
-          onChange={(e) => handleFileChange(e, "employcontract")}
-        />
-          {errors.employcontract && <p className="text-red-500 text-sm">{errors.employcontract}</p>}
-       {/* ✅ Show Loader only for Employ Contract */}
-       {isConvertingEmploycontract && (
-          <div className="flex justify-center mt-4">
-            <div className="loader"></div>
-          </div>
-        )}
-        {/* ✅ Employment Contract Preview */}
-        {employcontractPreview && !isConvertingEmploycontract && (
-          <div className="relative w-24 h-24 mt-4">
-             {typeof employcontractPreview === "string" && (employcontractPreview.startsWith("data:image") || employcontractPreview.startsWith("blob:") || /\.(png|jpe?g|gif|webp)$/i.test(employcontractPreview) ) ? (
-              <img
-                src={employcontractPreview}
-                alt="Employment Contract Preview"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
-                <span>PDF</span>
-              </div>
-            )}
-            <button
-              type="button"
-              className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
-              onClick={removeEmployContract}
-            >
-              ×
-            </button>
-          </div>
-        )}
-
-      </div>
+      {employment === "Nein" && (
+        <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
+          <label
+            htmlFor="employcontract-upload"
+            className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
+          >
+            <i className="fa fa-upload mr-2"></i>
+            Upload Arbeitsvertrag
+          </label>
+          <input
+            type="file"
+            id="employcontract-upload"
+            name="employcontract"
+            className="hidden"
+            accept="image/*, application/pdf"
+            ref={fileInputRef}
+            onChange={(e) => handleFileChange(e, "employcontract")}
+          />
+        {/* :white_check_mark: Show Loader only for Employ Contract */}
+        {isConvertingEmploycontract && (
+            <div className="flex justify-center mt-4">
+              <div className="loader"></div>
+            </div>
+          )}
+          {/* :white_check_mark: Employment Contract Preview */}
+          {employcontractPreview && !isConvertingEmploycontract && (
+            <div className="relative w-24 h-24 mt-4">
+              {typeof employcontractPreview === "string" && (employcontractPreview.startsWith("data:image") || employcontractPreview.startsWith("blob:") || /\.(png|jpe?g|gif|webp)$/i.test(employcontractPreview) ) ? (
+                <img
+                  src={employcontractPreview}
+                  alt="Employment Contract Preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
+                  <span>PDF</span>
+                </div>
+              )}
+              <button
+                type="button"
+                className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                onClick={removeEmployContract}
+              >
+                ×
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ✅ Navigation Buttons */}
       <div className="flex justify-between mt-10">

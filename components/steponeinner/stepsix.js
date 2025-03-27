@@ -35,16 +35,19 @@ const StepSixInner = ({
  const [employcontractPreview, setEmploycontractPreview] = useState(null);
  const [employcontractupdatedFilesstate, setEmploycontractupdatedFilesstate] = useState([]);
  useEffect(() => {
+  if (salarySlip && salarySlip.length > 0) {
+    // Flatten nested salarySlip array and use first images as preview
+    const previews = salarySlip.map(file => Array.isArray(file) ? file[0] : file);
+    setSalarySlipPreview(previews);
+  }
+}, [salarySlip]);
+
+useEffect(() => {
   if (employcontract && employcontract.length > 0) {
-    setEmploycontractPreview(employcontract[0]);
+    const preview = Array.isArray(employcontract[0]) ? employcontract[0][0] : employcontract[0];
+    setEmploycontractPreview(preview);
   }
 }, [employcontract]);
-useEffect(()=>{
-  console.log('employcontractPreview zunu',employcontract);
-},[employcontract]);
-useEffect(() => {
- console.log(salarySlip1)
-}, [salarySlip1]);
 let employcontractupdatedFiles = [];
  const handleFileChange = async (event, type) => {
   const files = Array.from(event.target.files);

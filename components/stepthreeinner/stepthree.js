@@ -19,12 +19,22 @@ const StepThreeInner = ({
     setOpenIndex(openIndex === index ? null : index); // Close if already open, else open
   };
 
-   // ✅ Ensure preview persists when navigating back to this step
- useEffect(() => {
-  if (personal && personal.length > 0) {
-    setPreviewImage(personal[0]); // Show the first image or file
-  }
-}, [personal]);
+  useEffect(() => {
+    if (personal && personal.length > 0) {
+      const first = personal[0];
+  
+      if (typeof first === "string") {
+        // Already a URL or base64
+        setPreviewImage(first);
+      } else if (first instanceof File) {
+        // Convert to base64 for consistent preview
+        const reader = new FileReader();
+        reader.onloadend = () => setPreviewImage(reader.result);
+        reader.readAsDataURL(first);
+      }
+    }
+  }, [personal]);
+  
 
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state

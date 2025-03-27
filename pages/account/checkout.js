@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SidebarHeader from '@/components/SidebarHeader';
 import styles from '../../styles/subscription.module.css';
 import { useRouter } from "next/router";
@@ -7,29 +7,50 @@ import 'react-toastify/dist/ReactToastify.css';
 import CheckoutForm from "@/components/CheckoutForm";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import {  PLAN_DURATIONS, PLAN_IDS, PLAN_LABELS, PLAN_PRICES  } from "@/lib/stripePlans";
 
 
 
-const stripePromise = loadStripe('pk_test_51KMSOYIBEl0UnhG5zx0cMrm2fvQiMWEhRYaJ58UsniuBX7XRct7CDA5qD3FrGOXJZhf61MhZIYtXO5j2WSrU0Fg200jpLbCMCg');
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISH_KEY);
 
 const Checkout = () => {
   const router = useRouter();
   let { selectedPlan } = router.query;
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
 
   // Default to 6-month plan if no plan is selected
   if (!selectedPlan || !["price_one_time","price_3_month", "price_6_month", "price_12_month"].includes(selectedPlan)) {
       selectedPlan = "price_6_month";
   }
 
-  // Mapping selected plan to the correct Stripe Price ID
-  const priceIdMap = {
-      price_3_month: "price_1R2oilIBEl0UnhG5tD4M6hb7",
-      price_6_month: "price_1R2oilIBEl0UnhG5qLbyj6Qc",
-      price_12_month: "price_1R2oilIBEl0UnhG5NqQwt5GU",
-      price_one_time: "price_1R3x3mIBEl0UnhG5T8lqLHvW",
-  };
 
-  const priceId = priceIdMap[selectedPlan];
+  const priceId = PLAN_IDS[selectedPlan];
+  const duration = PLAN_DURATIONS[priceId];
+  const label = PLAN_LABELS[priceId];
+  const price = PLAN_PRICES[priceId];
+ 
+
+
+  useEffect(() => {
+    // Check subscription status
+    const checkSubscription = async () => {
+      try {
+        const res = await fetch("/api/user/subscription");
+        const data = await res.json();
+        if (res.ok && data.status === "active") {
+          setHasActiveSubscription(true);
+        }
+      } catch (err) {
+        console.error("Failed to check subscription status", err);
+      } finally {
+        setCheckingStatus(false);
+      }
+    };
+
+    checkSubscription();
+  }, []);
   
   return (
     <>
@@ -38,34 +59,33 @@ const Checkout = () => {
       <div className="flex">
         <div className="flex-1 ml-64">
         <div className="bg-gray-100 py-8 p-12">
+          {checkingStatus ? (
+            <p>Lade...</p>
+            ) : hasActiveSubscription ? (
             <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
               <h1 className={`${styles['subscription-h1']}`}>
-                 Schneller in dein Traumzuhause mit Wohnungsmappe
+                Du hast bereits ein aktives Abonnement.
               </h1>
-
+            </div>
+            ) : (
+            <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
+              <h1 className={`${styles['subscription-h1']}`}>
+                Schneller in dein Traumzuhause mit Wohnungsmappe
+              </h1>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-20 pt-20">
                 {/* Card 1 */}
                 <div className={`${styles['payment-card']} bg-white p-4`}>
                   <div className="bg-gray-100 p-6 mt-4 flex flex-col sm:flex-row gap-4">
                     <div className={`${styles['circle-sec']}`}>
                       <p className={`${styles['deine']}`}>Deine Bestellung: </p>
-                      <p className={`${styles['wohnungmappe']}`}>Wohnungmappe {
-                                  selectedPlan === "price_3_month"
-                                    ? "3 Monate"
-                                    : selectedPlan === "price_6_month"
-                                    ? "6 Monate"
-                                    : selectedPlan === "price_one_time"
-                                    ? "One Time"
-                                    : "12 Monate"}{" "}</p>
+                      <p className={`${styles['wohnungmappe']}`}>
+                        {label || ""}
+                      </p>
                     </div>
                     <div className={`${styles['text-sec']}`}>
-                      <h3 className={`${styles['price']}`}> {selectedPlan === "price_3_month"
-                                    ? "29,99€"
-                                    : selectedPlan === "price_6_month"
-                                    ? "19,99€"
-                                    : selectedPlan === "price_one_time"
-                                    ? "30,99€"
-                                    : "12,99€"}{" "} <span>/ Monat</span></h3>
+                    <h3 className={`${styles['price']}`}>
+                      {price} <span>/ Monat</span>
+                    </h3>
                     </div>
                   </div>
                     {/* Section Content */}
@@ -126,7 +146,8 @@ const Checkout = () => {
 
               </div>
             </div>
-          </div>
+          )}
+        </div>
 
         </div>
       </div>

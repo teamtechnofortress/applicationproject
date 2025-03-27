@@ -20,7 +20,7 @@ const SubscriptionDetail = () => {
               const data = await res.json();
               console.log(data)
               
-              if (res.ok && data.status === "active") {
+              if (res.ok && data.status === "active" && !data.cancelAtPeriodEnd) {
                   setHasSubscription(true);
               }
           } catch (error) {

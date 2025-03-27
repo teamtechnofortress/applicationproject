@@ -16,9 +16,20 @@ const StepSixInner = ({
  // ✅ Ensure preview persists when navigating back to this step
  useEffect(() => {
   if (mietschuldenfreiheitimg && mietschuldenfreiheitimg.length > 0) {
-    setPreviewImage(mietschuldenfreiheitimg[0]); // Show the first image or file
+    const first = mietschuldenfreiheitimg[0];
+
+    if (typeof first === "string") {
+      // Handle base64 or uploaded URL
+      setPreviewImage(first);
+    } else if (first instanceof File) {
+      // Handle newly uploaded file
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImage(reader.result);
+      reader.readAsDataURL(first);
+    }
   }
 }, [mietschuldenfreiheitimg]);
+
   const handleFileChange = async (event) => {
     setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];

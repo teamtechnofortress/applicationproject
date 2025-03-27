@@ -29,6 +29,7 @@ const ThirdStep = ({
   personal,
   setPersonal,
   handleChange,
+  pdfurltodownloud,
   currentStep,setCurrentStep }) => {
   // const [currentStep, setCurrentStep] = useState(0);
   const [thirdStepComponent, setThirdStepComponent] = useState(currentStep);
@@ -92,7 +93,8 @@ const ThirdStep = ({
 
   return (
     <>
-      {thirdStepComponent !== null && (
+
+      {thirdStepComponent !== null && currentStep !== 23 && (
         <div className="mb-6">
           <div className="w-full bg-gray-200 rounded-full h-2.5">
             <div
@@ -209,6 +211,7 @@ const ThirdStep = ({
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}
             handleChange={handleChange}
+            pdfurltodownloud={pdfurltodownloud}
           />
       )}
   

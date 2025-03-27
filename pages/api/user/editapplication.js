@@ -10,6 +10,7 @@ import { put } from '@vercel/blob';
 import { pdf } from "@react-pdf/renderer";
 import MyDocument from "@/components/MyDocument";
 import MyDocumentTwo from "@/components/MyDocumentTwo";
+import QRCode from "qrcode";
 
 
 export const config = {
@@ -66,25 +67,16 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
     let savedForm = await ApplicationFile.findById(profileData._id);
     let qrCodeUrl = savedForm?.qrCode;
 
-    if (!qrCodeUrl) {
-      console.error("QR Code not found in DB");
-      return null;
-    }
-
-    if (profileData.childId) {
-      // ✅ Fetch parent profile and convert to plain object
-      const parentProfile = await ApplicationFile.findById(profileData.childId);
-      if (!parentProfile) {
-        console.error("Parent form not found");
-        return null;
-      }
-
+    // if (!qrCodeUrl) {
+    //   console.error("QR Code not found in DB");
+    //   return null;
+    // }
       // ✅ Delete old PDF before generating a new one
-      if (parentProfile.pdfPath) {
-        await deletefile(parentProfile.pdfPath);
+      if (savedForm.pdfPath) {
+        await deletefile(savedForm.pdfPath);
       }
-      if (parentProfile.qrCode) {
-        await deletefile(parentProfile.qrCode);
+      if (savedForm.qrCode) {
+        await deletefile(savedForm.qrCode);
       }
 
       const newQrCodeUrl = await generateAndUploadQRCode(predefinedPdfUrl);
@@ -92,8 +84,25 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
         console.error("Failed to generate new QR Code");
         return null;
       }
+      // ✅ Update parent profile with new PDF URL & QR Code
+      await ApplicationFile.findByIdAndUpdate(profileData._id, {
+        qrCode: newQrCodeUrl,
+      });
+
+    if (profileData.childId) {
+
+      const childprofile = await ApplicationFile.findById(profileData.childId);
+      if (!childprofile) {
+        console.error("Child form not found");
+        return null;
+      }
+      const parentProfile = await ApplicationFile.findById(profileData._id);
+      if (!parentProfile) {
+        console.error("Parent form not found");
+        return null;
+      }
       // ✅ Generate a combined PDF for parent and child
-      const combinedProfiles = { parent: profileData, child: parentProfile };
+      const combinedProfiles = { parent: parentProfile, child: childprofile };
 
       pdfBlob = await pdf(<MyDocumentTwo profileData={combinedProfiles} />).toBlob();
 
@@ -103,15 +112,56 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
         contentType: "application/pdf",
         addRandomSuffix: false,
       });
-       // ✅ Update parent profile with new PDF URL & QR Code
-       await ApplicationFile.findByIdAndUpdate(profileData._id, {
-        pdfPath: predefinedPdfUrl,
-        qrCode: qrCodeUrl,
-      });
+      //  // ✅ Update parent profile with new PDF URL & QR Code
+      //  await ApplicationFile.findByIdAndUpdate(profileData._id, {
+      //   pdfPath: predefinedPdfUrl,
+      //   qrCode: newQrCodeUrl,
+      // });
 
+    }else if(profileData.parent === "1"){
+
+      // console.log("Enter to find parent.")
+
+      const updatedParent = await ApplicationFile.findOneAndUpdate(
+        { childId: profileData._id },
+        {
+          qrCode: newQrCodeUrl,
+          pdfPath: predefinedPdfUrl,
+        },
+        { new: true }
+      );
+
+      const childprofile = await ApplicationFile.findById(profileData._id);
+      if (!childprofile) {
+        console.error("Child form not found");
+        return null;
+      }
+      const parentProfile = await ApplicationFile.findOne({ childId: profileData._id });
+      if (!parentProfile) {
+        console.error("Parent form not found");
+        return null;
+      }
+   
+      
+      // ✅ Generate a combined PDF for parent and child
+      const combinedProfiles = { parent: parentProfile, child: childprofile };
+
+      pdfBlob = await pdf(<MyDocumentTwo profileData={combinedProfiles} />).toBlob();
+
+      // ✅ Upload new PDF using the predefined name (without modifying the URL)
+      await put(pdfFileURL, pdfBlob, {
+        access: "public",
+        contentType: "application/pdf",
+        addRandomSuffix: false,
+      });
     } else {
+      const parentProfile = await ApplicationFile.findById(profileData._id);
+      if (!parentProfile) {
+        console.error("Parent form not found");
+        return null;
+      }
       // ✅ Generate PDF for a single person 
-      pdfBlob = await pdf(<MyDocument profileData={profileData} />).toBlob();
+      pdfBlob = await pdf(<MyDocument profileData={parentProfile} />).toBlob();
       console.log('pdfBlob', pdfBlob);
       // ✅ Upload new PDF using the predefined name (without modifying the URL)
        await put(pdfFileURL, pdfBlob, {
@@ -234,12 +284,12 @@ const handler = async (req, res) => {
         let einkommensbescheinigungimgData = [];
         const einkommensbescheinigungimgFiles = files.einkommensbescheinigungimg;
 
-        console.log("fields.einkommensbescheinigungimg", fields.einkommensbescheinigungimg);
-        console.log("files.einkommensbescheinigungimg", files.einkommensbescheinigungimg);
-        console.log("einkommensbescheinigungimgFiles", einkommensbescheinigungimgFiles);
+        // console.log("fields.einkommensbescheinigungimg", fields.einkommensbescheinigungimg);
+        // console.log("files.einkommensbescheinigungimg", files.einkommensbescheinigungimg);
+        // console.log("einkommensbescheinigungimgFiles", einkommensbescheinigungimgFiles);
 
         if(Array.isArray(fields.einkommensbescheinigungimg) && fields.einkommensbescheinigungimg[0] && fields.einkommensbescheinigungimg[0].startsWith('blob')){
-          console.log("skip fields.einkommensbescheinigungimg", fields.einkommensbescheinigungimg);
+          // console.log("skip fields.einkommensbescheinigungimg", fields.einkommensbescheinigungimg);
         }else{
           if (einkommensbescheinigungimgFiles) {
             const fileList = Array.isArray(einkommensbescheinigungimgFiles)
@@ -269,7 +319,7 @@ const handler = async (req, res) => {
           // ✅ Save as an array; if only one image, still store it inside an array
           einkommensbescheinigungimgData = einkommensbescheinigungimgArray.length === 1 ? einkommensbescheinigungimgArray : einkommensbescheinigungimgArray;
         }
-        console.log("einkommensbescheinigungimgData", einkommensbescheinigungimgData);
+        // console.log("einkommensbescheinigungimgData", einkommensbescheinigungimgData);
       
 
       const imageswbsImagesArray = [];
@@ -281,7 +331,7 @@ const handler = async (req, res) => {
       // console.log("files.imageswbs", files.imageswbs);
 
       if(Array.isArray(fields.imageswbs) && fields.imageswbs[0] && fields.imageswbs[0].startsWith('blob')){
-        console.log("skip fields.imageswbs", fields.imageswbs);
+        // console.log("skip fields.imageswbs", fields.imageswbs);
       }else{
         if (imageswbsImages) {
           const imageswbsFiles = Array.isArray(imageswbsImages) ? imageswbsImages : [imageswbsImages];
@@ -320,7 +370,7 @@ const handler = async (req, res) => {
       // console.log("bwaImages", bwaImages);
 
       if(Array.isArray(fields.bwaimages) && fields.bwaimages[0] && fields.bwaimages[0].startsWith('blob')){
-        console.log("skip fields.bwaimages", fields.bwaimages);
+        // console.log("skip fields.bwaimages", fields.bwaimages);
       }else{
         if (bwaImages) {
           const bwaFiles = Array.isArray(bwaImages) ? bwaImages : [bwaImages];
@@ -357,7 +407,7 @@ const handler = async (req, res) => {
       // console.log("personalImages", personalImages);
 
       if(Array.isArray(fields.personal) && fields.personal[0] && fields.personal[0].startsWith('blob')){
-        console.log("skip fields.personal", fields.personal);
+        // console.log("skip fields.personal", fields.personal);
       }else{
         if (personalImages) {
           const personalFiles = Array.isArray(personalImages) ? personalImages : [personalImages];
@@ -391,7 +441,7 @@ const handler = async (req, res) => {
       const mietschuldenfreiheitImages = files.mietschuldenfreiheitimg;
       // console.log("mietschuldenfreiheitImages", mietschuldenfreiheitImages);
       if(Array.isArray(fields.mietschuldenfreiheitimg) && fields.mietschuldenfreiheitimg[0] && fields.mietschuldenfreiheitimg[0].startsWith('blob')){
-        console.log("skip fields.mietschuldenfreiheitimg", fields.mietschuldenfreiheitimg);
+        // console.log("skip fields.mietschuldenfreiheitimg", fields.mietschuldenfreiheitimg);
       }else{
         if (mietschuldenfreiheitImages) {
           const mietschuldenfreiheitFiles = Array.isArray(mietschuldenfreiheitImages) ? mietschuldenfreiheitImages : [mietschuldenfreiheitImages];
@@ -426,7 +476,7 @@ const handler = async (req, res) => {
       // console.log("employContractImages", employContractImages);
 
       if(Array.isArray(fields.employcontract) && fields.employcontract[0] && fields.employcontract[0].startsWith('blob')){
-        console.log("skip fields.employcontract", fields.employcontract);
+        // console.log("skip fields.employcontract", fields.employcontract);
       }else{
         if (employContractImages) {
           const employContractFiles = Array.isArray(employContractImages) ? employContractImages : [employContractImages];
@@ -463,7 +513,7 @@ const handler = async (req, res) => {
       // console.log("schufaImages", schufaImages);
 
       if(Array.isArray(fields.schufa) && fields.schufa[0] && fields.schufa[0].startsWith('blob')){
-        console.log("skip fields.schufa", fields.schufa);
+        // console.log("skip fields.schufa", fields.schufa);
       }else{
         if (schufaImages) {
           const schufaFiles = Array.isArray(schufaImages) ? schufaImages : [schufaImages];
@@ -1011,31 +1061,30 @@ const handler = async (req, res) => {
         
          // ✅ Step 2: Define a Predefined PDF URL (Before PDF is Generated)
          const pdfFileName = `${updatedForm.vorname}_${updatedForm.nachname}_${Date.now()}.pdf`;
-         const predefinedPdfUrl = `https://unmisficlsvsb5o3.public.blob.vercel-storage.com/${pdfFileName}`;
+         const predefinedPdfUrl = `${process.env.BLOB_UPLOAD_URL}/${pdfFileName}`;
        
 
          // ✅ Step 3: Generate QR Code using the predefined PDF URL
-         const qrCodeUrl = await generateAndUploadQRCode(predefinedPdfUrl);
+        //  const qrCodeUrl = await generateAndUploadQRCode(predefinedPdfUrl);
          
-         if (!qrCodeUrl) {
-           console.error("Failed to generate QR Code");
-           return res.status(500).json({ success: false, error: "QR Code generation failed" });
-         }
+        //  if (!qrCodeUrl) {
+        //    console.error("Failed to generate QR Code");
+        //    return res.status(500).json({ success: false, error: "QR Code generation failed" });
+        //  }
 
          // ✅ Step 4: Save QR Code URL to the database before generating PDF
-         updatedForm.qrCode = qrCodeUrl;
-         await updatedForm.save();
+        //  updatedForm.qrCode = qrCodeUrl;
+        //  await updatedForm.save();
 
          // ✅ Step 5: Generate and Upload the PDF (Using the predefined URL)
-         const pdfUrl = await generateAndUploadPDF(updatedForm, predefinedPdfUrl);
+         const PdfUrl = await generateAndUploadPDF(updatedForm, predefinedPdfUrl);
 
-        if (pdfUrl) {
-          updatedForm.pdfPath = pdfUrl;
+        if (PdfUrl) {
+          updatedForm.pdfPath = PdfUrl;
           await updatedForm.save();
         }
         
-
-        return res.status(200).json({ success: true, message: 'Form submitted successfully'});
+        return res.status(200).json({ success: true, message: 'Form submitted successfully', pdfUrl: predefinedPdfUrl});
       } catch (error) {
         console.error('Error saving data:', error);
         return res.status(500).json({ success: false, error: 'Error saving data' });

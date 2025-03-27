@@ -6,10 +6,12 @@ import Subscription from "@/models/Subscription";
 import { parse } from "cookie";
 import { DateTime } from "luxon"; // Install via `npm install luxon`
 import nodemailer from "nodemailer";
+import { PLAN_DURATIONS } from "@/lib/stripePlans";
 
 
 
-const stripe = new Stripe("sk_test_51KMSOYIBEl0UnhG58lyeeFO3liqhus1mAOwEvqzlAAuBidKPmA5BEsTMpIm8Drxg7I4Z2jVlU2Qfke0eEu6OUzxg005fGxexFt");
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
     if (req.method !== "POST") return res.status(405).json({ error: "Method Not Allowed" });
@@ -28,16 +30,9 @@ export default async function handler(req, res) {
 
         const customerEmail = user.email;
         const { paymentMethodId, priceId } = req.body;
-
-        // Define plan durations in months
-        const planDurations = {
-            "price_1R2oilIBEl0UnhG5tD4M6hb7": 3,  // 3 months
-            "price_1R2oilIBEl0UnhG5qLbyj6Qc": 6, // 6 months
-            "price_1R2oilIBEl0UnhG5NqQwt5GU": 12 // 12 months
-        };
-
+        
         // Validate selected plan
-        const durationMonths = planDurations[priceId];
+        const durationMonths = PLAN_DURATIONS[priceId];
         if (!durationMonths) return res.status(400).json({ error: "Invalid plan selected." });
 
         // Check if customer already exists
@@ -102,7 +97,7 @@ export default async function handler(req, res) {
         `,
       };
   
-      await transporter.sendMail(mailOptions);
+    //   await transporter.sendMail(mailOptions);
 
         // const initialTermEnd = Math.floor(DateTime.now().plus({ months: durationMonths }).toSeconds());
 

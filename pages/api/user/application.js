@@ -519,7 +519,7 @@ const handler = async (req, res) => {
           
             // ✅ Step 2: Define Predefined PDF URL
       const pdfFileName = `${vorname}_${nachname}_${Date.now()}.pdf`;
-      const predefinedPdfUrl = `https://ni5rpxtvitzsvqtj.public.blob.vercel-storage.com/${pdfFileName}`;
+      const predefinedPdfUrl = `${process.env.BLOB_UPLOAD_URL}/${pdfFileName}`;
 
       // ✅ Step 3: Generate & Upload QR Code
       const qrCodeUrl = await generateAndUploadQRCode(predefinedPdfUrl);
