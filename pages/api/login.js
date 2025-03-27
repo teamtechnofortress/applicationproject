@@ -19,12 +19,6 @@ const handler = async (req, res) => {
         const bytes  = CryptoJS.AES.decrypt(user.password, process.env.AES_SECRET);
         let decryptedPass = bytes.toString(CryptoJS.enc.Utf8);
         if (user) {
-          console.log("stripe pub", process.env.NEXT_PUBLIC_STRIPE_PUBLISH_KEY)
-          console.log("stripe sec", process.env.STRIPE_SECRET_KEY)
-          console.log("stripe hook", process.env.STRIPE_WEBHOOK_SECRET)
-          console.log("stripe 3", process.env.NEXT_PUBLIC_PRICE_3_MONTH)
-          console.log("stripe 6", process.env.NEXT_PUBLIC_PRICE_6_MONTH)
-          console.log("stripe 12", process.env.NEXT_PUBLIC_PRICE_12_MONTH)
             if (req.body.email == user.email && req.body.password == decryptedPass) {
             var token = jwt.sign({id: user._id , firstname: user.firstname, lastname: user.lastname}, process.env.JWT_SECRET, {expiresIn:"1d"});
             res.setHeader('Set-Cookie', serialize('token', token, { path: '/', httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24 }))
