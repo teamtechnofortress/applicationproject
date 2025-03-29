@@ -14,6 +14,7 @@
     border-radius: 10px;
     padding: 14px 20px;
     border: 2px solid #333333;
+    height:200px;
 }
 .selected-plan{
     border-radius: 10px;
@@ -63,7 +64,7 @@
     font-weight: 700;
     border-radius: 20px;
     margin-top: 20px;
-    width: 18%;
+    width: 28%;
     background-color: #e7fc41;
 }
 .deine{
@@ -125,8 +126,27 @@
     font-family: 'Poppins Medium';
     font-size: 13px; 
 }
+.p-detail{
+    font-size:14px;
+}
+.expanded-card {
+    height: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+@media (max-width: 1080px) {
+    .btn-tip{
+        width:90%;
+    }
+}
 @media (max-width: 600px) {
     .label{
         font-size: 8px; 
     }  
+   
+    .subscription-h1{
+        font-size: 24px;
+    }
+    .subscription-h2{
+        font-size: 16px; 
+    }
 }

@@ -18,14 +18,14 @@ export default async function handler(req, res) {
     const userId = decoded.id;
 
     // ✅ Find User's Active Subscription
-    const subscription = await Subscription.findOne({ userId, status: "active" });
+    const subscription = await Subscription.findOne({ userId }).sort({ createdAt: -1 });
 
     if (!subscription) {
       return res.status(404).json({ message: "No active subscription found." });
     }
 
     // ✅ Return Customer ID
-    res.status(200).json({ customerId: subscription.customerId,  currentplan: subscription.currentplan,  status: subscription.status, cancelAtPeriodEnd: subscription.cancelAtPeriodEnd , TermEnd: subscription.initialTermEnd });
+    res.status(200).json({ data: subscription });
 
   } catch (error) {
     console.error("Error fetching customerId:", error);

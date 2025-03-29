@@ -70,6 +70,8 @@ export default async function handler(req, res) {
                 durationMonths: "1",
               },
             });
+            
+            dbSub.currentplan = "1 Monat";
           }
 
           // ✅ Extend initialTermEnd only if renewal happens

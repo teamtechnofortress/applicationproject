@@ -8,10 +8,13 @@ export const DashboardHeader = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const menuRef = useRef(null);
   const [progress, setProgress] = useState(0);
-
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
+  };
+  const toggleSidebar = () => {
+    setSidebarVisible((prev) => !prev); 
   };
 
   const logOut = async () => {
@@ -140,7 +143,9 @@ export const DashboardHeader = () => {
 
   return (
     <div className="flex">
-      <div className="bg-white shadow-md w-64 p-5 h-full fixed">
+      <div className={`bg-white shadow-md w-64 p-5 z-[99999] h-full fixed left-0 top-0 transition-transform ${
+  isSidebarVisible ? 'translate-x-0' : '-translate-x-full'
+} md:translate-x-0`}>
         <div className="mb-6">
           <a href="/">
           <img src="/images/logo.png" alt="Logo" className="h-12" />
@@ -178,16 +183,16 @@ export const DashboardHeader = () => {
       </div>
       </div>
 
-      <div className="flex-1 ml-64">
+      <div className="flex-1 ml-0 md:ml-64">
         <nav className="bg-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center"></div>
               <div className="flex items-center gap-4 relative ml-3">
-                <div className="relative">
+                {/* <div className="relative">
                   <img className="h-6 rounded-full" src="/images/Shape.png" alt="" />
                   <span className={`${styles['bell-dot']} absolute top-0 right-0 h-2 w-2 rounded-full`}></span>
-                </div>
+                </div> */}
                 <Link href="/account/subscriptiondetail" legacyBehavior>
                 <button className={`${styles['btn-plan']}`}>Mein Plan</button>
                 </Link>
@@ -241,6 +246,7 @@ export const DashboardHeader = () => {
                     </div>
                   )}
                 </div>
+                <button onClick={toggleSidebar} className="p-4 text-3xl font-semibold md:hidden">☰</button>
               </div>
             </div>
           </div>

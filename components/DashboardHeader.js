@@ -87,10 +87,10 @@ export const DashboardHeader = () => {
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center"></div>
               <div className="flex items-center gap-4 relative ml-3">
-                <div className="relative">
+                {/* <div className="relative">
                   <img className="h-6 rounded-full" src="/images/Shape.png" alt="" />
                   <span className={`${styles['bell-dot']} absolute top-0 right-0 h-2 w-2 rounded-full`}></span>
-                </div>
+                </div> */}
                 <Link href="/account/subscriptiondetail" legacyBehavior>
                 <button className={`${styles['btn-plan']}`}>Mein Plan</button>
                 </Link>

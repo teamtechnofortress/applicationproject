@@ -8,6 +8,7 @@ import styles from '../../styles/applications.module.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
+import { DateTime } from 'luxon';
 
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then(mod => mod.PDFDownloadLink),
@@ -17,16 +18,14 @@ const PDFDownloadLink = dynamic(
 const AllApplications = () => {
   const [cvdata, setCvdata] = useState([]);
   const [applicationCount, setApplicationCount] = useState(0);
-
-
   const [loading, setLoading] = useState(true);
   const [isEmpty, setIsEmpty] = useState(false);
   const [user, setUser] = useState({ firstname: '', lastname: '' });
-  const router = useRouter();
+  const [subscriptionData, setSubscriptionData] = useState(null);
   const [selectedApplication, setSelectedApplication] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
 
-
+  const router = useRouter();
   /** Fetches all apartment applications */
   const fetchProfileData = async () => {
   try {
@@ -70,17 +69,73 @@ const AllApplications = () => {
     }
   };
 
+  const fetchSubscriptionStatus = async () => {
+    try {
+      const res = await fetch("/api/user/subscription");
+      const data = await res.json();
+      if (res.ok) setSubscriptionData(data.data);
+    } catch (err) {
+      console.error("Subscription fetch error:", err);
+    }
+  };
+
+
   useEffect(() => {
     fetchProfileData();
     fetchUserData();
+    fetchSubscriptionStatus();
   }, []);
+
+  const isOneTimeValid = () => {
+    if (subscriptionData?.paymentType === "one-time") {
+      const created = DateTime.fromISO(subscriptionData.createdAt);
+      return DateTime.now() < created.plus({ days: 4 });
+    }
+    return false;
+  };
+
+  const canAddApplication = () => {
+    if (!subscriptionData) return applicationCount === 0;
+    if (subscriptionData.paymentType === "subscription") {
+      return subscriptionData.status === "active";
+    }
+    if (subscriptionData.paymentType === "one-time") {
+      return applicationCount === 0 && isOneTimeValid();
+    }
+    return false;
+  };
+
+  const canEdit = () => {
+    if (!subscriptionData) return false;
+    if (subscriptionData.paymentType === "subscription" &&  subscriptionData.status === "active") {
+      return true;
+    }
+    if (subscriptionData.paymentType === "one-time") {
+      return isOneTimeValid();
+    }
+    return false;
+  };
+
+  const canView = () => {
+    if (!subscriptionData) return false;
+    return subscriptionData.status === "active" || subscriptionData.paymentType === "one-time";
+  };
+
+  const canAddChild = () => {
+    if (!subscriptionData) return false;
+    return subscriptionData.paymentType === "subscription" && subscriptionData.status === "active";
+  };
+
+  const showQrCode = () => {
+    return canEdit();
+  };
 
   return (
     <>
       <SidebarHeader />
       <ToastContainer />
       <div className="flex">
-        <div className="flex-1 ml-64">
+        <div className="flex-1 ml-0 md:ml-64">
           <div className="bg-gray-100 py-8 sm:p-4 lg:p-12 p-4">
             <div className="mx-auto px-4">
               <h2 className={`${styles['application-h2']} mt-7`}>
@@ -89,7 +144,7 @@ const AllApplications = () => {
               <div className={`${styles['application-flex-div']}`}>
                 <h2 className={`${styles['application-h4']}`}>Your apartment applications</h2>
                 {/* Get applications where parent === 0 and check if there are 2 */}
-                {applicationCount < 2 && ( // ✅ Only show if there are less than 2 applications
+                {canAddApplication() && (
                   <Link href="/account/application" legacyBehavior>
                     <button className={`${styles['or-button']} mt-10`}>
                       New <img className={`${styles['img-button']}`} src="/images/plus.svg" />
@@ -110,7 +165,7 @@ const AllApplications = () => {
                         <div className={`${styles['pdf-btn-grp']}`}>
                           
                           {/* Hide "Person hinzufügen" if this application already has a child */}
-                          {!profile.childId && (
+                          {!profile.childId && canAddChild() && (
                             <button
                               type="button"
                               onClick={() => router.push(`/account/application?parentId=${profile._id}`)}
@@ -121,28 +176,51 @@ const AllApplications = () => {
                           )}
 
                          
-                          <button
-                            className={`${styles['pdf-btn']}`}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              event.stopPropagation();
-
-                              if (profile.childId) {
-                                setSelectedApplication({ childId: profile.childId, parentId: profile._id });
-                                setShowPopup(true);
-                              } else {
-                                router.push(`/account/editapplication?id=${profile._id}`);
-                              }
-                            }}
-                          >
-                            <img src="/images/write.svg" />
-                          </button>
-
-                          <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
-                            <button className={`${styles['pdf-btn']}`}>
-                              <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+                          {/* Edit */}
+                          {canEdit() && (
+                            <button
+                              className={`${styles['pdf-btn']}`}
+                              onClick={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                                if (profile.childId) {
+                                  setSelectedApplication({ childId: profile.childId, parentId: profile._id });
+                                  setShowPopup(true);
+                                } else {
+                                  router.push(`/account/editapplication?id=${profile._id}`);
+                                }
+                              }}
+                              
+                            >
+                              <img src="/images/write.svg" />
                             </button>
-                          </a>
+                          )}
+
+                        {/* View PDF */}
+                        {/* {canView() && (
+                            <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
+                              <button className={`${styles['pdf-btn']}`}>
+                                <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+                              </button>
+                            </a>
+                          )} */}
+
+                            {subscriptionData?.paymentType === "subscription" && subscriptionData?.status === "active" || 
+                            isOneTimeValid() ? (
+                              <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
+                                <button className={`${styles['pdf-btn']}`}>
+                                  <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+                                </button>
+                              </a>
+                            ) : (
+                              <button
+                                className={`${styles['pdf-btn']}`}
+                                onClick={() => router.push('/account/subscriptiondetail')}
+                                title="Plan erforderlich"
+                              >
+                                <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
+                              </button>
+                            )}
                           
                         </div>
 
@@ -168,10 +246,12 @@ const AllApplications = () => {
                                 </p>
                               </div>
                               <div className={`${styles['footerColCenter']}`}>
-                                <div className={`${styles['footerlogo']}`} >
-                                  <img src={profile.qrCode} alt="Barcode" />
-                                  <p className={`${styles['scanMe']}`}>Scan Me</p>
-                                </div>
+                              {showQrCode() && (
+                                  <div className={`${styles['footerlogo']}`}>
+                                    <img src={profile.qrCode} alt="Barcode" />
+                                    <p className={`${styles['scanMe']}`}>Scan Me</p>
+                                  </div>
+                                )}
                               </div>
                               <div className={`${styles['footerCol']}`}>
                                 <p className={`${styles['footerText']}`}>{profile.phonenumber}</p>

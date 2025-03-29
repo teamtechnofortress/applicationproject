@@ -42,7 +42,7 @@ export default async function handler(req, res) {
                     customer = customer.data[0]; // Use existing customer
                 }
             const paymentIntent = await stripe.paymentIntents.create({
-                amount: 3099, // Amount in cents (e.g., €30.99)
+                amount: 295, // Amount in cents (e.g., €30.99)
                 currency: "eur",
                 customer: customer.id,
                 payment_method: paymentMethodId,
@@ -66,7 +66,7 @@ export default async function handler(req, res) {
                 paymentId: paymentIntent.id,
                 paymentType: "one-time",
                 status: paymentIntent.status,
-                amount: 30.99,
+                amount: 2.95,
             });
 
             res.status(200).json({

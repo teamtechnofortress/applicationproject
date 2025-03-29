@@ -44,3 +44,12 @@
     width: 100%;
     background-color: #e7fc41;
 }
+
+@media (max-width: 600px) {
+    .second-sec{
+       margin-top:20px;
+    } 
+    .faq-h1{
+        font-size: 33px;
+    } 
+}

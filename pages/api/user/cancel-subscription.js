@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
 
-    const subscription = await Subscription.findOne({ userId, status: "active" });
+    const subscription = await Subscription.findOne({ userId }).sort({ createdAt: -1 });
 
     if (!subscription) return res.status(404).json({ error: "Active subscription not found" });
 

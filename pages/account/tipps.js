@@ -19,12 +19,12 @@ const Tip = () => {
       <SidebarHeader />
       <ToastContainer />
       <div className="flex">
-        <div className="flex-1 ml-64">
+        <div className="flex-1 ml-0 md:ml-64">
           <div className="bg-gray-100 py-8 p-12">
             <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
              <iframe
                 width="100%"
-                height="500"
+                className="h-[300px] md:h-[500px]"
                 src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
                 title="YouTube Video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -35,9 +35,9 @@ const Tip = () => {
                <button className={`${styles['nachstes-tip']}`}>Nächstes Video</button>
               </div>
 
-              <div className="flex gap-6 mt-10">
+              <div className="block md:flex gap-6 mt-10">
                 {/* Video 1 */}
-                <div className="w-1/3">
+                <div className="w-full md:w-1/3">
                   <iframe 
                     className="w-full h-56" 
                     src="https://www.youtube.com/embed/VIDEO_ID_1" 
@@ -48,7 +48,7 @@ const Tip = () => {
                 </div>
 
                 {/* Video 2 */}
-                <div className="w-1/3">
+                <div className="w-full md:w-1/3">
                   <iframe 
                     className="w-full h-56" 
                     src="https://www.youtube.com/embed/VIDEO_ID_2" 
@@ -59,7 +59,7 @@ const Tip = () => {
                 </div>
 
                 {/* Video 3 */}
-                <div className="w-1/3">
+                <div className="w-full md:w-1/3">
                   <iframe 
                     className="w-full h-56" 
                     src="https://www.youtube.com/embed/VIDEO_ID_3" 

@@ -185,8 +185,8 @@ const Profile = () => {
       <SidebarHeader key={refresh} />
       <ToastContainer /> 
       <div className="flex">
-        <div className="flex-1 ml-64">
-          <div className="bg-gray-100 py-8 p-12">
+        <div className="flex-1 ml-0 md:ml-64">
+          <div className="bg-gray-100 py-8 p-0 md:p-12">
             <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
               <nav className="">
                 <h1 className={`${styles['heading-dash']}`}>Einstellungen</h1>
@@ -194,21 +194,21 @@ const Profile = () => {
                   <ul className={`${styles['nav-form']} flex flex-wrap items-center`}>
                     <li className={`${styles['nav-form-li']} ${styles['active']}`}>
                       <Link href="/account/profile" legacyBehavior>
-                        <a href="#" className="block py-2 px-3" aria-current="page">
+                        <a href="#" className="block py-2 px-1 md:px-3" aria-current="page">
                           Profil
                         </a>
                       </Link>
                     </li>
                     <li className={`${styles['nav-form-li']}`}>
                       <Link href="/account/settings" legacyBehavior>
-                        <a href="#" className="block py-2 px-3">
+                        <a href="#" className="block py-2 px-1 md:px-3">
                           Kontoeinstellungen
                         </a>
                       </Link>
                     </li>
                     <li className={`${styles['nav-form-li']}`}>
                       <Link href="/account/subscription" legacyBehavior>
-                        <a href="#" className="block py-2 px-3">
+                        <a href="#" className="block py-2 px-1 md:px-3">
                         Abonnement
                         </a>
                       </Link>
@@ -216,8 +216,8 @@ const Profile = () => {
                   </ul>
                 </div>
               </nav>
-              <div className="flex gap-4 mt-4">
-                <div className=" w-2/3">
+              <div className="block md:flex gap-4 mt-4">
+                <div className="w-full md:w-2/3">
                   <div className={`${styles['two-third']} p-10`}>
                   <h3 className={`${styles['heading-personl']}`}>Persönliche Daten</h3>
                   <form className= "mt-4" onSubmit={handleSubmit}>
@@ -373,7 +373,7 @@ const Profile = () => {
                   </form>
                   </div>
                 </div>
-                <div className={`${styles['one-third']} w-1/3 p-10`}>
+                <div className={`${styles['one-third']} w-full md:w-1/3 mt-8 md:mt-0 p-10`}>
                   <h3 className={`${styles['heading-personl']}`}>Profilbild</h3>
                   <p className={`${styles['p-login']} mt-4`}>
                     Für die besten Ergebnisse verwenden Sie ein Bild mit mindestens 600 x 600 Pixeln.

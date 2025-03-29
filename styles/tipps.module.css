@@ -7,3 +7,8 @@
     width: 24%;
     background-color: #e7fc41;
 }
+@media (max-width: 600px) {
+    .nachstes-tip{
+        width: 50%;
+    }  
+}

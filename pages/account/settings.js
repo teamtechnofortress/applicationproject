@@ -94,8 +94,8 @@ const Account = () => {
       <ToastContainer />
       <div className="flex">
      
-     <div className="flex-1 ml-64">
-     <div className="bg-gray-100 py-8 p-12">
+     <div className="flex-1 ml-0 md:ml-64">
+     <div className="bg-gray-100 py-8 p-0 md:p-12">
        <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
          <nav className="">
            <h1 className={`${styles['heading-dash']}`}>Einstellungen</h1>
@@ -103,21 +103,21 @@ const Account = () => {
              <ul className={`${styles['nav-form']} flex flex-wrap items-center`}>
                <li className={`${styles['nav-form-li']} `}>
                  <Link href="/account/profile" legacyBehavior>
-                   <a href="#" className="block py-2 px-3" aria-current="page">
+                   <a href="#" className="block py-2 px-1 md:px-3" aria-current="page">
                      Profil
                    </a>
                  </Link>
                </li>
                <li className={`${styles['nav-form-li']} ${styles['active']}`}>
                  <Link href="/account/settings" legacyBehavior>
-                   <a href="#" className="block py-2 px-3">
+                   <a href="#" className="block py-2 px-1 md:px-3">
                      Kontoeinstellungen
                    </a>
                  </Link>
                </li>
                <li className={`${styles['nav-form-li']}`}>
                  <Link href="/account/subscription" legacyBehavior>
-                   <a href="#" className="block py-2 px-3">
+                   <a href="#" className="block py-2 px-1 md:px-3">
                    Abonnement
                    </a>
                  </Link>
@@ -131,12 +131,12 @@ const Account = () => {
               <div className={`${styles['two-third']} p-10`}>
                 <h3 className={`${styles['heading-personl']}`}>E-Mail-Adresse</h3>
                 <div className="grid grid-cols-1 gap-4 mt-5">
-                  <div className="flex justify-between items-center">
+                  <div className="block md:flex justify-between items-center">
                     <p className={`${styles['old-email']}`}>Ihre E-Mai-Adresse lautet <span className={`${styles['span-email']}`}>{currentUser ? currentUser.email : ''}</span></p>
                     <button
                       type="button"
                       onClick={() => setisMailOpen(true)}
-                      className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}
+                      className={`${styles['email-btn']} mt-2 md:mt-0 bg-blue-500 text-white px-4 py-2 p-4 rounded`}
                     >
                       E-Mail-Adresse ändern
                     </button>
@@ -180,12 +180,12 @@ const Account = () => {
               <div className={`${styles['two-third']} p-10 mt-9`}>
                
                 <div className="grid grid-cols-1 gap-4 mt-5">
-                <div className="flex justify-between items-center">
+                <div className="block md:flex justify-between items-center">
                     <h3 className={`${styles['heading-personl']}`}>Passwort</h3>
                     <button
                      type="button"
                       onClick={() => setisPasswordOpen(true)}
-                      className={`${styles['email-btn']} bg-blue-500 text-white px-4 py-2 rounded`}
+                      className={`${styles['email-btn']} bg-blue-500 mt-2 md:mt-0 text-white px-4 py-2 rounded`}
                     >
                       Passwort ändern
                     </button>
@@ -226,33 +226,19 @@ const Account = () => {
 
             <div className={`${styles['two-third']} p-10 mt-9`}>
             <h3 className={`${styles['heading-personl']}`}>Benachrichtigungen</h3>
-                <div className="flex justify-between items-center border-b border-gray-300 pb-10">
+                <div className="flex justify-between items-center pb-10">
                   <div className='mt-4'>
                   <h3 className={`${styles['heading-news']}`}>Newsletter</h3>
                   <p className={`${styles['p-news']}`}>Erhalten Sie unseren wöchentlichen Newsletter in Ihrer Mailbox</p>
                   </div>
                   <label className="switch relative inline-block w-12 h-6">
                     <input type="checkbox" className="opacity-0 w-0 h-0 peer" />
-                    <span className="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-blue-500"></span>
+                    <span className="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-[var(--active-color)]"
+                    style={{ "--active-color": "#e7fc41" }}></span>
+                    {/* <span className="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-blue-500"></span> */}
                     <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
                   </label>
-                   
-                    
                 </div>
-                <div className="flex justify-between items-center mt-2">
-                  <div className='mt-4'>
-                  <h3 className={`${styles['heading-news']}`}>Newsletter</h3>
-                  <p className={`${styles['p-news']}`}>Erhalten Sie unseren wöchentlichen Newsletter in Ihrer Mailbox</p>
-                  </div>
-                  <label className="switch relative inline-block w-12 h-6">
-                    <input type="checkbox" className="opacity-0 w-0 h-0 peer" />
-                    <span className="slider absolute inset-0 bg-gray-400 rounded-full transition-all duration-300 peer-checked:bg-blue-500"></span>
-                    <span className="dot absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 peer-checked:translate-x-6"></span>
-                  </label>
-                   
-                    
-                </div>
-              
               </div>
           </div>
         </div>

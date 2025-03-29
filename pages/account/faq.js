@@ -19,12 +19,12 @@ const FAQ = () => {
       <SidebarHeader />
       <ToastContainer />
       <div className="flex">
-        <div className="flex-1 ml-64">
+        <div className="flex-1 ml-0 md:ml-64">
           <div className="bg-gray-100 py-8 p-12">
             <div className="mx-auto px-4 sm:px-6 lg:px-8 p-4">
             <h1 className={`${styles['faq-h1']}`}>Frequently <br />asked questions</h1>
-              <div className="flex gap-4 mt-4">
-                <div className="w-2/3">
+              <div className="block md:flex gap-4 mt-4">
+                <div className="w-full md:w-2/3">
                   <div className={`${styles['faq-section']}`}>
                     
 
@@ -113,7 +113,7 @@ const FAQ = () => {
                 </div>
 
                 {/* Profile Section */}
-                <div className={`${styles['second-sec']} w-1/3 p-10`}>
+                <div className={`${styles['second-sec']} w-full md:w-1/3 p-10`}>
                   <img src="/images/message.svg" className='mx-auto mt-2 mb-10'/>
                   <h3 className={`${styles['heading-faq']}`}>Do you have more questions?</h3>
                   <p className={`${styles['p-faq']} mt-4`}>

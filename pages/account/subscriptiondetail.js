@@ -33,21 +33,23 @@ const SubscriptionDetail = () => {
   }, []);
 
 
-    const toggleExpand = (planId) => {
-        setExpanded((prev) => ({
-            ...prev,
-            [planId]: !prev[planId],
-        }));
-    };
+  const toggleExpand = (planId) => {
+    setExpanded((prev) => ({
+      ...prev,
+      [planId]: !prev[planId],
+    }));
+    setSelectedPlan(planId); // ✅ Ensure plan is selected
+  };
 
     const plans = [
         {
             id: "price_one_time",
             name: "Einmal",
-            price: "30,00€",
-            duration: "Einmal",
+            price: "2,95€",
+            duration: "4 Tage voller Zugang",
             details: "Mit dem „One Time“-Plan haben Sie vollen Zugriff auf exklusive Tools für vier Personen.",
             label: null,
+            label_month: "", 
 
         },
         {
@@ -55,8 +57,13 @@ const SubscriptionDetail = () => {
           name: "3 Monate",
           price: "29,99€",
           duration: "Mindestlaufzeit",
-          details: "Mit dem 3-Monats-Plan erhalten Sie vollen Zugang zu exklusiven Tools für einen begrenzten Zeitraum.",
+          details: `✅ Professionelle & ansprechende Wohnungsmappe – Sofort bereit für deine Bewerbungen!<br><br>
+          ✅ Erhöhe deine Chancen mit einem strukturierten, überzeugenden Mieterprofil<br><br>
+          ✅ Schneller Bewerbungsprozess – Kein mühsames Zusammenstellen von Dokumenten mehr<br><br>
+          ✅ 100 % DSGVO-konform – Deine Daten sind bei uns sicher<br><br>
+          📌 Ideal für alle, die in den nächsten Wochen eine Wohnung brauchen und sich von der Masse abheben wollen.`,
           label: null,
+          label_month: "/ Monat", 
 
       },
         {
@@ -64,16 +71,26 @@ const SubscriptionDetail = () => {
             name: "6 Monate",
             price: "19,99€",
             duration: "Mindestlaufzeit",
-            details: "Unser beliebtester Plan! Profitieren Sie von erweiterten Funktionen und einem günstigeren Monatspreis.",
+            details: `✅ Alle Vorteile des 3-Monats-Abos + mehr Zeit für die perfekte Wohnung<br><br>
+            ✅ Unbegrenzte Anpassungen deiner Wohnungsmappe – optimiere dein Profil jederzeit<br><br>
+            ✅ Exklusive Tipps & Tricks, um bei Vermietern den besten Eindruck zu hinterlassen<br><br>
+            ✅ Mehr Zeit = bessere Chancen – Stressfrei die beste Wohnung finden<br><br>
+            🎯 Die perfekte Wahl für alle, die gezielt suchen, aber sich nicht unter Druck setzen lassen wollen.`,
             label: "Beliebt", 
+            label_month: "/ Monat", 
         },
         {
             id: "price_12_month",
             name: "12 Monate",
             price: "12,99€",
             duration: "Mindestlaufzeit",
-            details: "Unser bestes Angebot! Sparen Sie am meisten mit einem langfristigen Zugriff auf alle Premium-Funktionen.",
+            details: `✅ Maximale Flexibilität – Nutze deine Wohnungsmappe jederzeit für neue Bewerbungen<br><br>
+            ✅ Premium-Optimierung – Erhalte regelmäßige Empfehlungen, um dein Profil zu verbessern<br><br>
+            ✅ Persönlicher Support – Wir helfen dir, dein Mietprofil perfekt zu gestalten<br><br>
+            ✅ Bester Preisvorteil – Spare langfristig und sei immer vorbereitet<br><br>
+            💡 Ideal für alle, die regelmäßig umziehen, langfristig vorbereitet sein wollen oder einfach das beste Angebot sichern möchten!`,
             label: "Bester Preis", 
+            label_month: "/ Monat", 
         },
     ];
 
@@ -82,27 +99,26 @@ const SubscriptionDetail = () => {
             <SidebarHeader />
             <ToastContainer />
             <div className="flex">
-                <div className="flex-1 ml-64">
-                    <div className="bg-gray-100 py-8 p-20">
-                        <div className="mx-auto px-4 sm:px-6 lg:px-8 p-20">
+                <div className="flex-1 ml-0 md:ml-64">
+                    <div className="bg-gray-100 py-8 p-10 md:p-0">
+                        <div className="mx-auto px-4 sm:px-6 lg:px-8 p-10 md:p-10 lg:p-20">
                             <h1 className={`${styles["subscription-h1"]}`}>
                                 Schneller in dein Traumzuhause mit Wohnungsmappe
                             </h1>
                             
-                            <h2 className={`${styles["subscription-h2"]}`}>Wähle deine Option:</h2>
+                            <h2 className={`${styles["subscription-h2"]} mt-2`}>Wähle deine Option:</h2>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-20 pt-20">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-0 md:mt-10 lg:pt-0 pt-20">
                                 {plans.map((plan) => (
-                                    <div
-                                        key={plan.id}
-                                        className={`${styles["card-1"]} ${
-                                            selectedPlan === plan.id ? styles["selected-plan"] : ""
-                                        } cursor-pointer border-2 ${
-                                            selectedPlan === plan.id ? "border-green-500" : "border-gray-300"
-                                        } relative`}
-                                        onClick={() => setSelectedPlan(plan.id)}
-                                    >
- 
+                                  <div
+                                  key={plan.id}
+                                  className={`${styles["card-1"]} ${
+                                    selectedPlan === plan.id ? styles["selected-plan"] : ""
+                                  } ${expanded[plan.id] ? styles["expanded-card"] : ""} cursor-pointer border-2 ${
+                                    selectedPlan === plan.id ? "border-green-500" : "border-gray-300"
+                                  } relative`}
+                                  onClick={() => toggleExpand(plan.id)} // ✅ Toggle and select
+                                >
                                     {plan.label && (
                                             <div className={`${styles["beliebt"]} absolute top-0`}>{plan.label}</div>
                                         )}
@@ -114,36 +130,52 @@ const SubscriptionDetail = () => {
                                                 <h3 className={`${styles["monate"]}`}>{plan.name}</h3>
                                                 <p className={`${styles["grey-text"]}`}>{plan.duration}</p>
                                                 <h3 className={`${styles["price"]}`}>{plan.price}</h3>
-                                                <p className={`${styles["grey-text"]} mt-2`}>/ Monat</p>
+                                                <p className={`${styles["grey-text"]} mt-2`}>{plan.label_month}</p>
                                             </div>
                                         </div>
 
                                         {/* Expandable Section */}
                                         {expanded[plan.id] && (
                                             <div className="mt-4 text-gray-700">
-                                                <p>{plan.details}</p>
+                                                <p className={`${styles["p-detail"]}`}><div dangerouslySetInnerHTML={{ __html: plan.details }} /></p>
                                             </div>
                                         )}
 
-                                        {/* Toggle Button */}
                                         <button
-                                            className={`${styles["btn-mehr"]} mt-4 flex items-center gap-2 rounded-lg`}
-                                            onClick={(e) => {
-                                                e.stopPropagation(); // Prevent selecting the plan when clicking this button
-                                                toggleExpand(plan.id);
-                                            }}
+                                        className={`${styles["btn-mehr"]} mt-4 flex items-center gap-2 rounded-lg`}
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent card click duplication
+                                            toggleExpand(plan.id); // ✅ Toggle & Select
+                                        }}
                                         >
-                                            {expanded[plan.id] ? "Weniger anzeigen" : "Mehr anzeigen"}
-                                            <svg width="10" height="10" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M0.244688 0.0499997H1.39469L3.81469 2.34L1.39469 4.64H0.244688L2.66469 2.34L0.244688 0.0499997Z"
-                                                    fill="#333333"
-                                                />
-                                            </svg>
+                                        {expanded[plan.id] ? "Weniger anzeigen" : "Mehr anzeigen"}
+                                        <svg width="10" height="10" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                            d="M0.244688 0.0499997H1.39469L3.81469 2.34L1.39469 4.64H0.244688L2.66469 2.34L0.244688 0.0499997Z"
+                                            fill="#333333"
+                                            />
+                                        </svg>
                                         </button>
                                     </div>
                                 ))}
                             </div>
+
+                             {/* Checkout Button */}
+                    {!hasSubscription && (
+                                <div className="text-center mb-10 mt-10">
+                                    <Link
+                                        href={{
+                                            pathname: "/account/checkout",
+                                            query: { selectedPlan },
+                                        }}
+                                        legacyBehavior
+                                    >
+                                        <button className={`${styles["btn-tip"]}`} disabled={!selectedPlan}>
+                                            Weiter zur Bezahlung
+                                        </button>
+                                    </Link>
+                                </div>
+                            )}
                         </div>
                     </div>
                 <div className='bg-white p-20 mb-20'>
@@ -222,22 +254,7 @@ const SubscriptionDetail = () => {
                   </div>
                 </div>
 
-                    {/* Checkout Button */}
-                    {!hasSubscription && (
-                                <div className="text-center mb-20">
-                                    <Link
-                                        href={{
-                                            pathname: "/account/checkout",
-                                            query: { selectedPlan },
-                                        }}
-                                        legacyBehavior
-                                    >
-                                        <button className={`${styles["btn-tip"]}`} disabled={!selectedPlan}>
-                                            Weiter zur Bezahlung
-                                        </button>
-                                    </Link>
-                                </div>
-                            )}
+                   
                 </div>
             </div>
         </>
