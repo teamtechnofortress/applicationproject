@@ -104,7 +104,7 @@ const Login = () => {
                 <div className={`${styles['heading-left']}`}>Hast du bereits ein Konto?</div>
                 <div>
                     <Link
-                      href=""
+                      href="/signup"
                       className={`${styles['jetzt-btn']}`}>
                       Jetzt anmelden
                     </Link>
@@ -137,7 +137,7 @@ const Login = () => {
                   autoComplete="email"
                   required
                   className={`${styles['input-field']}`}
-                  placeholder="Username or email address"
+                  placeholder="E-Mail-Adresse"
                 />
               </div>
               <div>
@@ -152,7 +152,7 @@ const Login = () => {
                   autoComplete="current-password"
                   required
                   className={`${styles['input-field']}`}
-                  placeholder="Password"
+                  placeholder="Passwort"
                 />
                  <span className="flex justify-around items-center" onClick={handleToggle}>
                   <Icon className="absolute mr-10" icon={icon} size={25}/>
@@ -162,7 +162,7 @@ const Login = () => {
                     <Link
                       href="/forgot"
                       className="font-medium">
-                      Forgot password
+                      Forgot Passwort
                     </Link>
                   </div>
                 </div>

@@ -201,15 +201,32 @@ useEffect(() => {
 
       {/* ✅ Modal - Conditional Rendering */}
       {isTipModal && (
-        <div id="tip-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900">
-          <div className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}>
-            <button type="button" className="absolute top-0 right-0 text-lg font-bold text-gray-700 hover:text-gray-900" onClick={() => setisTipModal(false)}>
-              ✖
-            </button>
-            <h3 className={`${styles["modal-h3"]} flex gap-4 justify-center`}>
-              <img src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
-            </h3>
-
+       <div
+       id="tip-modal"
+       className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
+       onClick={() => setisTipModal(false)} 
+     >
+       
+       <div
+         className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
+         onClick={(e) => e.stopPropagation()}
+       >
+         <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
+         <button
+             type="button"
+             className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
+             onClick={() => setisTipModal(false)}
+           >
+             ✖
+           </button>
+           <h3 className={`${styles["modal-h3"]}`}>
+             <div className="flex gap-4 justify-center">
+             <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
+             </div>
+         
+           </h3>
+         
+         </div>
             <div className="p-4 md:p-5 space-y-4">
                  {/* FAQ Item 1 */}
                  <div className={`${styles['faq-item']} p-4`}>
@@ -227,7 +244,7 @@ useEffect(() => {
                         {openIndex === 0 && (
                           <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                             <p>
-                            Bite nutze ausschließlich die Schufa-Auskunft welche extra für den Vermieter gedacht ist und nutze dafür den unten zur verfügung stehend Link. Viele Vermieter akzeptieren die kostenlose Schufa-Auskunft nicht                              </p>
+                            Nutze nur die Schufa-Auskunft, die speziell für Vermieter gedacht ist. Verwende dafür den unten stehenden Link – viele Vermieter akzeptieren die kostenlose Version nicht.</p>
                           </div>
                         )}
                   </div>
@@ -248,7 +265,7 @@ useEffect(() => {
                     {openIndex === 1 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Achte auf die gültigkeit deiner Schufaauskunft. Diese ist nur 3 Monate gültig und wird danach nicht mehr von den Vermietern akzeptiert.                         </p>
+                        Achte auf die Gültigkeit deiner Schufa-Auskunft – sie ist nur 3 Monate gültig und wird danach nicht mehr akzeptiert.</p>
                       </div>
                     )}
                   </div>
@@ -269,7 +286,7 @@ useEffect(() => {
                     {openIndex === 2 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Solltest du die Schufa-Auskunft per post zugeschickt bekommen dich aber bereits vor eintrefffen auf eine Wohnung bewerden wollen, kannst du eine veraltete Schufaauskunft einreichen und den hinweis auf die getätigte bestellung der neuen geben.                        </p>
+                        Hast du deine neue Schufa-Auskunft per Post bestellt, möchtest dich aber schon bewerben? Reiche eine ältere Version ein und weise darauf hin, dass die aktuelle bereits bestellt ist.</p>
                       </div>
                     )}
                   </div>

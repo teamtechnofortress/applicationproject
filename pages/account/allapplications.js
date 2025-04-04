@@ -30,6 +30,18 @@ const AllApplications = () => {
   const fetchProfileData = async () => {
   try {
     const response = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/user/allapplications`);
+    // Assuming response.data contains the actual array of applications
+    const data = response.data; // This should be the array of profiles
+    if (Array.isArray(data)) {
+      data.forEach(profile => {
+        // Accessing childId fields (firstname and lastname)
+        if (profile.childId) {
+          // console.log('Child ID Firstname:', profile.childId.vorname);
+          // console.log('Child ID Lastname:', profile.childId.nachname);
+        }
+      });
+      // console.log('Response:', data);
+     }
 
     if (response.data && Array.isArray(response.data)) {
       setApplicationCount(response.data.length); 
@@ -139,10 +151,10 @@ const AllApplications = () => {
           <div className="bg-gray-100 py-8 sm:p-4 lg:p-12 p-4">
             <div className="mx-auto px-4">
               <h2 className={`${styles['application-h2']} mt-7`}>
-                Hello {user.firstname} {user.lastname}
+                Hallo {user.firstname} {user.lastname}
               </h2>
               <div className={`${styles['application-flex-div']}`}>
-                <h2 className={`${styles['application-h4']}`}>Your apartment applications</h2>
+                <h2 className={`${styles['application-h4']}`}>Deine Wohnungsbewerbungen</h2>
                 {/* Get applications where parent === 0 and check if there are 2 */}
                 {canAddApplication() && (
                   <Link href="/account/application" legacyBehavior>
@@ -163,7 +175,7 @@ const AllApplications = () => {
                     return (
                       <div key={profile._id} className={`${styles['pdf-sec']} relative`}>
                         <div className={`${styles['pdf-btn-grp']}`}>
-                          
+                       
                           {/* Hide "Person hinzufügen" if this application already has a child */}
                           {!profile.childId && canAddChild() && (
                             <button
@@ -184,7 +196,14 @@ const AllApplications = () => {
                                 event.preventDefault();
                                 event.stopPropagation();
                                 if (profile.childId) {
-                                  setSelectedApplication({ childId: profile.childId, parentId: profile._id });
+                                  // setSelectedApplication({ childId: profile.childId, parentId: profile._id });
+                                  setSelectedApplication({
+                                    parentId: profile._id,
+                                    childId: profile.childId._id,
+                                    parentName: `${profile.vorname} ${profile.nachname}`,
+                                    childName: `${profile.childId.vorname} ${profile.childId.nachname}`,
+                                    
+                                  });
                                   setShowPopup(true);
                                 } else {
                                   router.push(`/account/editapplication?id=${profile._id}`);
@@ -306,7 +325,8 @@ const AllApplications = () => {
                 setShowPopup(false);
               }}
             >
-              Edit Parent Application
+    
+            Bewerbermappe von {selectedApplication.parentName} bearbeiten
             </button>
               {/* Edit Child */}
               <button
@@ -318,7 +338,8 @@ const AllApplications = () => {
               
               }}
             >
-              Edit Child Application
+      
+              Bewerbermappe von {selectedApplication.childName} bearbeiten
             </button>
           </div>
         </div>

@@ -309,7 +309,7 @@ const StepTwoInner = ({
               </div>
 
               <div className="p-4 md:p-5 space-y-4">
-                <div>Achte darauf, dass die Adresse die du hier angibst die selbe ist wie auf deinem Ausweis und deiner Schufa sowie auf deinen Gehaltsnachweisen. Sollten es bei den Adressen Abweichungen geben erkläre diese Unbedingt in deinem Anschreiben !!!</div>
+                <div>Erfordert die Wohnung einen Wohnberechtigungsschein (WBS)? Bewirb dich nur mit dem richtigen! Achtung: Es gibt verschiedene Arten – prüfe vorher, ob deiner passt, und lade ihn hier hoch.</div>
               </div>
             </div>
           </div>

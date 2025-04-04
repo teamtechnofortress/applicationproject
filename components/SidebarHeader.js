@@ -166,10 +166,10 @@ export const DashboardHeader = () => {
                 strokeDashoffset={strokeDashoffset}
               ></circle>
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-xl font-bold mb-10 text-gray-700 progress-text"> {progress}%</span>
+            <div className="absolute bottom-[49%] left-0 right-0 flex items-center justify-center">
+              <span className="text-xl font-bold text-gray-700 progress-text"> {progress}%</span>
             </div>
-            <p className={`${styles['progress-p']} font-bold text-gray-700 text-center`}>Applicant folder</p>
+            <p className={`${styles['progress-p']} font-bold text-gray-700 text-center`}>Bewerbermappe</p>
           </div>
           <Link href="/account/tipps" legacyBehavior><button className={`${styles['btn-tip']}`}>Tipps</button></Link>
           

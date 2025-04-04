@@ -116,7 +116,7 @@ const StepThreeInner = ({
           {errors.phonenumber && <p className="text-red-500 text-sm">{errors.phonenumber}</p>}
         </div>
         <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
-        (Name)lade dein Bewerberbild hoch
+        Lade dein Bewerberbild hoch
         </p>
         <img
           src="/images/profile.jpg"

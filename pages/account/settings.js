@@ -132,7 +132,7 @@ const Account = () => {
                 <h3 className={`${styles['heading-personl']}`}>E-Mail-Adresse</h3>
                 <div className="grid grid-cols-1 gap-4 mt-5">
                   <div className="block md:flex justify-between items-center">
-                    <p className={`${styles['old-email']}`}>Ihre E-Mai-Adresse lautet <span className={`${styles['span-email']}`}>{currentUser ? currentUser.email : ''}</span></p>
+                    <p className={`${styles['old-email']}`}>Ihre E-Mail-Adresse lautet <span className={`${styles['span-email']}`}>{currentUser ? currentUser.email : ''}</span></p>
                     <button
                       type="button"
                       onClick={() => setisMailOpen(true)}

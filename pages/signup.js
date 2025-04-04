@@ -134,7 +134,7 @@ const Signup = () => {
                   autoComplete="email"
                   required
                   className={`${styles['input-field']}`}
-                  placeholder="Username or email address"
+                  placeholder="E-Mail-Adresse"
                 />
               </div>
               <div>
@@ -149,7 +149,7 @@ const Signup = () => {
                   autoComplete="current-password"
                   required
                   className={`${styles['input-field']}`}
-                  placeholder="Password"
+                  placeholder="Passwort"
                 />
                 <span className="flex justify-around items-center" onClick={handleToggle}>
                   <Icon className="absolute mr-10" icon={icon} size={25}/>
@@ -159,7 +159,7 @@ const Signup = () => {
                     <Link
                       href="/forgot"
                       className="font-medium">
-                      Forgot password
+                      Forgot Passwort
                     </Link>
                   </div>
                 </div>

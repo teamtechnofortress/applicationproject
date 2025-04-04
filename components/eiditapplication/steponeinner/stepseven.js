@@ -96,27 +96,19 @@ useEffect(() => {
 
   const validateFields = () => {
     const newErrors = {};
-    // setBwaimages(updatedImages);
-
-    // if (!bwaimages || bwaimages.length === 0) {
-    //   newErrors.bwaimages = "BWA ist erforderlich.";
-    // }
-
-    // setErrors(newErrors);
-    // return Object.keys(newErrors).length === 0; // ✅ Return true if no errors
 
      // If updatedImages has new images, update imageswbs
-     if (updatedImages.length !== 0) {
+    if (updatedImages.length !== 0) {
       console.log("Updating imageswbs with new images from updatedImages");
       setBwaimages(updatedImages);
       // return true;
     }
     // If imageswbs already contains images, no need to update
-    if (bwaimages && bwaimages.length > 0) {
-      console.log("Validation passed, images already assigned:", bwaimages);
-      return true;
-    } 
-    newErrors.bwaimages = "BWA ist erforderlich.";
+    // if (bwaimages && bwaimages.length > 0) {
+    //   console.log("Validation passed, images already assigned:", bwaimages);
+    //   return true;
+    // } 
+    // newErrors.bwaimages = "BWA ist erforderlich.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

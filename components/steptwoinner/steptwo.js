@@ -132,7 +132,7 @@ const StepTwoInner = ({
                         {openIndex === 0 && (
                           <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                             <p>
-                            Solltest du in deinen Unterlagen irgendwelche unstimmigkeiten haben erkläre diese zwingend in dem Anschreiben. Beispiele hierfür könnten zum Beispiel verschwiedene Adressen auf der Schufa, dem Ausweis und den Gehaltsnachweisen sein.
+                            Hast du Unstimmigkeiten in deinen Unterlagen, z. B. unterschiedliche Adressen bei Schufa, Ausweis oder Gehaltsnachweisen? Erkläre das im Anschreiben.
                             </p>
                           </div>
                         )}
@@ -154,7 +154,7 @@ const StepTwoInner = ({
                     {openIndex === 1 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Gehe in dem Anschreiben auch auf deine Berufliche Situation ein, schildere deinen aktuellen stand und beschreibe deine position in dem Unternehmen sofern diese qualifikationen benötigt die für einen Vermiter interessant sein könnten                             </p>
+                        Beschreibe im Anschreiben deine berufliche Situation – deinen aktuellen Stand, deine Position und relevante Qualifikationen, die für den Vermieter interessant sein könnten.</p>
                       </div>
                     )}
                   </div>
@@ -175,7 +175,8 @@ const StepTwoInner = ({
                     {openIndex === 2 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Sage in dem Anschreiben auch, das die die Gegend sehr zusagt und dich hier wohlfühlen würdest. Dies kannst du auch gerne verallgemeinern und für mehrere Wohnung benutzten für die du dich bewirbst.                        </p>
+                        Erwähne, dass dir die Gegend gefällt und du dich dort wohlfühlen würdest. Diesen Hinweis kannst du auch bei mehreren Bewerbungen verwenden.
+                        </p>
                       </div>
                     )}
                   </div>

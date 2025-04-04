@@ -69,9 +69,9 @@ const StepSevenInner = ({
 
   const validateFields = () => {
     const newErrors = {};
-    if (!bwaimages || bwaimages.length === 0) {
-      newErrors.bwaimages = "BWA ist erforderlich.";
-    }
+    // if (!bwaimages || bwaimages.length === 0) {
+    //   newErrors.bwaimages = "BWA ist erforderlich.";
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // ✅ Return true if no errors

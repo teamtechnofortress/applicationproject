@@ -59,18 +59,7 @@ const StepTwoInner = ({
             />
             {errors.strabe && <p className="text-red-500 text-sm">{errors.strabe}</p>}
           </div>
-          <div className="input-field mt-10">
-            <input
-              type="text"
-              className={`${styles["form-input"]} form-control `}
-              id="postleitzahl"
-              name="postleitzahl"
-              placeholder="postleitzahl"
-              value={postleitzahl}
-              onChange={handleChange}
-            />
-            {errors.postleitzahl && <p className="text-red-500 text-sm">{errors.postleitzahl}</p>}
-          </div>
+         
           <div className="input-field mt-10">
             <input
                 type="text"
@@ -94,6 +83,18 @@ const StepTwoInner = ({
                 onChange={handleChange}
               />
                {errors.ort && <p className="text-red-500 text-sm">{errors.ort}</p>}
+          </div>
+          <div className="input-field mt-10">
+            <input
+              type="text"
+              className={`${styles["form-input"]} form-control `}
+              id="postleitzahl"
+              name="postleitzahl"
+              placeholder="Postleitzahl"
+              value={postleitzahl}
+              onChange={handleChange}
+            />
+            {errors.postleitzahl && <p className="text-red-500 text-sm">{errors.postleitzahl}</p>}
           </div>
         </div>
       </div>

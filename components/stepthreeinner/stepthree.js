@@ -243,7 +243,7 @@ const StepThreeInner = ({
                     {openIndex === 1 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Solltest du deinen Reisepass, Aufenthaltstitel o. Ä. anstatt deines Ausweises Hochladen musst du zwingend eine Meldebescheinigung deines Bürgeramts mit hochladen                        </p>
+                        Lädst du statt deines Ausweises einen Reisepass oder Aufenthaltstitel hoch? Dann füge unbedingt eine Meldebescheinigung vom Bürgeramt hinzu.</p>
                       </div>
                     )}
                   </div>
@@ -264,7 +264,7 @@ const StepThreeInner = ({
                     {openIndex === 2 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Schwärze auch hier alle sensiblen Daten/ Zahlen die der Vermieter nicht einsehen muss. Siehe Beispielbild. Gerne kannst du auch einen großen KOPIE schriftzug üder deinen Ausweis legen.                        </p>
+                        Schwärze sensible Daten wie Seriennummer und Zugangsnummer, die der Vermieter nicht einsehen muss (siehe Beispielbild). Du kannst auch einen großen "KOPIE"-Schriftzug über dein Dokument legen.</p>
                       </div>
                     )}
                   </div>

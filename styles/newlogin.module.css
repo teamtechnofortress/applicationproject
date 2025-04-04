@@ -26,7 +26,7 @@
 .jetzt-btn{
     font-family: 'Poppins Medium';
     font-size: 16px;
-    color:#e7fc41;
+    color:#d6e93e;
 }
 .google-btn{
     width: 50%;
@@ -62,7 +62,7 @@
     text-align: end;
     font-family: 'Poppins Medium';
     font-size: 13px;
-    color:#e7fc41;
+    color:#d6e93e;
 }
 .signIn-btn{
     font-family: 'Poppins Medium';
@@ -79,5 +79,5 @@
     text-align: center;
 }
 .p-login span{
-    color: #e7fc41;
+    color: #d6e93e;
 }

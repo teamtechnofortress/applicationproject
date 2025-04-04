@@ -24,10 +24,10 @@ const StepFourInner = ({
               <div className="grid grid-cols-1 gap-4 mt-3 mb-3">
                 <div>
                     <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
-                     Wie ist deine Berufliche Situation
+                     Wie ist deine Berufliche Situation ?
                     </p>    
                     <p className={`${styles["p-address"]} mb-4 text-center`}>
-                      Bitte walhle enie
+                    Bitte Option wählen
                     </p> 
 
                     <div className="grid grid-cols-2 mt-5 gap-4 w-[80%] mx-auto">
@@ -70,7 +70,7 @@ const StepFourInner = ({
                               htmlFor="profession2"
                             >
                               <img src="/images/self-emp.svg" alt="icon" />
-                              <p>Selbstsändig</p>
+                              <p>Selbstständig</p>
                               
                             </label>
                             

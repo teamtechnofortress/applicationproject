@@ -200,17 +200,34 @@ useEffect(() => {
 
       {/* ✅ Modal - Conditional Rendering */}
       {isTipModal && (
-        <div id="tip-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900">
-          <div className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}>
-            <button type="button" className="absolute top-0 right-0 text-lg font-bold text-gray-700 hover:text-gray-900" onClick={() => setisTipModal(false)}>
+        <div
+        id="tip-modal"
+        className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
+        onClick={() => setisTipModal(false)} 
+      >
+        
+        <div
+          className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
+          <button
+              type="button"
+              className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
+              onClick={() => setisTipModal(false)}
+            >
               ✖
             </button>
-            <h3 className={`${styles["modal-h3"]} flex gap-4 justify-center`}>
-              <img src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
+            <h3 className={`${styles["modal-h3"]}`}>
+              <div className="flex gap-4 justify-center">
+              <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
+              </div>
+          
             </h3>
-
+          
+          </div>
             <div className="p-4 space-y-4">
-              <p>Achte darauf, dass deine Mietschuldenfreiheitsbescheinigung nicht älter als 3 Monate ist und dass die Adresse mit deiner aktuellen Adresse übereinstimmt.</p>
+              <p>Achte auch hier auf die Gültigkeit der Mietschuldenfreiheitsbescheinigung, diese sollte in der Regel nicht älter als 3 Monate sein und die gleiche Adresse aufweisen die auch auf deinem Ausweis und den Gehaltsnachweisen zu finden ist.</p>
             </div>
           </div>
         </div>

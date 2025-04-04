@@ -120,33 +120,32 @@ const StepFiveInner = ({
       </div>
        {/* Modal - Conditional Rendering */}
        {isTipModal && (
-          <div
-            id="tip-modal"
-            className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
-            onClick={() => setisTipModal(false)} 
-          >
-            
-            <div
-              className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
-              <button
-                  type="button"
-                  className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
-                  onClick={() => setisTipModal(false)}
-                >
-                  ✖
-                </button>
-                <h3 className={`${styles["modal-h3"]}`}>
-                  <div className="flex gap-4 justify-center">
-                  <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
-                  </div>
-              
-                </h3>
-              
-              </div>
-
+         <div
+         id="tip-modal"
+         className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
+         onClick={() => setisTipModal(false)} 
+       >
+         
+         <div
+           className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
+           onClick={(e) => e.stopPropagation()}
+         >
+           <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
+           <button
+               type="button"
+               className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
+               onClick={() => setisTipModal(false)}
+             >
+               ✖
+             </button>
+             <h3 className={`${styles["modal-h3"]}`}>
+               <div className="flex gap-4 justify-center">
+               <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
+               </div>
+           
+             </h3>
+           
+           </div>
               <div className="p-4 md:p-5 space-y-4">
                  {/* FAQ Item 1 */}
                  <div className={`${styles['faq-item']} p-4`}>
@@ -164,7 +163,7 @@ const StepFiveInner = ({
                         {openIndex === 0 && (
                           <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                             <p>
-                            Die Mietschuldenfreiheit ist essenziell für den Bewerbungsprozess ! Solltest du von deiner Hausverwaltung keine bekommen oder bereits eine angefragt haben, kannst du übergangsweise die letzten getätigten Mietzahlung aus deinem Onlinebaking beifügen. Bitte beachte das dies aber keine Mietschuldenfreiheitsbescheinigung ersetzt und ungerne gesehen wird.                             </p>
+                            Die Mietschuldenfreiheitsbescheinigung ist essenziell für deine Bewerbung! Falls du keine von deiner Hausverwaltung bekommst oder noch auf eine Antwort wartest, kannst du vorübergehend deine letzten Mietzahlungen aus dem Onlinebanking beifügen. Beachte aber, dass dies keine offizielle Bescheinigung ersetzt und nur ungern akzeptiert wird.</p>
                           </div>
                         )}
                   </div>
@@ -185,7 +184,28 @@ const StepFiveInner = ({
                     {openIndex === 1 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Viele Mieter scheuen davor zurück Ihren aktuelle Vermieter nach einer solchen MSFB zu fragen, da sie glauben im Anschluss benachteiligt zu werden. In der Regel freut sich aber der aktuelle Vermieter wenn du ausziehst da er bei Neuvermietung eine höhere Miete ansetzten kann.                        </p>
+                        Viele Mieter zögern, ihren aktuellen Vermieter nach einer Mietschuldenfreiheitsbescheinigung zu fragen – aus Sorge vor Nachteilen. Doch oft profitieren Vermieter von einem Auszug, da sie die Wohnung teurer neu vermieten können. Scheue dich also nicht, danach zu fragen!</p>
+                      </div>
+                    )}
+                  </div>
+                  <hr/>
+                  {/* FAQ Item 3 */}
+                  <div className={`${styles['faq-item']}  p-4`}>
+                    <button
+                      type="button"
+                      onClick={() => toggleAccordion(2)}
+                      className="w-full text-left font-semibold text-xl rounded-lg flex items-center gap-3"
+                    >
+                        <span className={`${styles['open_faq']}`}>
+                        {openIndex === 2 ? '-' : '+'}
+                      </span>
+                      <span className={`${styles['faq-title']}`}>Tipp 3</span>
+                      
+                    </button>
+                    {openIndex === 2 && (
+                      <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
+                        <p>
+                        Achte auf die Gültigkeit deiner Mietschuldenfreiheitsbescheinigung – sie sollte nicht älter als 3 Monate sein und die gleiche Adresse enthalten wie dein Ausweis und deine Gehaltsnachweise.</p>
                       </div>
                     )}
                   </div>

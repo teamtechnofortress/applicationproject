@@ -29,7 +29,8 @@ const handler = async (req, res) => {
       }
 
       // Fetch the profile for the user
-      const profile = await Application.find({ userId: user._id, parent:"0" });
+      const profile = await Application.find({ userId: user._id, parent: "0" }).populate('childId', 'vorname nachname');
+
 
       if (!profile || profile.length === 0) {
         return res.status(200).json({ success: false, message: 'Application not found' });

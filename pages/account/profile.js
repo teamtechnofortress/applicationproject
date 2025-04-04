@@ -291,7 +291,7 @@ const Profile = () => {
                     </div>
                     <div className="text-end mt-3">
                       <button type="submit" className={`${styles['update-btn']} leading-6 shadow-sm px-3 py-1.5`}>
-                        Update now
+                        Aktualisieren
                       </button>
                     </div>
                   </form>
@@ -367,7 +367,7 @@ const Profile = () => {
                     </div>
                     <div className="text-end mt-3">
                       <button type="submit" className={`${styles['update-btn']} leading-6 shadow-sm px-3 py-1.5`}>
-                        Update now
+                        Aktualisieren
                       </button>
                     </div>
                   </form>

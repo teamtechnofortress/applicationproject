@@ -7,7 +7,8 @@ const StepNineInner = ({
   currentStep,
   setCurrentStep,
 }) => {
-
+  const [isTipModal, setisTipModal] = useState(false);
+  const [openIndex, setOpenIndex] = useState(0); // ✅ For FAQ accordion
   setCurrentStep(22);
    // Function to copy text
    const handleCopy = () => {
@@ -27,7 +28,10 @@ const StepNineInner = ({
       console.error("Fehler beim Kopieren des Textes: ", err);
     });
   };
-
+ // ✅ Toggle Accordion Item
+ const toggleAccordion = (index) => {
+  setOpenIndex(openIndex === index ? null : index);
+};
   return (
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg">
@@ -37,6 +41,10 @@ const StepNineInner = ({
         <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
           Untermieter
         </p>
+
+        <button type="button" className={`${styles["tips"]} mx-auto`} onClick={() => setisTipModal(true)}>
+          <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps zur Bewerbung</span>
+        </button>
 
         <p className={`${styles["p-address"]} mt-20 mb-10 text-center w-[60%] mx-auto`}>
         Kopiere diesen Text und sende ihn an deine Hausverwaltung.
@@ -89,6 +97,81 @@ const StepNineInner = ({
           </div>
         </div>
       </div>
+      {/* ✅ Modal - Conditional Rendering */}
+      {isTipModal && (
+        <div
+        id="tip-modal"
+        className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
+        onClick={() => setisTipModal(false)} 
+      >
+        
+        <div
+          className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-4 md:p-5 rounded-t justify-between items-center relative">
+          <button
+              type="button"
+              className="text-gray-700 hover:text-gray-900 text-lg font-bold absolute top-0 right-0"
+              onClick={() => setisTipModal(false)}
+            >
+              ✖
+            </button>
+            <h3 className={`${styles["modal-h3"]}`}>
+              <div className="flex gap-4 justify-center">
+              <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
+              </div>
+          
+            </h3>
+          
+          </div>
+
+            <div className="p-4 md:p-5 space-y-4">
+                 {/* FAQ Item 1 */}
+                 <div className={`${styles['faq-item']} p-4`}>
+                        <button
+                         type="button" 
+                          onClick={() => toggleAccordion(0)}
+                          className="w-full text-left font-semibold text-xl rounded-lg flex items-center gap-3"
+                        >
+                           <span className={`${styles['open_faq']}`}>
+                            {openIndex === 0 ? '-' : '+'}
+                          </span>
+                          <span className={`${styles['faq-title']}`}>Tipp 1</span>
+                         
+                        </button>
+                        {openIndex === 0 && (
+                          <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
+                            <p>
+                            Solltest du noch bei deinen Eltern wohnen können diese dir ganz einfach mit der unten zum Download verfügbaren vorlage deine Mietschuldenfreiheit bescheinigen.</p>
+                          </div>
+                        )}
+                  </div>
+                    <hr/>
+                  {/* FAQ Item 2 */}
+                  <div className={`${styles['faq-item']}  p-4`}>
+                    <button
+                      type="button"
+                      onClick={() => toggleAccordion(1)}
+                      className="w-full text-left font-semibold text-xl rounded-lg flex items-center gap-3"
+                    >
+                        <span className={`${styles['open_faq']}`}>
+                        {openIndex === 1 ? '-' : '+'}
+                      </span>
+                      <span className={`${styles['faq-title']}`}>Tipp 2</span>
+                      
+                    </button>
+                    {openIndex === 1 && (
+                      <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
+                        <p>
+                        Gleiches gilt für Untermieter die in einer WG oder als Pärchen gewohnt haben, hier kann der jeweilige im Hauptmitverrag verankerte Mieter dir ganz einfach deine Mietschuldenfreiheit bescheinigen. Nutze auch hier unsere vorlage um schenller zu deiner perfekten Bewerbung zu kommen.</p>
+                      </div>
+                    )}
+                  </div>
+              </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
