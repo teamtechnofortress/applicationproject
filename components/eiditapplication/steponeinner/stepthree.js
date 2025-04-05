@@ -42,10 +42,11 @@ const StepThreeInner = ({
     
 
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   
     if (!safeTrim(email)) {
       newErrors.email = "Bitte geben Sie Ihre E-Mail-Adresse ein.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    } else if (!emailRegex.test(email)) {
       newErrors.email = "Bitte geben Sie eine gültige E-Mail-Adresse ein.";
     }
   

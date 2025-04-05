@@ -24,6 +24,7 @@ const AllApplications = () => {
   const [subscriptionData, setSubscriptionData] = useState(null);
   const [selectedApplication, setSelectedApplication] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [showPriceingPopup, setShowPriceingPopup] = useState(false);
 
   const router = useRouter();
   /** Fetches all apartment applications */
@@ -117,6 +118,8 @@ const AllApplications = () => {
     return false;
   };
 
+ 
+
   const canEdit = () => {
     if (!subscriptionData) return false;
     if (subscriptionData.paymentType === "subscription" &&  subscriptionData.status === "active") {
@@ -144,7 +147,7 @@ const AllApplications = () => {
 
   return (
     <>
-      <SidebarHeader />
+      <SidebarHeader subscriptionData={subscriptionData} setShowPriceingPopup={setShowPriceingPopup} />
       <ToastContainer />
       <div className="flex">
         <div className="flex-1 ml-0 md:ml-64">
@@ -156,15 +159,22 @@ const AllApplications = () => {
               <div className={`${styles['application-flex-div']}`}>
                 <h2 className={`${styles['application-h4']}`}>Deine Wohnungsbewerbungen</h2>
                 {/* Get applications where parent === 0 and check if there are 2 */}
-                {canAddApplication() && (
+                {canAddApplication() ? (
                   <Link href="/account/application" legacyBehavior>
                     <button className={`${styles['or-button']} mt-10`}>
                       New <img className={`${styles['img-button']}`} src="/images/plus.svg" />
                     </button>
                   </Link>
+                ) : (
+                  <button
+                    onClick={() => setShowPriceingPopup(true)}
+                    className={`${styles['or-button']} mt-10`}
+                  >
+                    New <img className={`${styles['img-button']}`} src="/images/plus.svg" />
+                  </button>
                 )}
               </div>
-
+             
               <div className={`${styles['flex-sec']} gap-8`}>
                 {loading ? (
                   <div>Loading...</div>
@@ -176,45 +186,57 @@ const AllApplications = () => {
                       <div key={profile._id} className={`${styles['pdf-sec']} relative`}>
                         <div className={`${styles['pdf-btn-grp']}`}>
                        
-                          {/* Hide "Person hinzufügen" if this application already has a child */}
-                          {!profile.childId && canAddChild() && (
-                            <button
-                              type="button"
-                              onClick={() => router.push(`/account/application?parentId=${profile._id}`)}
-                              className={`${styles['pdf-person']}`}
-                            >
-                              Person hinzufügen <img className={`${styles['img-button']}`} src="/images/plus.svg" />
-                            </button>
-                          )}
-
-                         
+                         {/* Hide "Person hinzufügen" if this application already has a child */}
+                         {
+                            !profile.childId && canAddChild() ? (
+                              <button
+                                type="button"
+                                onClick={() => router.push(`/account/application?parentId=${profile._id}`)}
+                                className={styles['pdf-person']}
+                              >
+                                Person hinzufügen <img className={styles['img-button']} src="/images/plus.svg" />
+                              </button>
+                            ) : !profile.childId ? (
+                              <button
+                                type="button"
+                                onClick={() => setShowPriceingPopup(true)}
+                                className={styles['pdf-person']}
+                              >
+                                Person hinzufügen <img className={styles['img-button']} src="/images/plus.svg" />
+                              </button>
+                            ) : null
+                          }
                           {/* Edit */}
-                          {canEdit() && (
-                            <button
-                              className={`${styles['pdf-btn']}`}
-                              onClick={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                                if (profile.childId) {
-                                  // setSelectedApplication({ childId: profile.childId, parentId: profile._id });
-                                  setSelectedApplication({
-                                    parentId: profile._id,
-                                    childId: profile.childId._id,
-                                    parentName: `${profile.vorname} ${profile.nachname}`,
-                                    childName: `${profile.childId.vorname} ${profile.childId.nachname}`,
-                                    
-                                  });
-                                  setShowPopup(true);
-                                } else {
-                                  router.push(`/account/editapplication?id=${profile._id}`);
-                                }
-                              }}
-                              
-                            >
-                              <img src="/images/write.svg" />
-                            </button>
-                          )}
-
+                          {canEdit() ? (
+                              <button
+                                className={styles['pdf-btn']}
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  if (profile.childId) {
+                                    setSelectedApplication({
+                                      parentId: profile._id,
+                                      childId: profile.childId._id,
+                                      parentName: `${profile.vorname} ${profile.nachname}`,
+                                      childName: `${profile.childId.vorname} ${profile.childId.nachname}`,
+                                    });
+                                    setShowPopup(true);
+                                  } else {
+                                    router.push(`/account/editapplication?id=${profile._id}`);
+                                  }
+                                }}
+                              >
+                                <img src="/images/write.svg" alt="Edit" />
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => setShowPriceingPopup(true)}
+                                className={styles['pdf-btn']}
+                              >
+                                <img src="/images/write.svg" alt="Edit" />
+                              </button>
+                            )}
                         {/* View PDF */}
                         {/* {canView() && (
                             <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
@@ -234,7 +256,7 @@ const AllApplications = () => {
                             ) : (
                               <button
                                 className={`${styles['pdf-btn']}`}
-                                onClick={() => router.push('/account/subscriptiondetail')}
+                                onClick={() => setShowPriceingPopup(true)}
                                 title="Plan erforderlich"
                               >
                                 <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
@@ -273,7 +295,7 @@ const AllApplications = () => {
                                 )}
                               </div>
                               <div className={`${styles['footerCol']}`}>
-                                <p className={`${styles['footerText']}`}>{profile.phonenumber}</p>
+                                <p className={`${styles['footerText']}`}> {profile.phonenumber ? `+${profile.phonenumber}` : ''}</p>
                                 <p className={`${styles['footerText']}`}>{profile.email}</p>
                               </div>
                             </div>
@@ -344,6 +366,55 @@ const AllApplications = () => {
           </div>
         </div>
       </div>
+      )}
+      {/* <!-- Modal --> */}
+      {showPriceingPopup && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setShowPriceingPopup(false)}
+        >
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-gray-900"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Mehr rausholen?</h2>
+              <button
+                onClick={() => setShowPriceingPopup(false)}
+                className="text-gray-500 hover:text-red-600 text-2xl"
+              >
+                &times;
+              </button>
+            </div>
+
+            <p className="text-gray-700 mb-4 leading-relaxed text-base">
+              Diese Funktion ist exklusiv für zahlende Nutzer verfügbar.
+              <br />
+            </p>
+            <p className='mt-3 mb-3'>
+              <strong>Jetzt upgraden und alle Vorteile genießen.</strong>
+            </p>
+            <div className="flex justify-end gap-3">
+              {/* <button
+                onClick={() => setShowPriceingPopup(false)}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
+              >
+                Schließen
+              </button> */}
+
+              <button
+                onClick={() => {
+                  setShowPriceingPopup(false);
+                  router.push('/account/subscriptiondetail');
+                }}
+                className="text-gray-900 font-semibold px-4 py-2 rounded hover:brightness-90 transition"
+                style={{ backgroundColor: '#e7fc41' }}
+              >
+                Jetzt freischalten
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

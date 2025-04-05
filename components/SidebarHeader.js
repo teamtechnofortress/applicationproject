@@ -2,19 +2,40 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import router from 'next/router';
 import styles from '../styles/login.module.css';
+import { DateTime } from 'luxon';
 
-export const DashboardHeader = () => {
+
+export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const menuRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-
+  
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
   const toggleSidebar = () => {
     setSidebarVisible((prev) => !prev); 
+  };
+
+  const canViewTipps = () => {
+    if (!subscriptionData) return false;
+    if (subscriptionData.paymentType === "subscription") {
+      return subscriptionData.status === "active";
+    }
+    if (subscriptionData.paymentType === "one-time") {
+      return isOneTimeValid();
+    }
+    return false;
+  };
+
+  const isOneTimeValid = () => {
+    if (subscriptionData?.paymentType === "one-time") {
+      const created = DateTime.fromISO(subscriptionData.createdAt);
+      return DateTime.now() < created.plus({ days: 4 });
+    }
+    return false;
   };
 
   const logOut = async () => {
@@ -171,8 +192,15 @@ export const DashboardHeader = () => {
             </div>
             <p className={`${styles['progress-p']} font-bold text-gray-700 text-center`}>Bewerbermappe</p>
           </div>
-          <Link href="/account/tipps" legacyBehavior><button className={`${styles['btn-tip']}`}>Tipps</button></Link>
-          
+          {canViewTipps() ? (
+            <Link href="/account/tipps" legacyBehavior>
+              <button className={styles['btn-tip']}>Tipps</button>
+            </Link>
+          ) : (
+            <button onClick={() => setShowPriceingPopup(true)} className={styles['btn-tip']}>
+              Tipps
+            </button>
+          )}
         </div>
         <div className={`${styles['faq-sec']} absolute bottom-0 left-0 w-full pt-5 p-5`}>
         <Link href="/account/faq" legacyBehavior>

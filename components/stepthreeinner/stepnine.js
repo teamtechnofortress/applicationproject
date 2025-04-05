@@ -46,8 +46,8 @@ const StepNineInner = ({
           <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps zur Bewerbung</span>
         </button>
 
-        <p className={`${styles["p-address"]} mt-20 mb-10 text-center w-[60%] mx-auto`}>
-        Kopiere diesen Text und sende ihn an deine Hausverwaltung.
+        <p className={`${styles["p-address"]} mt-10 mb-10 text-center w-[60%] mx-auto`}>
+        Kopiere diesen Text und sende ihn an deine Hausverwaltung .
         </p>
         <div className={`${styles["static-section"]} w-[70%] mx-auto`}>
               <p className={`${styles["p-address"]}`}>

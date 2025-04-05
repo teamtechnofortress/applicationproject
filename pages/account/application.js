@@ -836,7 +836,7 @@ const application = () => {
           progress: undefined,
           theme: "light",
         });
-        setCurrentStep(23);
+        // setCurrentStep(23);
         
         // router.push(`${process.env.NEXT_PUBLIC_HOST}/account/success`);
       } else {

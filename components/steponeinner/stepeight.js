@@ -58,9 +58,9 @@ const StepEightInner = ({
 
   const validateFields = () => {
     const newErrors = {};
-    if (!einkommensbescheinigungimg || einkommensbescheinigungimg.length === 0) {
-      newErrors.einkommensbescheinigungimg = "Einkommensbescheinigung ist erforderlich.";
-    }
+    // if (!einkommensbescheinigungimg || einkommensbescheinigungimg.length === 0) {
+    //   newErrors.einkommensbescheinigungimg = "Einkommensbescheinigung ist erforderlich.";
+    // }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
