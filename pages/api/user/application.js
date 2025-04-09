@@ -122,6 +122,12 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
 
 const handler = async (req, res) => {
   try {
+    console.log('hatzner endpoint', process.env.HETZNER_ENDPOINT)
+    console.log('hatzner HETZNER_BUCKET', process.env.HETZNER_BUCKET)
+    console.log('hatzner HETZNER_SECRET_KEY', process.env.HETZNER_SECRET_KEY)
+    console.log('hatzner HETZNER_ACCESS_KEY', process.env.HETZNER_ACCESS_KEY)
+    
+    
     await connectDb();
 
     if (req.method === 'POST') {
