@@ -6,11 +6,13 @@ import { parseCookies } from 'nookies';
 import { connectDb } from '@/helper/db';
 import User from '@/models/User';
 import { v4 as uuidv4 } from 'uuid';
-import { put } from '@vercel/blob';
 import { pdf } from "@react-pdf/renderer";
 import MyDocument from "@/components/MyDocument";
 import MyDocumentTwo from "@/components/MyDocumentTwo";
 import QRCode from "qrcode";
+import { S3Client, PutObjectCommand,DeleteObjectCommand } from '@aws-sdk/client-s3';
+import path from 'path';
+import application from '@/pages/account/application';
 
 
 export const config = {
@@ -18,26 +20,88 @@ export const config = {
     bodyParser: false,
   },
 };
+const hetznerBaseUrl = `${process.env.HETZNER_ENDPOINT}`;
 
+const s3 = new S3Client({
+  region: process.env.HETZNER_REGION,
+  endpoint: process.env.HETZNER_ENDPOINT.startsWith('http')
+    ? process.env.HETZNER_ENDPOINT
+    : `https://${process.env.HETZNER_ENDPOINT}`,
+  credentials: {
+    accessKeyId: process.env.HETZNER_ACCESS_KEY,
+    secretAccessKey: process.env.HETZNER_SECRET_KEY,
+  },
+  forcePathStyle: false, // required by Hetzner
+});
+
+// ✅ Upload to Hetzner S3
+const uploadToHetzner = async (buffer, key, contentType) => {
+  const command = new PutObjectCommand({
+    Bucket: process.env.HETZNER_BUCKET,
+    Key: `uploads/${key}`,
+    Body: buffer,
+    ACL: 'public-read',
+    ContentType: contentType,
+  });
+
+  await s3.send(command);
+  return `${process.env.HETZNER_ENDPOINT}/${process.env.HETZNER_BUCKET}/uploads/${key}`;
+};
+const handleFileUpload = async (fileInput) => {
+  if (!fileInput) return [];
+
+  const fileList = Array.isArray(fileInput) ? fileInput : [fileInput];
+  const urls = [];
+
+  for (const file of fileList) {
+    if (file && file.filepath && file.originalFilename) {
+      const ext = path.extname(file.originalFilename).toLowerCase();
+
+      // ✅ Only allow .jpg, .jpeg, .png
+      let contentType;
+      if (ext === '.jpg' || ext === '.jpeg') {
+        contentType = 'image/jpeg';
+      } else if (ext === '.png') {
+        contentType = 'image/png';
+      } else {
+        console.warn(`❌ Skipping unsupported file type: ${file.originalFilename}`);
+        continue; // skip unsupported files
+      }
+
+      try {
+        const fileContent = fs.readFileSync(file.filepath);
+        const uniqueName = `${uuidv4()}_${file.originalFilename}`;
+
+        const fileUrl = await uploadToHetzner(fileContent, uniqueName, contentType);
+        urls.push(fileUrl);
+      } catch (error) {
+        console.error(`❌ Error uploading file: ${file.originalFilename}`, error);
+      }
+    } else {
+      console.warn('⚠️ Invalid file structure:', file);
+    }
+  }
+
+  return urls;
+};
 
 const deletefile = async (id) => {
-  if (id) {
-      const existingImageUrl = id;
-      // console.log(existingImageUrl);
-      // return;
-      const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/user/deleteblobobject?url=${encodeURIComponent(existingImageUrl)}`, {
-          method: "DELETE",
-          headers: {
-              'Accept': 'application/json',
-          }
-      });
+  if (!id) return;
 
-      if (!response.ok) {
-          const error = await response.json();
-          console.error('Failed to delete blob:', error);
-      }
+  const params = {
+    Bucket: process.env.HETZNER_BUCKET,
+    Key: `uploads/${id}`,
+  };
+
+  try {
+    await s3.send(new DeleteObjectCommand(params));
+    return { success: true, key: id };
+  } catch (error) {
+    console.error('Delete error:', error);
+    throw new Error('Failed to delete file: ' + error.message);
   }
-}
+};
+
 // ✅ Function to generate and upload QR Code image
 const generateAndUploadQRCode = async (pdfUrl) => {
   try {
@@ -48,17 +112,13 @@ const generateAndUploadQRCode = async (pdfUrl) => {
     const qrFileName = `qr_${uuidv4()}.png`;
 
     // ✅ Upload the QR Code image to Vercel Blob Storage
-    const blob = await put(qrFileName, qrCodeBuffer, {
-      access: "public",
-      contentType: "image/png",
-    });
-
-    return blob.url; // ✅ Return the URL of the uploaded QR Code image
+    return await uploadToHetzner(qrCodeBuffer, qrFileName, 'image/png');
   } catch (error) {
     console.error("Error generating QR Code:", error);
     return null;
   }
 };
+
 const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
   try {
     let pdfBlob;
@@ -67,19 +127,21 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
     let savedForm = await ApplicationFile.findById(profileData._id);
     let qrCodeUrl = savedForm?.qrCode;
 
-    // if (!qrCodeUrl) {
-    //   console.error("QR Code not found in DB");
-    //   return null;
-    // }
+   
       // ✅ Delete old PDF before generating a new one
       if (savedForm.pdfPath) {
-        await deletefile(savedForm.pdfPath);
+        const filename = savedForm.pdfPath.split("/uploads/")[1];
+        await deletefile(filename);
+        // await deletefile(savedForm.pdfPath);
       }
       if (savedForm.qrCode) {
-        await deletefile(savedForm.qrCode);
+        const filename = savedForm.qrCode.split("/uploads/")[1];
+        await deletefile(filename);
+        // await deletefile(savedForm.qrCode);
       }
 
       const newQrCodeUrl = await generateAndUploadQRCode(predefinedPdfUrl);
+      
       if (!newQrCodeUrl) {
         console.error("Failed to generate new QR Code");
         return null;
@@ -88,6 +150,7 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
       await ApplicationFile.findByIdAndUpdate(profileData._id, {
         qrCode: newQrCodeUrl,
       });
+
 
     if (profileData.childId) {
 
@@ -104,19 +167,15 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
       // ✅ Generate a combined PDF for parent and child
       const combinedProfiles = { parent: parentProfile, child: childprofile };
 
-      pdfBlob = await pdf(<MyDocumentTwo profileData={combinedProfiles} />).toBlob();
 
-      // ✅ Upload new PDF using the predefined name (without modifying the URL)
-      await put(pdfFileURL, pdfBlob, {
-        access: "public",
-        contentType: "application/pdf",
-        addRandomSuffix: false,
-      });
-      //  // ✅ Update parent profile with new PDF URL & QR Code
-      //  await ApplicationFile.findByIdAndUpdate(profileData._id, {
-      //   pdfPath: predefinedPdfUrl,
-      //   qrCode: newQrCodeUrl,
-      // });
+      // const pdfFileURL = predefinedPdfUrl.split('/').pop();
+      // ✅ Generate PDF document
+      const pdfBlob = await pdf(<MyDocumentTwo profileData={combinedProfiles} />).toBlob();
+      const arrayBuffer = await pdfBlob.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      
+      // ✅ Upload PDF with predefined name (so URL remains unchanged)
+      await uploadToHetzner(buffer, pdfFileURL, 'application/pdf');
 
     }else if(profileData.parent === "1"){
 
@@ -146,29 +205,30 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
       // ✅ Generate a combined PDF for parent and child
       const combinedProfiles = { parent: parentProfile, child: childprofile };
 
-      pdfBlob = await pdf(<MyDocumentTwo profileData={combinedProfiles} />).toBlob();
 
-      // ✅ Upload new PDF using the predefined name (without modifying the URL)
-      await put(pdfFileURL, pdfBlob, {
-        access: "public",
-        contentType: "application/pdf",
-        addRandomSuffix: false,
-      });
+      const pdfBlob = await pdf(<MyDocumentTwo profileData={combinedProfiles} />).toBlob();
+      const arrayBuffer = await pdfBlob.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      
+      // ✅ Upload PDF with predefined name (so URL remains unchanged)
+      await uploadToHetzner(buffer, pdfFileURL, 'application/pdf');
+
+    
     } else {
       const parentProfile = await ApplicationFile.findById(profileData._id);
       if (!parentProfile) {
         console.error("Parent form not found");
         return null;
       }
-      // ✅ Generate PDF for a single person 
-      pdfBlob = await pdf(<MyDocument profileData={parentProfile} />).toBlob();
-      console.log('pdfBlob', pdfBlob);
-      // ✅ Upload new PDF using the predefined name (without modifying the URL)
-       await put(pdfFileURL, pdfBlob, {
-        access: "public",
-        contentType: "application/pdf",
-        addRandomSuffix: false, // ✅ Prevents the URL from changing
-      });
+
+      const pdfBlob = await pdf(<MyDocument profileData={parentProfile} />).toBlob();
+      const arrayBuffer = await pdfBlob.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      
+      // ✅ Upload PDF with predefined name (so URL remains unchanged)
+      await uploadToHetzner(buffer, pdfFileURL, 'application/pdf');
+
+     
 
     }
     return predefinedPdfUrl;
@@ -198,8 +258,6 @@ const handler = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
-
-    
 
     const form = new IncomingForm();
     
@@ -255,184 +313,84 @@ const handler = async (req, res) => {
     
         // profile image
       const inputfotoImage = files.inputfoto;
-      let fullfilenameinputfoto = null
+      let inputfotoImagarray = [];
+      let inputfotoImag;
+
       if(inputfotoImage){
-        // If photo is an array, get the first item
-        const photoFile = Array.isArray(inputfotoImage) ? inputfotoImage[0] : inputfotoImage;
+        // inputfotoImag = await deletefile(files.inputfoto);
+        if (Applicationforblob.inputfoto?.length > 0) {
+          const filename = Applicationforblob.inputfoto.split("/uploads/")[1];
+          await deletefile(filename);
+        }        
+        inputfotoImagarray = await handleFileUpload(files.inputfoto);
+        inputfotoImag = inputfotoImagarray[0] || null;
 
-        if (!photoFile || !photoFile.filepath || !photoFile.originalFilename) {
-          console.error('Filepath or originalFilename missing:', photoFile);
-          return res.status(400).json({ success: false, error: 'Filepath or originalFilename missing' });
-        }
-        const fileContent = fs.readFileSync(photoFile.filepath);
-        const uniqueFileName = `${uuidv4()}_${photoFile.originalFilename}`;
-        const blob = await put(uniqueFileName, fileContent, {
-          access: 'public',
-        });
-
-        fullfilenameinputfoto = blob.url
-
-        if(fullfilenameinputfoto){
-          if (Applicationforblob.inputfoto) {
-              deletefile(Applicationforblob.inputfoto);
-            }
-        }
         // console.log(fullfilenameinputfoto)
       }
          // einkommensbescheinigungimg image
-        const einkommensbescheinigungimgArray = [];
+
         let einkommensbescheinigungimgData = [];
         const einkommensbescheinigungimgFiles = files.einkommensbescheinigungimg;
 
-        // console.log("fields.einkommensbescheinigungimg", fields.einkommensbescheinigungimg);
-        // console.log("files.einkommensbescheinigungimg", files.einkommensbescheinigungimg);
-        // console.log("einkommensbescheinigungimgFiles", einkommensbescheinigungimgFiles);
+       
 
-        if(Array.isArray(fields.einkommensbescheinigungimg) && fields.einkommensbescheinigungimg[0] && fields.einkommensbescheinigungimg[0].startsWith('blob')){
+        if(Array.isArray(fields.einkommensbescheinigungimg) && fields.einkommensbescheinigungimg[0] && fields.einkommensbescheinigungimg[0].startsWith(hetznerBaseUrl)){
           // console.log("skip fields.einkommensbescheinigungimg", fields.einkommensbescheinigungimg);
         }else{
           if (einkommensbescheinigungimgFiles) {
-            const fileList = Array.isArray(einkommensbescheinigungimgFiles)
-              ? einkommensbescheinigungimgFiles
-              : [einkommensbescheinigungimgFiles];
-            for (const file of fileList) {
-              if (file && file.filepath && file.originalFilename) {
-                try {
-                  const fileContent = fs.readFileSync(file.filepath);
-                  const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                  const blob = await put(uniqueFileName, fileContent, {
-                    access: "public",
-                  });
-
-                  einkommensbescheinigungimgArray.push(blob.url);
-                  // console.log("Uploaded einkommensbescheinigungimg:", blob.url);
-                } catch (error) {
-                  console.error("Error uploading einkommensbescheinigungimg:", error);
-                }
-              } else {
-                console.warn("Invalid file structure:", file);
-              }
-            }
+            einkommensbescheinigungimgData = await handleFileUpload(files.einkommensbescheinigungimg);
           } else {
             console.warn("No einkommensbescheinigungimg uploaded or incorrect format");
           }
-          // ✅ Save as an array; if only one image, still store it inside an array
-          einkommensbescheinigungimgData = einkommensbescheinigungimgArray.length === 1 ? einkommensbescheinigungimgArray : einkommensbescheinigungimgArray;
         }
-        // console.log("einkommensbescheinigungimgData", einkommensbescheinigungimgData);
-      
 
-      const imageswbsImagesArray = [];
       let imageswbsData = [];
 
       const imageswbsImages = files.imageswbs;
-      // console.log("imageswbsImages", imageswbsImages);
-      // console.log("fields.imageswbs", fields.imageswbs);
-      // console.log("files.imageswbs", files.imageswbs);
 
-      if(Array.isArray(fields.imageswbs) && fields.imageswbs[0] && fields.imageswbs[0].startsWith('blob')){
+
+      if(Array.isArray(fields.imageswbs) && fields.imageswbs[0] && fields.imageswbs[0].startsWith(hetznerBaseUrl)){
         // console.log("skip fields.imageswbs", fields.imageswbs);
       }else{
         if (imageswbsImages) {
-          const imageswbsFiles = Array.isArray(imageswbsImages) ? imageswbsImages : [imageswbsImages];
-          for (const file of imageswbsFiles) {
-            if (file && file.filepath && file.originalFilename) {
-              try {
-                const fileContent = fs.readFileSync(file.filepath);
-                const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                const blob = await put(uniqueFileName, fileContent, {
-                  access: "public",
-                });
-        
-                imageswbsImagesArray.push(blob.url);
-                // console.log("Uploaded imageswbs:", blob.url);
-              } catch (error) {
-                console.error("Error uploading imageswbs:", error);
-              }
-            } else {
-              console.warn("Invalid file structure:", file);
-            }
-          }
+          imageswbsData = await handleFileUpload(files.imageswbs);
         } else {
           console.warn("No imageswbs uploaded or incorrect format");
         }
-        // Save as an array; if only one image, store it inside an array
-        imageswbsData = imageswbsImagesArray.length === 1 ? imageswbsImagesArray : imageswbsImagesArray;
+       
       }
-      // console.log("imageswbsData", imageswbsData);
       
       // BWA Images
-      const bwaImagesArray = [];
+
       let bwaImagesData = [];
       const bwaImages = files.bwaimages;
-      // console.log("fields.bwaimages", fields.bwaimages);
-      // console.log("files.bwaimages", files.bwaimages);
-      // console.log("bwaImages", bwaImages);
+    
 
-      if(Array.isArray(fields.bwaimages) && fields.bwaimages[0] && fields.bwaimages[0].startsWith('blob')){
+      if(Array.isArray(fields.bwaimages) && fields.bwaimages[0] && fields.bwaimages[0].startsWith(hetznerBaseUrl)){
         // console.log("skip fields.bwaimages", fields.bwaimages);
       }else{
         if (bwaImages) {
-          const bwaFiles = Array.isArray(bwaImages) ? bwaImages : [bwaImages];
-          for (const file of bwaFiles) {
-            if (file && file.filepath && file.originalFilename) {
-              try {
-                const fileContent = fs.readFileSync(file.filepath);
-                const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                const blob = await put(uniqueFileName, fileContent, { access: "public" });
-
-                bwaImagesArray.push(blob.url);
-                // console.log("Uploaded bwaImages:", blob.url);
-              } catch (error) {
-                console.error("Error uploading bwaImages:", error);
-              }
-            } else {
-              console.warn("Invalid file structure:", file);
-            }
-          }
+          bwaImagesData = await handleFileUpload(files.bwaimages);
         } else {
           console.warn("No bwaImages uploaded or incorrect format");
         }
-        bwaImagesData = bwaImagesArray.length === 1 ? bwaImagesArray : bwaImagesArray;
       }
 
-      // console.log("bwaImagesData", bwaImagesData);
 
       // Personal Images
-      const personalImagesArray = [];
       let personalImagesData = [];
       const personalImages = files.personal;
-      // console.log("fields.personal", fields.personal);
-      // console.log("files.personal", files.personal);
-      // console.log("personalImages", personalImages);
+      
 
-      if(Array.isArray(fields.personal) && fields.personal[0] && fields.personal[0].startsWith('blob')){
+      if(Array.isArray(fields.personal) && fields.personal[0] && fields.personal[0].startsWith(hetznerBaseUrl)){
         // console.log("skip fields.personal", fields.personal);
       }else{
         if (personalImages) {
-          const personalFiles = Array.isArray(personalImages) ? personalImages : [personalImages];
-          for (const file of personalFiles) {
-            if (file && file.filepath && file.originalFilename) {
-              try {
-                const fileContent = fs.readFileSync(file.filepath);
-                const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                const blob = await put(uniqueFileName, fileContent, { access: "public" });
-
-                personalImagesArray.push(blob.url);
-                // console.log("Uploaded personalImages:", blob.url);
-              } catch (error) {
-                console.error("Error uploading personalImages:", error);
-              }
-            } else {
-              console.warn("Invalid file structure:", file);
-            }
-          }
+          personalImagesData = await handleFileUpload(files.personal);
         } else {
           console.warn("No personalImages uploaded or incorrect format");
         }
-        personalImagesData = personalImagesArray.length === 1 ? personalImagesArray : personalImagesArray;
       }
-      // console.log("personalImagesData", personalImagesData);
 
 
       // Mietschuldenfreiheit Images
@@ -440,280 +398,106 @@ const handler = async (req, res) => {
       let mietschuldenfreiheitImagesData = [];
       const mietschuldenfreiheitImages = files.mietschuldenfreiheitimg;
       // console.log("mietschuldenfreiheitImages", mietschuldenfreiheitImages);
-      if(Array.isArray(fields.mietschuldenfreiheitimg) && fields.mietschuldenfreiheitimg[0] && fields.mietschuldenfreiheitimg[0].startsWith('blob')){
+      if(Array.isArray(fields.mietschuldenfreiheitimg) && fields.mietschuldenfreiheitimg[0] && fields.mietschuldenfreiheitimg[0].startsWith(hetznerBaseUrl)){
         // console.log("skip fields.mietschuldenfreiheitimg", fields.mietschuldenfreiheitimg);
       }else{
         if (mietschuldenfreiheitImages) {
-          const mietschuldenfreiheitFiles = Array.isArray(mietschuldenfreiheitImages) ? mietschuldenfreiheitImages : [mietschuldenfreiheitImages];
-          for (const file of mietschuldenfreiheitFiles) {
-            if (file && file.filepath && file.originalFilename) {
-              try {
-                const fileContent = fs.readFileSync(file.filepath);
-                const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                const blob = await put(uniqueFileName, fileContent, { access: "public" });
-
-                mietschuldenfreiheitImagesArray.push(blob.url);
-                // console.log("Uploaded mietschuldenfreiheitImages:", blob.url);
-              } catch (error) {
-                console.error("Error uploading mietschuldenfreiheitImages:", error);
-              }
-            } else {
-              console.warn("Invalid file structure:", file);
-            }
-          }
+          mietschuldenfreiheitImagesData = await handleFileUpload(files.mietschuldenfreiheitimg);
         } else {
           console.warn("No mietschuldenfreiheitImages uploaded or incorrect format");
         }
-        mietschuldenfreiheitImagesData = mietschuldenfreiheitImagesArray.length === 1 ? mietschuldenfreiheitImagesArray : mietschuldenfreiheitImagesArray;
+        // mietschuldenfreiheitImagesData = mietschuldenfreiheitImagesArray.length === 1 ? mietschuldenfreiheitImagesArray : mietschuldenfreiheitImagesArray;
       }
 
       // Employ Contract Images
-      const employContractImagesArray = [];
       let employContractImagesData = [];
       const employContractImages = files.employcontract;
-      // console.log("fields.employcontract", fields.employcontract);
-      // console.log("files.employcontract", files.employcontract);
-      // console.log("employContractImages", employContractImages);
+  
 
-      if(Array.isArray(fields.employcontract) && fields.employcontract[0] && fields.employcontract[0].startsWith('blob')){
+      if(Array.isArray(fields.employcontract) && fields.employcontract[0] && fields.employcontract[0].startsWith(hetznerBaseUrl)){
         // console.log("skip fields.employcontract", fields.employcontract);
       }else{
         if (employContractImages) {
-          const employContractFiles = Array.isArray(employContractImages) ? employContractImages : [employContractImages];
-          for (const file of employContractFiles) {
-            if (file && file.filepath && file.originalFilename) {
-              try {
-                const fileContent = fs.readFileSync(file.filepath);
-                const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                const blob = await put(uniqueFileName, fileContent, { access: "public" });
-
-                employContractImagesArray.push(blob.url);
-                // console.log("Uploaded employContractImages:", blob.url);
-              } catch (error) {
-                console.error("Error uploading employContractImages:", error);
-              }
-            } else {
-              console.warn("Invalid file structure:", file);
-            }
-          }
+          employContractImagesData = await handleFileUpload(files.employcontract);
         } else {
           console.warn("No employContractImages uploaded or incorrect format");
-        }
-        employContractImagesData = employContractImagesArray.length === 1 ? employContractImagesArray : employContractImagesArray;
-      }
-      // console.log('employContractImagesData',employContractImagesData);
+        }      }
       // return;
 
       // **Schufa Images**
-      const schufaImagesArray = [];
       let schufaImagesData = [];
       const schufaImages = files.schufa;
-      // console.log("fields.schufa", fields.schufa);
-      // console.log("files.schufa", files.schufa);
-      // console.log("schufaImages", schufaImages);
+     
 
-      if(Array.isArray(fields.schufa) && fields.schufa[0] && fields.schufa[0].startsWith('blob')){
+      if(Array.isArray(fields.schufa) && fields.schufa[0] && fields.schufa[0].startsWith(hetznerBaseUrl)){
         // console.log("skip fields.schufa", fields.schufa);
       }else{
         if (schufaImages) {
-          const schufaFiles = Array.isArray(schufaImages) ? schufaImages : [schufaImages];
-          for (const file of schufaFiles) {
-            if (file && file.filepath && file.originalFilename) {
-              try {
-                const fileContent = fs.readFileSync(file.filepath);
-                const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                const blob = await put(uniqueFileName, fileContent, { access: "public" });
-
-                schufaImagesArray.push(blob.url);
-                // console.log("Uploaded schufaImages:", blob.url);
-              } catch (error) {
-                console.error("Error uploading schufaImages:", error);
-              }
-            } else {
-              console.warn("Invalid file structure:", file);
-            }
-          }
+          schufaImagesData = await handleFileUpload(files.schufa);
         } else {
           console.warn("No schufaImages uploaded or incorrect format");
         }
-        schufaImagesData = schufaImagesArray.length === 1 ? schufaImagesArray : schufaImagesArray;
       }
-      // console.log("schufaImagesData", schufaImagesData);
 
-      const salarySlip1ImagesArray = [];
       const salarySlip1Images = files.salarySlip1;
       let salarySlip1ImagesData = [];
-      // console.log("files.salarySlip1", files.salarySlip1);
-      // console.log("fields.salarySlip1", fields.salarySlip1);
-      // console.log("salarySlip1Images", salarySlip1Images);
+     
 
       let salarySlip1firstFile = fields.salarySlip1 && fields.salarySlip1.length > 0 ? fields.salarySlip1[0] : null;
-      if (typeof salarySlip1firstFile === "string" && (salarySlip1firstFile.startsWith("blob:") || salarySlip1firstFile.includes("vercel-storage.com"))) {
-          // console.log(`Skipping file: ${fields.salarySlip1[0]}`);
+      if (typeof salarySlip1firstFile === "string" && (salarySlip1firstFile.startsWith(hetznerBaseUrl))) {
       }else{
           if (salarySlip1Images) {
-            const salarySlip1Files = Array.isArray(salarySlip1Images) ? salarySlip1Images : [salarySlip1Images];
-            if (Array.isArray(Applicationforblob.salarySlip1) && Applicationforblob.salarySlip1.length > 0) {
-                // Run the loop to delete all files in the array
-                Applicationforblob.salarySlip1.forEach((fileUrl) => {
-                    deletefile(fileUrl);
-                });
-            }
-            for (const file of salarySlip1Files) {
-              if (file && file.filepath && file.originalFilename) {
-                try {
-                  const fileContent = fs.readFileSync(file.filepath);
-                  const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                  const blob = await put(uniqueFileName, fileContent, { access: "public" });
-    
-                  salarySlip1ImagesArray.push(blob.url);
-                  // console.log("Uploaded salarySlip1Images:", blob.url);
-                } catch (error) {
-                  console.error("Error uploading salarySlip1Images:", error);
-                }
-              } else {
-                console.warn("Invalid file structure:", file);
-              }
-            }
+           
+            salarySlip1ImagesData = await handleFileUpload(files.salarySlip1);
+            
           } else {
             console.warn("No salarySlip1Images uploaded or incorrect format");
           }
-          salarySlip1ImagesData = salarySlip1ImagesArray.length === 1 ? salarySlip1ImagesArray : salarySlip1ImagesArray;
-          // console.log("salarySlip1ImagesData", salarySlip1ImagesData);
+         
       }
-      const salarySlip2ImagesArray = [];
       const salarySlip2Images = files.salarySlip2;
       let salarySlip2ImagesData = [];
-      // console.log("files.salarySlip2", files.salarySlip2);
-      // console.log("fields.salarySlip2", fields.salarySlip2);
-      // console.log("salarySlip2Images", salarySlip2Images);
+     
 
       let salarySlip2firstFile = fields.salarySlip2 && fields.salarySlip2.length > 0 ? fields.salarySlip2[0] : null;
-      if (typeof salarySlip2firstFile === "string" && (salarySlip2firstFile.startsWith("blob:") || salarySlip2firstFile.includes("vercel-storage.com"))) {
+      if (typeof salarySlip2firstFile === "string" && (salarySlip2firstFile.startsWith(hetznerBaseUrl))) {
           // console.log(`Skipping file: ${fields.salarySlip2[0]}`);
       }else{
         // console.log('Enter in else salarySlip2firstFile');
           if (salarySlip2Images) {
             const salarySlip2Files = Array.isArray(salarySlip2Images) ? salarySlip2Images : [salarySlip2Images];
 
-            if (Array.isArray(Applicationforblob.salarySlip2) && Applicationforblob.salarySlip2.length > 0) {
-                // Run the loop to delete all files in the array
-                Applicationforblob.salarySlip2.forEach((fileUrl) => {
-                    deletefile(fileUrl);
-                });
-            }
+            
+            salarySlip2ImagesData = await handleFileUpload(files.salarySlip2);
 
-            for (const file of salarySlip2Files) {
-              if (file && file.filepath && file.originalFilename) {
-                try {
-                  const fileContent = fs.readFileSync(file.filepath);
-                  const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                  const blob = await put(uniqueFileName, fileContent, { access: "public" });
-
-                  salarySlip2ImagesArray.push(blob.url);
-                  // console.log("Uploaded salarySlip2Images:", blob.url);
-                } catch (error) {
-                  console.error("Error uploading salarySlip2Images:", error);
-                }
-              } else {
-                console.warn("Invalid file structure:", file);
-              }
-            }
           } else {
             console.warn("No salarySlip2Images uploaded or incorrect format");
           }
-          salarySlip2ImagesData = salarySlip2ImagesArray.length === 1 ? salarySlip2ImagesArray : salarySlip2ImagesArray;
-          // console.log("salarySlip2ImagesData", salarySlip2ImagesData);
+         
       }
 
-      const salarySlip3ImagesArray = [];
       const salarySlip3Images = files.salarySlip3;
       let salarySlip3ImagesData = [];
-      // console.log("files.salarySlip3", files.salarySlip3);
-      // console.log("fields.salarySlip3", fields.salarySlip3);
-      // console.log("salarySlip3Images", salarySlip3Images);
+     
 
       let salarySlip3firstFile = fields.salarySlip3 && fields.salarySlip3.length > 0 ? fields.salarySlip3[0] : null;
 
-      if (typeof salarySlip3firstFile === "string" && (salarySlip3firstFile.startsWith("blob:") || salarySlip3firstFile.includes("vercel-storage.com"))) {
-          // console.log(`Skipping file: ${fields.salarySlip3[0]}`);
+      if (typeof salarySlip3firstFile === "string" && (salarySlip3firstFile.startsWith(hetznerBaseUrl))) {
       }else{
-        // console.log('Enter in else salarySlip3firstFile');
         if (salarySlip3Images) {
           const salarySlip3Files = Array.isArray(salarySlip3Images) ? salarySlip3Images : [salarySlip3Images];
   
-          if (Array.isArray(Applicationforblob.salarySlip3) && Applicationforblob.salarySlip3.length > 0) {
-              // Run the loop to delete all files in the array
-              Applicationforblob.salarySlip3.forEach((fileUrl) => {
-                  deletefile(fileUrl);
-              });
-          }
-  
-          for (const file of salarySlip3Files) {
-            if (file && file.filepath && file.originalFilename) {
-              try {
-                const fileContent = fs.readFileSync(file.filepath);
-                const uniqueFileName = `${uuidv4()}_${file.originalFilename}`;
-                const blob = await put(uniqueFileName, fileContent, { access: "public" });
-  
-                salarySlip3ImagesArray.push(blob.url);
-                // console.log("Uploaded salarySlip3Images:", blob.url);
-              } catch (error) {
-                console.error("Error uploading salarySlip3Images:", error);
-              }
-            } else {
-              console.warn("Invalid file structure:", file);
-            }
-          }
+         
+          salarySlip3ImagesData = await handleFileUpload(files.salarySlip3);
+
         } else {
           console.warn("No salarySlip3Images uploaded or incorrect format");
         }
-        salarySlip3ImagesData = salarySlip3ImagesArray.length === 1 ? salarySlip3ImagesArray : salarySlip3ImagesArray;
-        // console.log("salarySlip3ImagesData", salarySlip3ImagesData);
+       
       }
 
       // new code for new images end
       try {
-  
-        // const newForm = new Application({
-        //   userId: user._id,
-        //   vorname,
-        //   nachname,
-        //   strabe,
-        //   hausnummer,
-        //   Ort,
-        //   email,
-        //   tel,
-        //   geburtsdatum,
-        //   ausgeübterBeruf,
-        //   arbeitgeber,
-        //   income,
-        //   textarea1,
-        //   textarea2,
-        //   textarea3,
-        //   textarea4,
-        //   textarea5,
-        //   inputfoto: fullfilename, // Save the URL of the uploaded file
-        //   noofpeople, // Save the URL of the uploaded file
-        //   status, // Save the URL of the uploaded file
-        //   currentactivity, // Save the URL of the uploaded file
-        //   currentemployer, // Save the URL of the uploaded file
-        //   incomee, // Save the URL of the uploaded file
-        //   fläche,
-        //   familyid,
-        //   anzahlderzimmer,
-        //   salarystatementlast: fullfilenamesalarystatementlast,  
-        //   salarystatementbefore:fullfilenamesalarystatementbefore,       
-        //   salarystatementago:fullfilenamesalarystatementago,       
-        //   residencepermit:fullfilenameresidencepermit,       
-        //   identificationdocument:fullfilenameidentificationdocument,       
-        //   shortvideo:fullfilenameshortvideo,       
-        //   currentSchufareport:fullfilenamecurrentSchufareport,       
-        //   rentalschoolfree:fullfilenamerentalschoolfree,       
-        //   signatureData:fullfilenamesignatureData,       
-        //   applicationImg:fullfilenamecomponentImage,       
-        // });
-
         const updateData = {
           vorname,
           nachname,
@@ -742,7 +526,7 @@ const handler = async (req, res) => {
 
         // **Only include `inputfoto` if `fullfilenameinputfoto` is NOT null/undefined**
         if (inputfotoImage) {
-          updateData.inputfoto = fullfilenameinputfoto;
+          updateData.inputfoto = inputfotoImag;
         }
         if (files.salarySlip1 && files.salarySlip1.length > 0 && salarySlip1Images !== undefined) {
             if (Array.isArray(Applicationforblob.salarySlip1) && Applicationforblob.salarySlip1.length > 0) {
@@ -836,7 +620,8 @@ const handler = async (req, res) => {
         if (Array.isArray(einkommensbescheinigungimgData) && einkommensbescheinigungimgData.length > 0) {
           if (Array.isArray(Applicationforblob.einkommensbescheinigungimg) && Applicationforblob.einkommensbescheinigungimg.length > 0) {
               Applicationforblob.einkommensbescheinigungimg.forEach((fileUrl) => {
-                  deletefile(fileUrl);
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
               });
           }
             updateData.einkommensbescheinigungimg = einkommensbescheinigungimgData;
@@ -851,7 +636,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.einkommensbescheinigungimg) && Applicationforblob.einkommensbescheinigungimg.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.einkommensbescheinigungimg.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.einkommensbescheinigungimg = [];
@@ -864,7 +650,8 @@ const handler = async (req, res) => {
         if (Array.isArray(imageswbsData) && imageswbsData.length > 0) {
           if (Array.isArray(Applicationforblob.imageswbs) && Applicationforblob.imageswbs.length > 0) {
               Applicationforblob.imageswbs.forEach((fileUrl) => {
-                  deletefile(fileUrl);
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
               });
           }
             updateData.imageswbs = imageswbsData;
@@ -879,7 +666,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.imageswbs) && Applicationforblob.imageswbs.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.imageswbs.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.imageswbs = [];
@@ -889,7 +677,8 @@ const handler = async (req, res) => {
         if (Array.isArray(bwaImagesData) && bwaImagesData.length > 0) {
           if (Array.isArray(Applicationforblob.bwaimages) && Applicationforblob.bwaimages.length > 0) {
               Applicationforblob.bwaimages.forEach((fileUrl) => {
-                  deletefile(fileUrl);
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
               });
           }
             updateData.bwaimages = bwaImagesData;
@@ -904,7 +693,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.bwaimages) && Applicationforblob.bwaimages.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.bwaimages.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.bwaimages = [];
@@ -916,7 +706,8 @@ const handler = async (req, res) => {
         if (Array.isArray(personalImagesData) && personalImagesData.length > 0) {
           if (Array.isArray(Applicationforblob.personal) && Applicationforblob.personal.length > 0) {
               Applicationforblob.personal.forEach((fileUrl) => {
-                  deletefile(fileUrl);
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
               });
           }
             updateData.personal = personalImagesData;
@@ -931,7 +722,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.personal) && Applicationforblob.personal.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.personal.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.personal = [];
@@ -940,7 +732,8 @@ const handler = async (req, res) => {
         if (Array.isArray(schufaImagesData) && schufaImagesData.length > 0) {
           if (Array.isArray(Applicationforblob.schufa) && Applicationforblob.schufa.length > 0) {
               Applicationforblob.schufa.forEach((fileUrl) => {
-                  deletefile(fileUrl);
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
               });
           }
             updateData.schufa = schufaImagesData;
@@ -955,7 +748,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.schufa) && Applicationforblob.schufa.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.schufa.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.schufa = [];
@@ -967,7 +761,8 @@ const handler = async (req, res) => {
         if (Array.isArray(mietschuldenfreiheitImagesData) && mietschuldenfreiheitImagesData.length > 0) {
           if (Array.isArray(Applicationforblob.mietschuldenfreiheitimg) && Applicationforblob.mietschuldenfreiheitimg.length > 0) {
               Applicationforblob.mietschuldenfreiheitimg.forEach((fileUrl) => {
-                  deletefile(fileUrl);
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
               });
           }
             updateData.mietschuldenfreiheitimg = mietschuldenfreiheitImagesData;
@@ -982,7 +777,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.mietschuldenfreiheitimg) && Applicationforblob.mietschuldenfreiheitimg.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.mietschuldenfreiheitimg.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.mietschuldenfreiheitimg = [];
@@ -996,26 +792,30 @@ const handler = async (req, res) => {
           if (Array.isArray(Applicationforblob.salarySlip1) && Applicationforblob.salarySlip1.length > 0) {
             // Run the loop to delete all files in the array
             Applicationforblob.salarySlip1.forEach((fileUrl) => {
-                deletefile(fileUrl);
+              const filename = fileUrl.split("/uploads/")[1];
+              deletefile(filename);
             });
           }
           if (Array.isArray(Applicationforblob.salarySlip2) && Applicationforblob.salarySlip2.length > 0) {
             // Run the loop to delete all files in the array
             Applicationforblob.salarySlip2.forEach((fileUrl) => {
-                deletefile(fileUrl);
+              const filename = fileUrl.split("/uploads/")[1];
+              deletefile(filename);
             });
           }
           if (Array.isArray(Applicationforblob.salarySlip2) && Applicationforblob.salarySlip2.length > 0) {
             // Run the loop to delete all files in the array
             Applicationforblob.salarySlip2.forEach((fileUrl) => {
-                deletefile(fileUrl);
+              const filename = fileUrl.split("/uploads/")[1];
+              deletefile(filename);
             });
           }
           // console.log('Enter to deete bolb only');
           if (Array.isArray(Applicationforblob.employcontract) && Applicationforblob.employcontract.length > 0) {
             // Run the loop to delete all files in the array
             Applicationforblob.employcontract.forEach((fileUrl) => {
-                deletefile(fileUrl);
+              const filename = fileUrl.split("/uploads/")[1];
+              deletefile(filename);
             });
           }
           updateData.employment = "";
@@ -1029,13 +829,15 @@ const handler = async (req, res) => {
           if (Array.isArray(Applicationforblob.bwaImages) && Applicationforblob.bwaImages.length > 0) {
             // Run the loop to delete all files in the array
             Applicationforblob.bwaImages.forEach((fileUrl) => {
-                deletefile(fileUrl);
+              const filename = fileUrl.split("/uploads/")[1];
+              deletefile(filename);
             });
           }
           if (Array.isArray(Applicationforblob.einkommensbescheinigungimg) && Applicationforblob.einkommensbescheinigungimg.length > 0) {
             // Run the loop to delete all files in the array
             Applicationforblob.einkommensbescheinigungimg.forEach((fileUrl) => {
-                deletefile(fileUrl);
+              const filename = fileUrl.split("/uploads/")[1];
+              deletefile(filename);
             });
           }
           updateData.bwaImages = [];
@@ -1046,7 +848,8 @@ const handler = async (req, res) => {
 
           if (Array.isArray(Applicationforblob.mietschuldenfreiheitimg) && Applicationforblob.mietschuldenfreiheitimg.length > 0) {
             Applicationforblob.mietschuldenfreiheitimg.forEach((fileUrl) => {
-                deletefile(fileUrl);
+              const filename = fileUrl.split("/uploads/")[1];
+              deletefile(filename);
             });
           }
           updateData.mietschuldenfreiheitimg = [];
@@ -1060,21 +863,11 @@ const handler = async (req, res) => {
         );
         
          // ✅ Step 2: Define a Predefined PDF URL (Before PDF is Generated)
-         const pdfFileName = `${updatedForm.vorname}_${updatedForm.nachname}_${Date.now()}.pdf`;
-         const predefinedPdfUrl = `${process.env.BLOB_UPLOAD_URL}/${pdfFileName}`;
+         const pdfFileName = `${vorname}_${nachname}_${Date.now()}.pdf`;
+         const predefinedPdfUrl = `${process.env.HETZNER_ENDPOINT}/${process.env.HETZNER_BUCKET}/uploads/${pdfFileName}`;
        
 
-         // ✅ Step 3: Generate QR Code using the predefined PDF URL
-        //  const qrCodeUrl = await generateAndUploadQRCode(predefinedPdfUrl);
-         
-        //  if (!qrCodeUrl) {
-        //    console.error("Failed to generate QR Code");
-        //    return res.status(500).json({ success: false, error: "QR Code generation failed" });
-        //  }
-
-         // ✅ Step 4: Save QR Code URL to the database before generating PDF
-        //  updatedForm.qrCode = qrCodeUrl;
-        //  await updatedForm.save();
+        
 
          // ✅ Step 5: Generate and Upload the PDF (Using the predefined URL)
          const PdfUrl = await generateAndUploadPDF(updatedForm, predefinedPdfUrl);
