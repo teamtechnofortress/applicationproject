@@ -1,5 +1,4 @@
 import { IncomingForm } from 'formidable';
-import fs from 'fs';
 import ApplicationFile from '@/models/ApplicationFile';
 import jwt from 'jsonwebtoken';
 import { parseCookies } from 'nookies';
@@ -9,8 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { pdf } from "@react-pdf/renderer";
 import MyDocument from "@/components/MyDocument";
 import QRCode from "qrcode";
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import path from 'path';
+import { handleFileUpload, uploadToHetzner } from '@/utils/blob_storage_util';
+
 
 
 export const config = {
@@ -18,71 +17,6 @@ export const config = {
     bodyParser: false,
   },
 };
-const s3 = new S3Client({
-  region: process.env.HETZNER_REGION,
-  endpoint: process.env.HETZNER_ENDPOINT.startsWith('http')
-    ? process.env.HETZNER_ENDPOINT
-    : `https://${process.env.HETZNER_ENDPOINT}`,
-  credentials: {
-    accessKeyId: process.env.HETZNER_ACCESS_KEY,
-    secretAccessKey: process.env.HETZNER_SECRET_KEY,
-  },
-  forcePathStyle: false, // required by Hetzner
-});
-
-// ✅ Upload to Hetzner S3
-const uploadToHetzner = async (buffer, key, contentType) => {
-  const command = new PutObjectCommand({
-    Bucket: process.env.HETZNER_BUCKET,
-    Key: `uploads/${key}`,
-    Body: buffer,
-    ACL: 'public-read',
-    ContentType: contentType,
-  });
-
-  await s3.send(command);
-  return `${process.env.HETZNER_ENDPOINT}/${process.env.HETZNER_BUCKET}/uploads/${key}`;
-};
-
-const handleFileUpload = async (fileInput) => {
-  if (!fileInput) return [];
-
-  const fileList = Array.isArray(fileInput) ? fileInput : [fileInput];
-  const urls = [];
-
-  for (const file of fileList) {
-    if (file && file.filepath && file.originalFilename) {
-      const ext = path.extname(file.originalFilename).toLowerCase();
-
-      // ✅ Only allow .jpg, .jpeg, .png
-      let contentType;
-      if (ext === '.jpg' || ext === '.jpeg') {
-        contentType = 'image/jpeg';
-      } else if (ext === '.png') {
-        contentType = 'image/png';
-      } else {
-        console.warn(`❌ Skipping unsupported file type: ${file.originalFilename}`);
-        continue; // skip unsupported files
-      }
-
-      try {
-        const fileContent = fs.readFileSync(file.filepath);
-        const uniqueName = `${uuidv4()}_${file.originalFilename}`;
-
-        const fileUrl = await uploadToHetzner(fileContent, uniqueName, contentType);
-        urls.push(fileUrl);
-      } catch (error) {
-        console.error(`❌ Error uploading file: ${file.originalFilename}`, error);
-      }
-    } else {
-      console.warn('⚠️ Invalid file structure:', file);
-    }
-  }
-
-  return urls;
-};
-
-
 
 // ✅ Function to generate and upload QR Code image
 const generateAndUploadQRCode = async (pdfUrl) => {

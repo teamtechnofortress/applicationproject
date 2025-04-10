@@ -406,7 +406,6 @@ const styles = StyleSheet.create({
 // Create Document Component
 const MyDocumentTwo = ({ profileData }) => {
   const { parent, child } = profileData;
-  
  
   return (
     <Document>

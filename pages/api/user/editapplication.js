@@ -1,5 +1,4 @@
 import { IncomingForm } from 'formidable';
-import fs from 'fs';
 import ApplicationFile from '@/models/ApplicationFile';
 import jwt from 'jsonwebtoken';
 import { parseCookies } from 'nookies';
@@ -10,9 +9,8 @@ import { pdf } from "@react-pdf/renderer";
 import MyDocument from "@/components/MyDocument";
 import MyDocumentTwo from "@/components/MyDocumentTwo";
 import QRCode from "qrcode";
-import { S3Client, PutObjectCommand,DeleteObjectCommand } from '@aws-sdk/client-s3';
-import path from 'path';
-import application from '@/pages/account/application';
+import { handleFileUpload, uploadToHetzner, deletefile } from '@/utils/blob_storage_util';
+
 
 
 export const config = {
@@ -21,86 +19,6 @@ export const config = {
   },
 };
 const hetznerBaseUrl = `${process.env.HETZNER_ENDPOINT}`;
-
-const s3 = new S3Client({
-  region: process.env.HETZNER_REGION,
-  endpoint: process.env.HETZNER_ENDPOINT.startsWith('http')
-    ? process.env.HETZNER_ENDPOINT
-    : `https://${process.env.HETZNER_ENDPOINT}`,
-  credentials: {
-    accessKeyId: process.env.HETZNER_ACCESS_KEY,
-    secretAccessKey: process.env.HETZNER_SECRET_KEY,
-  },
-  forcePathStyle: false, // required by Hetzner
-});
-
-// ✅ Upload to Hetzner S3
-const uploadToHetzner = async (buffer, key, contentType) => {
-  const command = new PutObjectCommand({
-    Bucket: process.env.HETZNER_BUCKET,
-    Key: `uploads/${key}`,
-    Body: buffer,
-    ACL: 'public-read',
-    ContentType: contentType,
-  });
-
-  await s3.send(command);
-  return `${process.env.HETZNER_ENDPOINT}/${process.env.HETZNER_BUCKET}/uploads/${key}`;
-};
-const handleFileUpload = async (fileInput) => {
-  if (!fileInput) return [];
-
-  const fileList = Array.isArray(fileInput) ? fileInput : [fileInput];
-  const urls = [];
-
-  for (const file of fileList) {
-    if (file && file.filepath && file.originalFilename) {
-      const ext = path.extname(file.originalFilename).toLowerCase();
-
-      // ✅ Only allow .jpg, .jpeg, .png
-      let contentType;
-      if (ext === '.jpg' || ext === '.jpeg') {
-        contentType = 'image/jpeg';
-      } else if (ext === '.png') {
-        contentType = 'image/png';
-      } else {
-        console.warn(`❌ Skipping unsupported file type: ${file.originalFilename}`);
-        continue; // skip unsupported files
-      }
-
-      try {
-        const fileContent = fs.readFileSync(file.filepath);
-        const uniqueName = `${uuidv4()}_${file.originalFilename}`;
-
-        const fileUrl = await uploadToHetzner(fileContent, uniqueName, contentType);
-        urls.push(fileUrl);
-      } catch (error) {
-        console.error(`❌ Error uploading file: ${file.originalFilename}`, error);
-      }
-    } else {
-      console.warn('⚠️ Invalid file structure:', file);
-    }
-  }
-
-  return urls;
-};
-
-const deletefile = async (id) => {
-  if (!id) return;
-
-  const params = {
-    Bucket: process.env.HETZNER_BUCKET,
-    Key: `uploads/${id}`,
-  };
-
-  try {
-    await s3.send(new DeleteObjectCommand(params));
-    return { success: true, key: id };
-  } catch (error) {
-    console.error('Delete error:', error);
-    throw new Error('Failed to delete file: ' + error.message);
-  }
-};
 
 // ✅ Function to generate and upload QR Code image
 const generateAndUploadQRCode = async (pdfUrl) => {
@@ -528,11 +446,12 @@ const handler = async (req, res) => {
         if (inputfotoImage) {
           updateData.inputfoto = inputfotoImag;
         }
-        if (files.salarySlip1 && files.salarySlip1.length > 0 && salarySlip1Images !== undefined) {
+        if (files.salarySlip1 && files.salarySlip1.length > 0  && salarySlip1Images !== undefined ) {
             if (Array.isArray(Applicationforblob.salarySlip1) && Applicationforblob.salarySlip1.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.salarySlip1.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.salarySlip1 = salarySlip1ImagesData;
@@ -541,18 +460,20 @@ const handler = async (req, res) => {
             updateData.salarySlip1 = [];
             if (Array.isArray(Applicationforblob.salarySlip1) && Applicationforblob.salarySlip1.length > 0) {
                 // Run the loop to delete all files in the array
-                Applicationforblob.salarySlip2.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                Applicationforblob.salarySlip1.forEach((fileUrl) => {
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
           }
         }
-        if (files.salarySlip2 && files.salarySlip2.length > 0 && salarySlip2Images !== undefined) {
+        if (files.salarySlip2 && files.salarySlip2.length > 0  && salarySlip2Images !== undefined) {
           // console.log("enter salarySlip2 if in updated db and blobb");
             if (Array.isArray(Applicationforblob.salarySlip2) && Applicationforblob.salarySlip2.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.salarySlip2.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
            updateData.salarySlip2 = salarySlip2ImagesData;
@@ -564,17 +485,19 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.salarySlip2) && Applicationforblob.salarySlip2.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.salarySlip2.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
           }
         }
-        if (files.salarySlip3 && files.salarySlip3.length > 0 && salarySlip3Images !== undefined) {
+        if (files.salarySlip3 && files.salarySlip3.length > 0  && salarySlip3Images !== undefined) {
           // console.log("enter salarySlip3 if in updated db and blobb");
           if (Array.isArray(Applicationforblob.salarySlip3) && Applicationforblob.salarySlip3.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.salarySlip3.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.salarySlip3 = salarySlip3ImagesData;
@@ -586,7 +509,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.salarySlip3) && Applicationforblob.salarySlip3.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.salarySlip3.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
           }
@@ -596,7 +520,8 @@ const handler = async (req, res) => {
               // console.log('Enter to deete bolb and updated from db');
               // Run the loop to delete all files in the array
               Applicationforblob.employcontract.forEach((fileUrl) => {
-                  deletefile(fileUrl);
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
               });
           }
           updateData.employcontract = employContractImagesData;
@@ -611,7 +536,8 @@ const handler = async (req, res) => {
             if (Array.isArray(Applicationforblob.employcontract) && Applicationforblob.employcontract.length > 0) {
                 // Run the loop to delete all files in the array
                 Applicationforblob.employcontract.forEach((fileUrl) => {
-                    deletefile(fileUrl);
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
                 });
             }
             updateData.employcontract = [];
