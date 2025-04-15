@@ -47,7 +47,7 @@ const StepNineInner = ({
         </button>
 
         <p className={`${styles["p-address"]} mt-10 mb-10 text-center w-[60%] mx-auto`}>
-        Kopiere diesen Text und sende ihn an deine Hausverwaltung .
+        Kopiere diesen Text und sende ihn an deine Hauptmieter .
         </p>
         <div className={`${styles["static-section"]} w-[70%] mx-auto`}>
               <p className={`${styles["p-address"]}`}>
@@ -71,9 +71,11 @@ const StepNineInner = ({
         </div>
      
         <div className="w-full flex justify-center">
-            <button type="button" className={`${styles["download-btn"]} w-[30%] mt-8`}>
+        <a href="/mietschuldenfreiheitsbescheinigung_wohnungsmappe.pdf" className={`${styles["download-btn"]} w-[30%] mt-8 text-center`} download>
+            <button type="button">
                 Hier Vorlage downloaden
             </button>
+        </a>
         </div>
                   
 

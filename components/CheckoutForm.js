@@ -45,21 +45,22 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
             return;
         }
         // const isOneTime = priceId === "price_1R3x3mIBEl0UnhG5T8lqLHvW";
-        const isOneTime = priceId === PLAN_IDS.price_one_time;
+        // const isOneTime = priceId === PLAN_IDS.price_one_time;
 
 
-        const endpoint = isOneTime 
-        ? "/api/user/one-time-payment" // One-Time Payment API
-        : "/api/user/create-subscription"; // Subscription API
+        // const endpoint = isOneTime 
+        // ? "/api/user/one-time-payment" // One-Time Payment API
+        // : "/api/user/create-subscription"; // Subscription API
         try {
-        const response = await fetch(endpoint, {
+            console.log('price id', priceId)
+        const response = await fetch('/api/user/create-subscription', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 paymentMethodId: paymentMethod.id,
                 customerEmail,
                 priceId, // ✅ Always include priceId
-                oneTime: isOneTime, // ✅ Explicitly pass oneTime flag
+                // oneTime: isOneTime, // ✅ Explicitly pass oneTime flag
             }),
         });
 

@@ -67,9 +67,11 @@ const StepEightInner = ({
             </button>
         </div>
         <div className="w-full flex justify-center">
-            <button type="button" className={`${styles["download-btn"]} w-[30%] mt-8`}>
+        <a href="/mietschuldenfreiheitsbescheinigung_wohnungsmappe.pdf" className={`${styles["download-btn"]} w-[30%] mt-8 text-center`} download>
+            <button type="button">
                 Hier Vorlage downloaden
             </button>
+        </a>
         </div>
 
         <div className="flex justify-between mt-10 p-6">

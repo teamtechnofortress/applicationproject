@@ -6,9 +6,8 @@ import styles from '../styles/login.module.css';
 const Sidebar = () => {
     <div className="bg-white shadow-md w-64 p-5 h-full fixed">
     <div className="mb-6">
-      <a href="/">
       <img src="/images/logo.png" alt="Logo" className="h-12" />
-      </a>
+
       <h1 className={`${styles['sidebar-h1']} mt-10`}>Invite + recommend friends</h1>
       <div className={`${styles['progress-circle']} relative`}>
         <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">

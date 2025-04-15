@@ -76,9 +76,7 @@ export const DashboardHeader = () => {
   return (
     <div className="flex">
       <div className="mt-2 px-4 sm:px-6 lg:px-8">
-        <a href="/">
           <img src="/images/logo.png" alt="Logo" className="h-12" />
-          </a>
       </div>
 
       <div className="flex-1">

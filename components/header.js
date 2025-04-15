@@ -34,7 +34,7 @@ const Nav = () => {
        <section className="container mx-auto">
            <nav className="bg-white border-gray-200 pt-8 relative">
                <div className="flex flex-wrap items-center justify-between mx-auto p-4">
-                   <a href="" className={`${styles['a-tag']} flex items-center space-x-3 rtl:space-x-reverse`}>
+                   <a href="#" className={`${styles['a-tag']} flex items-center space-x-3 rtl:space-x-reverse`}>
                        <img src="/images/logo.png" className={`${styles['logo']}`} alt="Flowbite Logo" />
                    </a>
                    <button

@@ -168,7 +168,7 @@ const Signup = () => {
 
             <div className="mt-3 mb-6">
                <button type="submit" className={`${styles['signIn-btn']} flex w-full leading-6 shadow-sm px-3 py-1.5 justify-center`} >REGISTRIERE DICH KOSTENLOS</button>
-               <p className={`${styles['p-login']} mt-5`}>Indem du auf “Kostenlos registrieren” klickst, erklärst du, dass du die <span>Datenschutzerklärung</span>  und <span>Allgemeinen Geschäftsbedingungen</span>  gelesen hast und akzeptierst.</p>
+               <p className={`${styles['p-login']} mt-5`}>Indem du auf “Kostenlos registrieren” klickst, erklärst du, dass du die <a href="https://www.wohnungsmappe.de/contact/datenschutzerklarung"><span>Datenschutzerklärung</span></a>  und <a href="https://www.wohnungsmappe.de/contact/agb"><span>Allgemeinen Geschäftsbedingungen</span></a>  gelesen hast und akzeptierst.</p>
             </div>
           </form>
         </div>

@@ -185,7 +185,7 @@ const SubscriptionDetail = () => {
                       <div className={`${styles['review']} p-4`}>
                         <div className="flex gap-4 mt-4 justify-between">
                           <div className={`${styles['circle-sec']}`}>
-                          <p className={`${styles['review-p']}`}>Enrico</p>
+                          <p className={`${styles['review-p']}`}>Lena (28, Berlin)</p>
                           </div>
                           <div className={`flex`}>
                             <img src="/images/Star.svg" alt="icon" className="w-1/5" />
@@ -195,7 +195,8 @@ const SubscriptionDetail = () => {
                             <img src="/images/Star.svg" alt="icon" className="w-1/5" />
                           </div>
                         </div>
-                        <p className={`${styles['review-p']} mt-2`}>Super Tipps und wirklich Hilfreich etwas von den Experten aus erster Hand zu Erfahren </p>
+                        <p className={`${styles['review-p']} mt-2`}>„Mein Makler meinte wörtlich: “So eine strukturierte Bewerbung sieht man selten.”
+Mit dem QR-Code konnte ich vor Ort einfach alles zeigen er hat gescannt, hatte direkt alle Unterlagen und ich bin im Kopf geblieben. Genau diese Wohnung hab ich dann auch bekommen.“ </p>
 
                         <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
                           Mehr anzeigen  
@@ -209,7 +210,7 @@ const SubscriptionDetail = () => {
                       <div className={`${styles['review']} p-4`}>
                         <div className="flex gap-4 mt-4 justify-between">
                           <div className={`${styles['circle-sec']}`}>
-                          <p className={`${styles['review-p']}`}>Enrico</p>
+                          <p className={`${styles['review-p']}`}>Marc (30, München)</p>
                           </div>
                           <div className={`flex`}>
                             <img src="/images/Star.svg" alt="icon" className="w-1/5" />
@@ -219,7 +220,7 @@ const SubscriptionDetail = () => {
                             <img src="/images/Star.svg" alt="icon" className="w-1/5" />
                           </div>
                         </div>
-                        <p className={`${styles['review-p']} mt-2`}>Super Tipps und wirklich Hilfreich etwas von den Experten aus erster Hand zu Erfahren </p>
+                        <p className={`${styles['review-p']} mt-2`}>„Ehrlich gesagt war ich unsicher, ob Vermieter sich sowas wirklich anschauen. Aber ich wurde mit genau dieser Mappe zu mehreren Besichtigungen eingeladen. Alles war sauber gegliedert und direkt online abrufbar kein Stress mit PDFs oder Ausdruck-Chaos. Das kam richtig gut an.“ </p>
 
                         <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
                           Mehr anzeigen  
@@ -232,7 +233,7 @@ const SubscriptionDetail = () => {
                       <div className={`${styles['review']} p-4`}>
                         <div className="flex gap-4 mt-4 justify-between">
                           <div className={`${styles['circle-sec']}`}>
-                          <p className={`${styles['review-p']}`}>Enrico</p>
+                          <p className={`${styles['review-p']}`}>Jonas (31, Hamburg)</p>
                           </div>
                           <div className={`flex`}>
                             <img src="/images/Star.svg" alt="icon" className="w-1/5" />
@@ -242,7 +243,7 @@ const SubscriptionDetail = () => {
                             <img src="/images/Star.svg" alt="icon" className="w-1/5" />
                           </div>
                         </div>
-                        <p className={`${styles['review-p']} mt-2`}>Super Tipps und wirklich Hilfreich etwas von den Experten aus erster Hand zu Erfahren </p>
+                        <p className={`${styles['review-p']} mt-2`}>„Ich habe zuerst gezögert, ob sich die Ausgabe lohnt im Nachhinein war es definitiv die richtige Entscheidung. Die Vorlage ist professionell aufgebaut und besonders die Bewerbungstipps haben mir enorm geholfen. Man merkt, dass da echte Erfahrung dahintersteckt.“ </p>
 
                         <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
                           Mehr anzeigen  

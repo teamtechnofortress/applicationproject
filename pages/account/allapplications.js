@@ -395,12 +395,6 @@ const AllApplications = () => {
               <strong>Jetzt upgraden und alle Vorteile genießen.</strong>
             </p>
             <div className="flex justify-end gap-3">
-              {/* <button
-                onClick={() => setShowPriceingPopup(false)}
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
-              >
-                Schließen
-              </button> */}
 
               <button
                 onClick={() => {
