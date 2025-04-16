@@ -124,7 +124,7 @@ const StepThreeInner = ({
         Lade dein Bewerberbild hoch
         </p>
         <img
-          src="/images/profile.jpg"
+          src="/images/step3.png"
           className="object-cover"
         />
         <div className="flex flex-col justify-center mx-auto">
@@ -164,11 +164,11 @@ const StepThreeInner = ({
       </div>
 
       <div className="flex justify-between mt-10">
-         <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => {
+         <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3  rounded-lg" onClick={() => {
               setCurrentStep(1); 
           }}> Zurück </button>
           <div className="col-span-2">
-            <button type="button" className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+            <button type="button" className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3  rounded-lg bg-blue-500 mx-auto block`}
               onClick={() => {
                 if (validateFields()) {
                 setCurrentStep(3); 

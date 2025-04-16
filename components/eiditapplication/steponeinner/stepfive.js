@@ -46,7 +46,7 @@ const StepFiveInner = ({
                         onClick={() => setisTipModal(true)}>
                         <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
                       </button> 
-                    <div className="grid grid-cols-2 gap-4 mt-5">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
                       <div className="...">
                         <div className="input-field">
                           <input
@@ -78,7 +78,7 @@ const StepFiveInner = ({
                         </div>
                       </div>
                     </div>
-                    <div className="input-field mt-10">
+                    <div className="input-field mt-5 lg:mt-10">
                       <input
                             type="text"
                             className={`${styles["form-input"]} form-control `}
@@ -92,10 +92,10 @@ const StepFiveInner = ({
                     </div>
                     {profession === "Ja" && (
                        <>
-                        <p className={`${styles["p-address"]} mt-20 mb-10 text-center`}>
+                        <p className={`${styles["p-address"]} mt-10 lg:mt-20 mb-10 text-center`}>
                         Besteht das Beschäftigungsverhältnis länger, als 6 Monate?
                         </p> 
-                        <div className="grid grid-cols-2 mt-5 gap-10 w-[60%] mx-auto">
+                        <div className="grid grid-cols-2 mt-5 gap-10 w-[90%] lg:w-[60%] mx-auto">
                             <div className="col-span-1 flex items-center">
                             <input
                                   className={`${styles["form-check-input"]} mr-2`}
@@ -145,13 +145,13 @@ const StepFiveInner = ({
                   {profession === "Ja" && (
                     <>
                     <div className="flex justify-between mt-10">
-                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
                           onClick={() => {
                             setCurrentStep(3); 
                           }}
                             > Zurück 
                     </button>
-                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
                           onClick={() => {
                             if (validateFields()) {
                             setCurrentStep(8); // Correctly update the step state

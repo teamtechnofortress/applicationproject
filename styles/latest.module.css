@@ -4,6 +4,11 @@
     font-size: 32px;
     font-weight: 900;
 }
+.main-heading-sec{
+    font-family: 'Poppins Bold';
+    font-size: 32px;
+    font-weight: 900; 
+}
 .main-upload-heading{
     font-family: 'Poppins Bold';
     font-size: 22px;
@@ -235,9 +240,11 @@ label.file_up {
     align-items: flex-end;
 }
 .profession-btn.black{
+    cursor: pointer;
     background: #ededed66 !important;
 }
 .profession-btn{
+    cursor: pointer;
     padding: 28px 16px;
     /* padding: 20px; */
     background-color: transparent;
@@ -266,4 +273,28 @@ label.file_up {
     border-radius: 10px;
     font-family: 'Poppins Medium';
     font-size: 12px;
+}
+@media screen and (max-width: 600px) {
+    .form-input,.ausgeubterBeruf{
+        padding: 14px 22px;
+        font-size: 16px;
+    }
+    .main-heading{
+        font-size: 23px;
+    }
+    .p-address{
+        font-size: 15px; 
+    }
+    .main-heading-2{
+        font-size: 19px; 
+    }
+    .second-heading{
+        font-size: 30px; 
+    }
+    .main-heading-sec{
+        font-size: 19px; 
+    }
+    .main-heading-sec-2{
+        font-size: 15px; 
+    }
 }

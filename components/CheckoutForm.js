@@ -150,7 +150,7 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
 
             {error && <p className="text-red-500">{error}</p>}
 
-            <div className="text-center mb-20">
+            <div className="text-center mb-0 lg:mb-20">
                 <button type="submit" disabled={!stripe || loading} className={`${styles['jetzt-tip']}`}>
                     {loading ? "Processing..." : "Jetzt Kaufen"}
                 </button>

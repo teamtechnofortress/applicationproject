@@ -267,10 +267,11 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   footerColOne: {
-    width: "27%",
+    width: "30%",
   },
   footerCol: {
-    width: "35%",  
+    width: "30%",  
+    paddingLeft:10,
   },
   footerText: {
     fontFamily: 'Poppins',
@@ -286,6 +287,7 @@ const styles = StyleSheet.create({
     width: "42%", 
     justifyContent: "center",
     alignItems: "center",
+    paddingRight:10,
   },
   secondPageBody:{
     backgroundColor: '#f6f6f6',

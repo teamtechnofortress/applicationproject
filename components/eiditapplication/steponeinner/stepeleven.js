@@ -24,10 +24,10 @@ const StepElevenInner = ({
           <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
             Nur noch ein paar Fragen.
           </p>
-          <p className={`${styles["p-address"]} mt-20 mb-10 text-center  w-[40%] mx-auto`}>
+          <p className={`${styles["p-address"]} mt-10 lg:mt-20 mb-10 text-center w-[80%] lg:w-[40%] mx-auto`}>
           Wurde in den letzten 5 Jahren Insolvenzverfahren gegen dich eröffnet? 
           </p>
-          <div className="grid grid-cols-2 mt-5 gap-10 w-[40%] mx-auto">
+          <div className="grid grid-cols-2 mt-5 gap-10  w-[80%] lg:w-[40%] mx-auto">
               <div className="col-span-1 flex items-center">
                 <input
                   className={`${styles["form-check-input"]} mr-2`}
@@ -74,7 +74,7 @@ const StepElevenInner = ({
        <div className="flex justify-between mt-10">
        <button
           type="button"
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+          className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3  rounded-lg"
           onClick={() => {
             setCurrentStep(9);
           }}
@@ -84,7 +84,7 @@ const StepElevenInner = ({
         <div className="col-span-2">
           <button
               type="button"
-              className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+              className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3 rounded-lg bg-blue-500 mx-auto block`}
               onClick={() => {
                 if (validateFields()) {
                   setCurrentStep(11);

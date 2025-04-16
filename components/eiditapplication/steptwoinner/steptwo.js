@@ -48,10 +48,10 @@ const StepTwoInner = ({
               onClick={() => setisTipModal(true)}>
               <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
             </button>
-            <p className={`${styles["p-address"]} mt-20 mb-10 text-center w-[60%] mx-auto`}>
+            <p className={`${styles["p-address"]} mt-10 lg:mt-20 mb-10 text-center w-[90%] lg:w-[60%] mx-auto`}>
             Ein kurzes Anschreiben hilft dir, einen guten ersten Eindruck bei deinem Vermieter zu hinterlassen. Stell dich kurz vor – wer du bist, was du machst und warum du an der Wohnung interessiert bist. Zeige, dass du zuverlässig bist und die Wohnung zu schätzen weißt. Ein freundlicher Abschluss mit der Bereitschaft für Rückfragen oder eine Besichtigung rundet dein Schreiben ab.
             </p>
-            <div className="grid grid-cols-1 gap-4 mt-5 w-[60%] mx-auto">
+            <div className="grid grid-cols-1 gap-4 mt-5  w-[90%] lg:w-[60%] mx-auto">
               <label>Dein Anschreiben</label>
               <textarea
                 id="textarea-field"
@@ -66,10 +66,10 @@ const StepTwoInner = ({
               )}
             </div>
 
-            <div className="flex justify-between mt-10  w-[60%] mx-auto">
+            <div className="flex justify-between mt-10 w-[90%] lg:w-[60%] mx-auto">
                 <button
                     type="button"
-                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                    className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
                     onClick={() => {
                         setCurrentStep(12);
                     }}
@@ -80,7 +80,7 @@ const StepTwoInner = ({
                 <div className="col-span-2">
                 <button
                     type="button"
-                    className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+                    className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3 rounded-lg bg-blue-500 mx-auto block`}
                     onClick={handleNextClick}
                   >
                     Weiter

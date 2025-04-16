@@ -57,8 +57,8 @@ const Checkout = () => {
       <SidebarHeader />
       <ToastContainer />
       <div className="flex">
-        <div className="flex-1 ml-64">
-        <div className="bg-gray-100 py-8 p-12">
+        <div className="flex-1 ml-0 md:ml-64">
+        <div className="bg-gray-100 py-8 p-5 lg:p-12">
           {checkingStatus ? (
             <p>Lade...</p>
             ) : hasActiveSubscription ? (
@@ -72,7 +72,7 @@ const Checkout = () => {
               <h1 className={`${styles['subscription-h1']}`}>
                 Schneller in dein Traumzuhause mit Wohnungsmappe
               </h1>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-20 pt-20">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 mt-10 lg:mt-20 pt-2 lg:pt-20">
                 {/* Card 1 */}
                 <div className={`${styles['payment-card']} bg-white p-4`}>
                   <div className="bg-gray-100 p-6 mt-4 flex flex-col sm:flex-row gap-4">
@@ -100,8 +100,8 @@ const Checkout = () => {
                 </div>
 
                 {/* Card 2 */}
-                <div className={`${styles['section-text']} p-8`}>
-                  <div className='flex items-center justify-between mt-6'>
+                <div className={`${styles['section-text']} p-2 lg:p-8`}>
+                  <div className='block lg:flex items-center justify-between mt-6'>
                     <h2 className={`${styles['p-vorteile']}`}>Vorteile von</h2>
                     <img src="/images/logo.png" alt="Logo" className="h-12" />
                   </div>
@@ -132,13 +132,10 @@ const Checkout = () => {
                     <img src="/images/tick.svg"  />
                     <p className={`${styles['p-text']}`}>QR Code zum digitalen Abruf ihrer Bewerbung bei der Besichtiung</p>
                   </div>
-                  <div className='flex items-center gap-4 mt-3'>
-                    <img src="/images/tick.svg"  />
-                    <p className={`${styles['p-text']}`}>4+ Vorlagen</p>
-                  </div>
+                  
 
-                  <div className='flex items-center justify-between mt-20'>
-                    <img src="/images/norton.svg" alt="Logo"/>
+                  <div className='block lg:flex items-center justify-between mt-10 lg:mt-20'>
+                    <img src="/images/norton.svg" alt="Logo" className='mx-auto lg:mx-0'/>
                     <img src="/images/review.svg" alt="Logo"/>
                   </div>
                 </div>

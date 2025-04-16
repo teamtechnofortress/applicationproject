@@ -118,7 +118,7 @@ useEffect(() => {
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
         <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>Schufa</p>
-        <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
+        <p className={`${styles["p-address"]} mb-6 lg:mb-10 text-center w-[90%] lg:w-[60%] mx-auto`}>
           Diese kannst du auch später hochladen, solltest du sie gerade nicht zur Hand haben.
         </p>
 
@@ -126,7 +126,7 @@ useEffect(() => {
           <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
         </button>
 
-        <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
+        <div className="flex flex-col mt-10 items-center justify-center w-[90%] lg:w-[40%] mx-auto">
           <label
             htmlFor="image-upload"
             className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
@@ -176,17 +176,17 @@ useEffect(() => {
             </div>
           )}
             <div class="mt-4 grid grid-cols-3 gap-4"></div>
-            <a href="#" className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg text-center`}>
+            <a href="#" className={`${styles["next-btn"]} text-white px-5 lg:px-6 py-3 rounded-lg text-center`}>
             Hier Schufaauskunft erhalten
           </a>
         </div>
         <div className="flex justify-between mt-10">    
-         <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => {setCurrentStep(16)}}>
+         <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg" onClick={() => {setCurrentStep(16)}}>
             Zurück
           </button>
           <button
             type="button"
-            className={`bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`bg-gray-500 text-white px-6 py-2 lg:py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
             onClick={() => {
               if(validateFields()){
                 setCurrentStep(18)}

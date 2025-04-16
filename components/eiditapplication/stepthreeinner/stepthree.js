@@ -113,7 +113,7 @@ useEffect(() => {
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
         <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>Personalausweis</p>
-        <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
+        <p className={`${styles["p-address"]} mb-10 text-center w-[80%] lg:w-[60%] mx-auto`}>
           Bitte lade nun eine Kopie deines Personalausweises hoch. In dem Beispiel siehst du, welche Stellen du schwärzen darfst.
         </p>
 
@@ -123,14 +123,14 @@ useEffect(() => {
 
         <div className="grid grid-cols-2 mt-5 gap-10 mt-3 mb-3">
           <div className="col-span-1 flex items-center justify-end">
-            <img src="/idfront.jpeg" alt="ID Front" className="w-[53%] h-auto" />
+            <img src="/idfront.jpeg" alt="ID Front" className="w-[73%] lg:w-[53%] h-auto" />
           </div>
           <div className="col-span-1 flex items-center">
-            <img src="/idback.jpeg" alt="ID Back" className="w-[55%] h-auto" />
+            <img src="/idback.jpeg" alt="ID Back" className="w-[75%] lg:w-[55%] h-auto" />
           </div>
         </div>
 
-        <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
+        <div className="flex flex-col mt-10 items-center justify-center w-[80%] lg:w-[40%] mx-auto">
           <label
             htmlFor="image-upload"
             className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
@@ -182,13 +182,13 @@ useEffect(() => {
         </div>
 
         <div className="flex justify-between mt-10">
-    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => {setCurrentStep(15)} }>
+    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg" onClick={() => {setCurrentStep(15)} }>
             Zurück
           </button>
 
           <button
             type="button"
-            className={`bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`bg-gray-500 text-white px-6 py-2 lg:py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
             onClick={() => {
               if(validateFields()){
                 setCurrentStep(17)}}

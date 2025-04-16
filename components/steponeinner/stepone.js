@@ -3,7 +3,7 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import styles from "@/styles/latest.module.css";
 import usePdfToImages from "@/hooks/usePdfToImages";
-
+import { German } from "flatpickr/dist/l10n/de.js";
 const StepOneInner = ({
   vorname,
   nachname,
@@ -41,8 +41,10 @@ const StepOneInner = ({
 
     // Initialize flatpickr
     const flatpickrInstance = flatpickr(element, {
-      dateFormat: "Y-m-d", // Ensure format matches expected input
-      defaultDate: geburtsdatum || null, // Set default date from state
+      locale: German, 
+      dateFormat: "d-m-Y",
+      defaultDate: geburtsdatum || null, 
+      disableMobile: true,
       onChange: (selectedDates, dateStr) => {
         setGeburtsdatum(dateStr); // Update state on date selection
         handleChange({ target: { name: "geburtsdatum", value: dateStr } }); // Sync with parent
@@ -128,7 +130,7 @@ const StepOneInner = ({
 
         <button
           type="button"
-          className={`${styles["next-btn"]} mt-10 px-6 py-3 rounded-lg bg-blue-500 mx-auto block flex items-center justify-between`}
+          className={`${styles["next-btn"]} mt-10 px-6 py-2 lg:py-3 rounded-lg bg-blue-500 mx-auto block flex items-center justify-between`}
           onClick={() => {
             if (validateFields()) {
               setCurrentStep(1);
@@ -136,7 +138,7 @@ const StepOneInner = ({
           }}
         >
           <span className="mr-4">Weiter</span>
-          <span className="text-2xl font-bold">&rarr;</span>
+          <span className="text-1xl lg:text-2xl font-bold">&rarr;</span>
         </button>
 
 

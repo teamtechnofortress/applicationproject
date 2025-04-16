@@ -35,7 +35,7 @@ const StepFiveInner = ({
   return (
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
-        <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>
+        <p className={`${styles["main-heading"]} ${styles["main-heading-sec-2"]} mt-10 text-center font-bold`}>
         Mietschuldenfreiheitsbescheinigung
         </p>
         <button
@@ -45,10 +45,10 @@ const StepFiveInner = ({
               onClick={() => setisTipModal(true)}>
               <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
             </button>
-        <p className={`${styles["p-address"]} mt-20 mb-10 text-center w-[40%] mx-auto`}>
+        <p className={`${styles["p-address"]} mt-10 lg:mt-20 mb-6 lg:mb-10 text-center w-[80%] lg:w-[40%] mx-auto`}>
           Bestehen Mietrückstände aus bisherigen Mietverhältnissen?
         </p>
-        <div className="grid grid-cols-2 mt-5 gap-10 w-[60%] mx-auto">
+        <div className="grid grid-cols-2 mt-0 lg:mt-5 gap-10 w-[80%] lg:w-[60%] mx-auto">
             <div className="col-span-1 flex items-center">
                     <input
                           className={`${styles["form-check-input"]} mr-2`}

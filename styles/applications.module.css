@@ -202,7 +202,30 @@
     }
     .pdf-person{
         font-size: 11px;
+        align-items: center;
     }
+    .pdf-layout{
+      width:300px;
+    }
+    .application-h4{
+      font-size: 20px;
+      line-height: 20px;
+    }
+    .application-h2{
+      font-size: 30px;
+    line-height: 30px;
+    }
+    .or-button{
+      padding: 5px 27px 5px 27px;
+    }
+    .pdf-btn-grp{
+      right: 10px;
+      left: auto;
+  }
+  .scanMe{
+    font-size: 11px;
+  }
+  
 }
 
 

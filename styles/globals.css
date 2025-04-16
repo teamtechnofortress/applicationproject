@@ -157,6 +157,9 @@ details[open] .accordion-content {
   /* .slider-div {
     padding-left: 15px;
 } */
+input#geburtsdatum,input#email {
+  padding: 14px 50px;
+}
 .slider-div .slick-dots{
   display: none !important;
 }

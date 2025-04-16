@@ -23,17 +23,17 @@ const StepOneInner = ({
         <p className={`${styles["second-heading"]} font-bold`}>Uploads</p>
        </div>
      
-       <div className="flex justify-between w-[70%] mx-auto mt-10 px-4">
+       <div className="flex justify-between w-full lg:w-[70%] gap-2 lg:gap-0 mx-auto mt-10 px-4">
          <button
            type="button"
-           className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg w-[8%] mx-auto"
+           className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg w-[20%] lg:w-[8%] mx-auto"
            
            onClick={handleNextClick}
          >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 25 25"
-            className="h-8 w-8" // Increased size
+            className="h-6 lg:h-8 w-6 lg:w-8" // Increased size
             aria-label="Back Arrow"
           >
             <path
@@ -46,11 +46,11 @@ const StepOneInner = ({
          <button
            type="button"
            onClick={() => (setCurrentStep(15))} 
-           className={`${styles["next-btn"]} bg-blue-500 text-white px-6 py-3 rounded-lg mx-auto block flex items-center justify-between`}
+           className={`${styles["next-btn"]} bg-blue-500 text-white px-6 py-2 lg:py-3 rounded-lg mx-auto block flex items-center justify-between`}
            style={{ width: '90%' }} // Assign 90% width
          >
            Weiter
-           <span className="text-2xl font-bold">&rarr;</span>
+           <span className="text-1xl lg:text-2xl font-bold">&rarr;</span>
          </button>
        </div>
      </div>

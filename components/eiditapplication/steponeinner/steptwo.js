@@ -35,7 +35,7 @@ const StepTwoInner = ({
         <div>
         <p className={`${styles["main-heading"]} mt-10 mb-4 text-center`}>
          
-        Hallo {vorname} {nachname}, schön dich kennenzulernen
+        Hallo {vorname}, schön dich kennenzulernen
         </p>   
         <p className={`${styles["p-address"]} mb-10 text-center`}>
           Wie lautet deine aktuelle Adresse?
@@ -102,7 +102,7 @@ const StepTwoInner = ({
       <div className="flex justify-between mt-10">
           <button
             type="button"
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+            className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
             onClick={() => {
               setCurrentStep(0); 
           }}
@@ -112,7 +112,7 @@ const StepTwoInner = ({
           <div className="col-span-2">
             <button
               type="button"
-              className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+              className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3 rounded-lg bg-blue-500 mx-auto block`}
               onClick={() => {
                 if (validateFields()) {
                 setCurrentStep(2); 

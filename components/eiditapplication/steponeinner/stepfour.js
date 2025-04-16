@@ -30,7 +30,7 @@ const StepFourInner = ({
                     Bitte Option wählen
                     </p> 
 
-                    <div className="grid grid-cols-2 mt-5 gap-10 w-[80%] mx-auto">
+                    <div className="grid grid-cols-2 mt-5 gap-10 w-full lg:w-[80%] mx-auto">
                         <div className="col-span-1 flex items-center">
                         <input
                               className={`${styles["form-check-input"]}  mr-2`}
@@ -82,7 +82,7 @@ const StepFourInner = ({
                     <div className="flex justify-between mt-10">
                         <button
                           type="button"
-                          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                          className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
                           onClick={() => {
                             setCurrentStep(2); 
                           }}
@@ -92,7 +92,7 @@ const StepFourInner = ({
                         <div className="col-span-2">
                         <button
                             type="button"
-                            className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+                            className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3 rounded-lg bg-blue-500 mx-auto block`}
                             onClick={() => {
                               if (validateFields()) {
                                 setCurrentStep((prevStep) => prevStep + 1);

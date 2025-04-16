@@ -39,7 +39,7 @@ const StepNineInner = ({
         <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>
           Mietschuldenfreiheit
         </p>
-        <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
+        <p className={`${styles["p-address"]} mb-10 text-center w-[90%] lg:w-[60%] mx-auto`}>
           Untermieter
         </p>
 
@@ -48,10 +48,10 @@ const StepNineInner = ({
           <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps zur Bewerbung</span>
         </button>
 
-        <p className={`${styles["p-address"]} mt-10 mb-10 text-center w-[60%] mx-auto`}>
+        <p className={`${styles["p-address"]} mt-10 mb-10 text-center w-[80%] lg:w-[60%] mx-auto`}>
         Kopiere diesen Text und sende ihn an deine Hauptmieter.
         </p>
-        <div className={`${styles["static-section"]} w-[70%] mx-auto`}>
+        <div className={`${styles["static-section"]} w-[90%] lg:w-[70%] mx-auto`}>
               <p className={`${styles["p-address"]}`}>
               Hallo [Name des Hauptmieters], 
               </p>
@@ -73,7 +73,7 @@ const StepNineInner = ({
         </div>
      
         <div className="w-full flex justify-center">
-        <a href="/mietschuldenfreiheitsbescheinigung_wohnungsmappe.pdf" className={`${styles["download-btn"]} w-[30%] mt-8 text-center`} download>
+        <a href="/mietschuldenfreiheitsbescheinigung_wohnungsmappe.pdf" className={`${styles["download-btn"]}  w-[80%] lg:w-[30%] mt-8 text-center`} download>
             <button type="button">
                 Hier Vorlage downloaden
             </button>
@@ -84,7 +84,7 @@ const StepNineInner = ({
         <div className="flex justify-between mt-10 p-6">
           <button
             type="button"
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+            className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
             onClick={() => setCurrentStep(20)}
           >
             Zurück
@@ -93,7 +93,7 @@ const StepNineInner = ({
           <div className="col-span-2">
             <button
              type="submit"
-              className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
+              className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3 rounded-lg`}
               // onClick={() => setCurrentStep(23)}
             >
              Weiter
@@ -168,7 +168,7 @@ const StepNineInner = ({
                     {openIndex === 1 && (
                       <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
                         <p>
-                        Gleiches gilt für Untermieter die in einer WG oder als Pärchen gewohnt haben, hier kann der jeweilige im Hauptmitverrag verankerte Mieter dir ganz einfach deine Mietschuldenfreiheit bescheinigen. Nutze auch hier unsere vorlage um schenller zu deiner perfekten Bewerbung zu kommen.</p>
+                        Gleiches gilt für Untermieter die in einer WG oder als Pärchen gewohnt haben, hier kann der jeweilige im Hauptmietvertrag verankerte Mieter dir ganz einfach deine Mietschuldenfreiheit bescheinigen. Nutze auch hier unsere vorlage um schenller zu deiner perfekten Bewerbung zu kommen.</p>
                       </div>
                     )}
                   </div>

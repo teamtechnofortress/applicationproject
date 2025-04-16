@@ -84,7 +84,7 @@ const StepTwoInner = ({
   return (
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
-        <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>
+        <p className={`${styles["main-heading-sec"]} mt-10 text-center font-bold`}>
           Wohnberechtigungsschein
         </p>
         <p className={`${styles["p-address"]} mb-10 text-center w-[60%] mx-auto`}>
@@ -97,12 +97,12 @@ const StepTwoInner = ({
         onClick={() => setisTipModal(true)}>
         <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
       </button>
-        <div className="grid grid-cols-1 gap-4 mt-3 mb-3 w-[40%] mx-auto">
+        <div className="grid grid-cols-1 gap-4 mt-3 mb-3 w-[90%] lg:w-[40%] mx-auto">
           <div>
             <p className={`${styles["p-address"]} mt-10 mb-10 text-center`}>
               Hast du einen Wohnberechtigungsschein?
             </p>
-            <div className="grid grid-cols-2 gap-4 mt-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
               <div className="...">
                 <div className="input-field">
                   <input
@@ -133,7 +133,7 @@ const StepTwoInner = ({
           </div>
         </div>
 
-       <div className="flex flex-col  w-[40%] justify-center mx-auto">
+       <div className="flex flex-col w-[90%] lg:w-[40%] justify-center mx-auto">
             <label
               htmlFor="image-upload"
               className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
@@ -190,7 +190,7 @@ const StepTwoInner = ({
         <div className="flex justify-between mt-10">
           <button
             type="button"
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+            className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
             onClick={() => setCurrentStep(14)}
           >
             Zurück
@@ -199,7 +199,7 @@ const StepTwoInner = ({
           <div className="col-span-2">
             <button
               type="button"
-              className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg`}
+              className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3 rounded-lg`}
               onClick={() => setCurrentStep(16)}
               disabled={isConverting}
             >

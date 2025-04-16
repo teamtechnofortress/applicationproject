@@ -135,11 +135,13 @@ const FAQ = () => {
                 {/* Profile Section */}
                 <div className={`${styles['second-sec']} w-full md:w-1/3 p-10`}>
                   <img src="/images/message.svg" className='mx-auto mt-2 mb-10'/>
-                  <h3 className={`${styles['heading-faq']}`}>Do you have more questions?</h3>
+                  <h3 className={`${styles['heading-faq']}`}>Haben Sie noch weitere Fragen?</h3>
                   <p className={`${styles['p-faq']} mt-4`}>
-                  End-to-end payments and financial management in a single solution. Meet the right platform to help realize.
+                  End-to-End-Zahlungen und Finanzmanagement in einer einzigen Lösung. Lernen Sie die richtige Plattform kennen, die bei der Umsetzung hilft.
                   </p>
+                  <Link href="/account/allapplications" legacyBehavior>
                   <button className={`${styles['btn-tip']}`}>Wohnungsmappe fertigstellen</button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -236,7 +236,7 @@ export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
                   >
                     <span className="absolute -inset-1.5"></span>
                     <span className="sr-only">Open user menu</span>
-                    <img className="h-9 rounded-full" src="/images/icon.png" alt="" />
+                    <img className="h-9 rounded-full" src="/images/profileicon.svg" alt="" />
                     <span className="ml-3 font-bold">{currentUser ? currentUser.firstname : ''}</span>
                     <i className="fa fa-chevron-down ml-3 text-xs"></i>
                   </button>
@@ -250,17 +250,17 @@ export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
                     >
                       <Link href="/account/allapplications" legacyBehavior>
                         <a className="block px-4 py-2 text-sm text-gray-700" role="menuitem">
-                          All Applications
+                          Deine Bewerbungen
                         </a>
                       </Link>
                       <Link href="/account/profile" legacyBehavior>
                         <a className="block px-4 py-2 text-sm text-gray-700" role="menuitem">
-                          Profile
+                         Profil
                         </a>
                       </Link>
                       <Link href="/account/settings" legacyBehavior>
                         <a className="block px-4 py-2 text-sm text-gray-700" role="menuitem">
-                          Account Settings
+                          Kontoeinstellungen
                         </a>
                       </Link>
                       <a
@@ -269,7 +269,7 @@ export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
                         className="block px-4 py-2 text-sm text-gray-700"
                         role="menuitem"
                       >
-                        Sign out
+                        Abmelden
                       </a>
                     </div>
                   )}

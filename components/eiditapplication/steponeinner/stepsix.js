@@ -311,8 +311,10 @@ useEffect(() => {
         <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
       </button>
 
+      <img src="/images/salary.png" alt="ID Front" className="w-[73%] lg:w-[23%] h-auto mx-auto" />
+
       {/* ✅ Upload Salary Slips */}
-      <div className="flex flex-col items-center justify-center w-[40%] mx-auto">
+      <div className="flex flex-col items-center justify-center w-[100%] lg:w-[40%] mx-auto">
         <label
           htmlFor="salarySlip-upload"
           className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
@@ -368,7 +370,7 @@ useEffect(() => {
 
       {/* ✅ Upload Employment Contract */}
       {employment === "Nein" && (
-        <div className="flex flex-col mt-10 items-center justify-center w-[40%] mx-auto">
+        <div className="flex flex-col mt-5 lg:mt-10 items-center justify-center w-[100%] lg:w-[40%] mx-auto">
           <label
             htmlFor="employcontract-upload"
             className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
@@ -421,7 +423,7 @@ useEffect(() => {
       <div className="flex justify-between mt-10">
         <button
           type="button"
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+          className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
           onClick={() => setCurrentStep(4)}
         >
           Zurück
@@ -429,7 +431,7 @@ useEffect(() => {
         <div className="col-span-2">
           <button
             type="button"
-            className={`${styles["next-btn"]} text-white px-6 py-3 rounded-lg bg-blue-500 mx-auto block`}
+            className={`${styles["next-btn"]} text-white px-6 py-2 lg:py-3 rounded-lg bg-blue-500 mx-auto block`}
             onClick={() => {
               if (validateFields()) {
                 if (salarySlip.length !== 0) {
@@ -494,50 +496,6 @@ useEffect(() => {
   
                 <div className="p-4 md:p-5 space-y-4">
                     {/* FAQ Item 1 */}
-                    <div className={`${styles['faq-item']} p-4`}>
-                          <button
-                            type="button" 
-                            onClick={() => toggleAccordion(0)}
-                            className="w-full text-left font-semibold text-xl rounded-lg flex items-center gap-3"
-                          >
-                              <span className={`${styles['open_faq']}`}>
-                              {openIndex === 0 ? '-' : '+'}
-                            </span>
-                            <span className={`${styles['faq-title']}`}>Tipp 1</span>
-                            
-                          </button>
-                          {openIndex === 0 && (
-                            <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
-                              <p>
-                              Bist du noch in der Probezeit? Lade die relevanten Seiten deines Arbeitsvertrags hoch (Anschrift & Firma, Gehalt, Befristung) – der Vermieter braucht diese Infos
-                            </p>
-                            </div>
-                          )}
-                    </div>
-                      <hr/>
-                    {/* FAQ Item 2 */}
-                    <div className={`${styles['faq-item']}  p-4`}>
-                      <button
-                        type="button"
-                        onClick={() => toggleAccordion(1)}
-                        className="w-full text-left font-semibold text-xl rounded-lg flex items-center gap-3"
-                      >
-                          <span className={`${styles['open_faq']}`}>
-                          {openIndex === 1 ? '-' : '+'}
-                        </span>
-                        <span className={`${styles['faq-title']}`}>Tipp 2</span>
-                        
-                      </button>
-                      {openIndex === 1 && (
-                        <div className={`${styles['faq-txt']}  mt-2 rounded-lg`}>
-                          <p>
-                          Dein Job startet erst in Zukunft? Lass dir eine Arbeitgeberbescheinigung ausstellen, die Startdatum, Position und monatliches Einkommen enthält.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    <hr/>
-                    {/* FAQ Item 3 */}
                     <div className={`${styles['faq-item']}  p-4`}>
                       <button
                         type="button"
@@ -547,7 +505,7 @@ useEffect(() => {
                           <span className={`${styles['open_faq']}`}>
                           {openIndex === 2 ? '-' : '+'}
                         </span>
-                        <span className={`${styles['faq-title']}`}>Tipp 3</span>
+                        <span className={`${styles['faq-title']}`}>Tipp 1</span>
                         
                       </button>
                       {openIndex === 2 && (
@@ -559,7 +517,7 @@ useEffect(() => {
                       )}
                     </div>
                     <hr/>
-                    {/* FAQ Item 4 */}
+                    {/* FAQ Item 2 */}
                     <div className={`${styles['faq-item']}  p-4`}>
                       <button
                         type="button"
@@ -569,7 +527,7 @@ useEffect(() => {
                           <span className={`${styles['open_faq']}`}>
                           {openIndex === 3 ? '-' : '+'}
                         </span>
-                        <span className={`${styles['faq-title']}`}>Tipp 4</span>
+                        <span className={`${styles['faq-title']}`}>Tipp 2</span>
                         
                       </button>
                       {openIndex === 3 && (

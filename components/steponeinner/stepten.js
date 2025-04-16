@@ -24,10 +24,10 @@ const StepTenInner = ({
     <p className={`${styles["main-heading"]} mt-10 mb-10 text-center font-bold`}>
       Nur noch ein paar Fragen.
     </p>
-    <p className={`${styles["p-address"]} mt-20 mb-10 text-center w-[40%] mx-auto`}>
+    <p className={`${styles["p-address"]} mt-10 lg:mt-20 mb-10 text-center w-[80%] lg:w-[40%] mx-auto`}>
       Bestehen Mietrückstände aus bisherigen Mietverhältnissen?
     </p>
-    <div className="grid grid-cols-2 mt-5 gap-10 w-[40%] mx-auto">
+    <div className="grid grid-cols-2 mt-5 gap-10  w-[80%] lg:w-[40%] mx-auto">
         <div className="col-span-1 flex items-center">
         <input
               className={`${styles["form-check-input"]} mr-2`}
