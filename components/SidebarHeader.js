@@ -3,39 +3,24 @@ import Link from 'next/link';
 import router from 'next/router';
 import styles from '../styles/login.module.css';
 import { DateTime } from 'luxon';
+import { fetchSubscriptionStatus,canViewTipps } from '@/utils/user_sub_data.js';
+import UpgradePopup from '@/components/UpgradePopup';
 
 
-export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
+export const DashboardHeader = () => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const menuRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [subscriptionData, setSubscriptionData] = useState(null);
+  const [showPriceingPopup, setShowPriceingPopup] = useState(false);
   
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
   };
   const toggleSidebar = () => {
     setSidebarVisible((prev) => !prev); 
-  };
-
-  const canViewTipps = () => {
-    if (!subscriptionData) return false;
-    if (subscriptionData.paymentType === "subscription") {
-      return subscriptionData.status === "active";
-    }
-    if (subscriptionData.paymentType === "one-time") {
-      return isOneTimeValid();
-    }
-    return false;
-  };
-
-  const isOneTimeValid = () => {
-    if (subscriptionData?.paymentType === "one-time") {
-      const created = DateTime.fromISO(subscriptionData.createdAt);
-      return DateTime.now() < created.plus({ days: 4 });
-    }
-    return false;
   };
 
   const logOut = async () => {
@@ -141,7 +126,16 @@ export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
     calculateProgress();
   }, []);
   
-
+  useEffect(() => {
+    const init = async () => {
+      const data = await fetchSubscriptionStatus();
+      if (data) {
+        setSubscriptionData(data);
+      }
+    };
+  
+    init();
+  }, []);
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -192,7 +186,7 @@ export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
             </div>
             <p className={`${styles['progress-p']} font-bold text-gray-700 text-center`}>Bewerbermappe</p>
           </div>
-          {canViewTipps() ? (
+          {canViewTipps(subscriptionData) ? (
             <Link href="/account/tipps" legacyBehavior>
               <button className={styles['btn-tip']}>Tipps</button>
             </Link>
@@ -280,6 +274,7 @@ export const DashboardHeader = ({subscriptionData,setShowPriceingPopup}) => {
           </div>
         </nav>
       </div>
+      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} />
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import styles from "@/styles/latest.module.css";
 import { useRouter } from "next/router";
+import { fetchSubscriptionStatus,canViewTipps } from '@/utils/user_sub_data.js';
+import UpgradePopup from '@/components/UpgradePopup';
 
 
 const StepTenInner = ({
@@ -15,6 +17,8 @@ const StepTenInner = ({
 }) => {
   const router = useRouter();
   const [errors, setErrors] = useState({});
+  const [subscriptionData, setSubscriptionData] = useState(null);
+  const [showPriceingPopup, setShowPriceingPopup] = useState(false);
 
   useEffect(()=>{
     // console.log('pdfurltodownloud',pdfurltodownloud);
@@ -47,25 +51,36 @@ const StepTenInner = ({
       </p>
      
       
-      <button
-        type="button"
-        className={`${styles["mappe-btn"]} mt-10 px-6 py-3 rounded-lg mx-auto block`}
-        onClick={() => {
-          const link = document.createElement("a");
-          link.href = pdfurltodownloud;
-          link.download = "mappe.pdf"; // Optional: custom file name
-          link.target = "_blank"; // Optional: open in new tab
-          link.click();
-        }}
-      >
-        Download Mappe
-      </button>
+      {canViewTipps(subscriptionData) ? (
+        <button
+          type="button"
+          className={`${styles["mappe-btn"]} mt-10 px-6 py-3 rounded-lg mx-auto block`}
+          onClick={() => {
+            const link = document.createElement("a");
+            link.href = pdfurltodownloud;
+            link.download = "mappe.pdf"; // Optional: custom file name
+            link.target = "_blank"; // Optional: open in new tab
+            link.click();
+          }}
+        >
+          Download Mappe
+        </button>
+      ) : (
+        <button 
+          type="button"
+          className={`${styles["mappe-btn"]} mt-10 px-6 py-3 rounded-lg mx-auto block`}
+          onClick={() => setShowPriceingPopup(true)}
+          >
+          Download Mappe
+        </button>
+      )}
 
 
       <button type="button" className={`${styles["zum-btn"]} mt-10  px-6 py-3 rounded-lg mx-auto block`} onClick={() => router.push("/account/allapplications")} >
           Zum Dashboard
       </button>
       </div>
+      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} />
     </div>
   );
 };

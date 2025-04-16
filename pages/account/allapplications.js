@@ -9,6 +9,8 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
 import { DateTime } from 'luxon';
+import { fetchSubscriptionStatus,isOneTimeValid } from '@/utils/user_sub_data.js';
+import UpgradePopup from '@/components/UpgradePopup';
 
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then(mod => mod.PDFDownloadLink),
@@ -25,6 +27,7 @@ const AllApplications = () => {
   const [selectedApplication, setSelectedApplication] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [showPriceingPopup, setShowPriceingPopup] = useState(false);
+  
 
   const router = useRouter();
   /** Fetches all apartment applications */
@@ -82,30 +85,41 @@ const AllApplications = () => {
     }
   };
 
-  const fetchSubscriptionStatus = async () => {
-    try {
-      const res = await fetch("/api/user/subscription");
-      const data = await res.json();
-      if (res.ok) setSubscriptionData(data.data);
-    } catch (err) {
-      console.error("Subscription fetch error:", err);
-    }
-  };
-
+  // const fetchSubscriptionStatus = async () => {
+  //   try {
+  //     const res = await fetch("/api/user/subscription");
+  //     const data = await res.json();
+  //     if (res.ok) setSubscriptionData(data.data);
+  //   } catch (err) {
+  //     console.error("Subscription fetch error:", err);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchProfileData();
-    fetchUserData();
-    fetchSubscriptionStatus();
+    const init = async () => {
+      await fetchProfileData();
+      await fetchUserData();
+      const data = await fetchSubscriptionStatus();
+      if (data) {
+        setSubscriptionData(data);
+      }
+    };
+    init();
   }, []);
 
-  const isOneTimeValid = () => {
-    if (subscriptionData?.paymentType === "one-time") {
-      const created = DateTime.fromISO(subscriptionData.createdAt);
-      return DateTime.now() < created.plus({ days: 4 });
-    }
-    return false;
-  };
+  // useEffect(() => {
+  //   fetchProfileData();
+  //   fetchUserData();
+  //   fetchSubscriptionStatus();
+  // }, []);
+
+  // const isOneTimeValid = () => {
+  //   if (subscriptionData?.paymentType === "one-time") {
+  //     const created = DateTime.fromISO(subscriptionData.createdAt);
+  //     return DateTime.now() < created.plus({ days: 4 });
+  //   }
+  //   return false;
+  // };
 
   const canAddApplication = () => {
     if (!subscriptionData) return applicationCount === 0;
@@ -131,10 +145,10 @@ const AllApplications = () => {
     return false;
   };
 
-  const canView = () => {
-    if (!subscriptionData) return false;
-    return subscriptionData.status === "active" || subscriptionData.paymentType === "one-time";
-  };
+  // const canView = () => {
+  //   if (!subscriptionData) return false;
+  //   return subscriptionData.status === "active" || subscriptionData.paymentType === "one-time";
+  // };
 
   const canAddChild = () => {
     if (!subscriptionData) return false;
@@ -147,7 +161,7 @@ const AllApplications = () => {
 
   return (
     <>
-      <SidebarHeader subscriptionData={subscriptionData} setShowPriceingPopup={setShowPriceingPopup} />
+      <SidebarHeader />
       <ToastContainer />
       <div className="flex">
         <div className="flex-1 ml-0 md:ml-64">
@@ -368,48 +382,7 @@ const AllApplications = () => {
       </div>
       )}
       {/* <!-- Modal --> */}
-      {showPriceingPopup && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={() => setShowPriceingPopup(false)}
-        >
-          <div
-            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-gray-900"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Mehr rausholen?</h2>
-              <button
-                onClick={() => setShowPriceingPopup(false)}
-                className="text-gray-500 hover:text-red-600 text-2xl"
-              >
-                &times;
-              </button>
-            </div>
-
-            <p className="text-gray-700 mb-4 leading-relaxed text-base">
-              Diese Funktion ist exklusiv für zahlende Nutzer verfügbar.
-              <br />
-            </p>
-            <p className='mt-3 mb-3'>
-              <strong>Jetzt upgraden und alle Vorteile genießen.</strong>
-            </p>
-            <div className="flex justify-end gap-3">
-
-              <button
-                onClick={() => {
-                  setShowPriceingPopup(false);
-                  router.push('/account/subscriptiondetail');
-                }}
-                className="text-gray-900 font-semibold px-4 py-2 rounded hover:brightness-90 transition"
-                style={{ backgroundColor: '#e7fc41' }}
-              >
-                Jetzt freischalten
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} />
     </>
   );
 };
