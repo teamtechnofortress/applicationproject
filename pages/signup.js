@@ -100,7 +100,7 @@ const Signup = () => {
             <h2 className={`${styles['heading-login']} mt-3`}>
             Erstelle ein kostenloses Konto und sichere dir deine Traumwohnung
             </h2>
-            <div className="flex gap-3 mt-3">
+            <div className="block lg:flex gap-3 mt-3">
                 <div className={`${styles['heading-left']}`}>Hast du bereits ein Konto?</div>
                 <div>
                     <Link
