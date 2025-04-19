@@ -17,6 +17,7 @@ const SubscriptionSchema = new Schema({
     initialTermEnd: { type: Date },
     nextInvoiceDate: { type: Date},
     cancelAt: { type: Date},
+    scheduleId: {type: String},
 
 },{timestamps: true});
 

@@ -95,9 +95,12 @@ const Login = () => {
         theme="colors"
        />
       <div className={`${styles['body-background']} flex min-h-full items-center justify-center`}>
+      <div className="absolute top-0 left-0 p-4">
+          <img src="/images/logo.png" alt="Logo" className="h-12" />
+        </div>
         <div className={`${styles['login-form']} w-full max-w-md space-y-8`}>
           <div>
-            <h2 className={`${styles['heading-login']} mt-3 text-gray-900`}>
+            <h2 className={`${styles['heading-login']} mt-3`}>
             Erstelle ein kostenloses Konto und sichere dir deine Traumwohnung
             </h2>
             <div className="flex gap-3 mt-3">

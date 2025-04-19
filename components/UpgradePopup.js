@@ -34,7 +34,7 @@ const UpgradePopup = ({ show, setShow }) => {
           <button
             onClick={() => {
               setShow(false);
-              router.push('/account/subscriptiondetail');
+              router.push('/account/checkout?selectedPlan=price_one_time');
             }}
             className="text-gray-900 font-semibold px-4 py-2 rounded hover:brightness-90 transition"
             style={{ backgroundColor: '#e7fc41' }}

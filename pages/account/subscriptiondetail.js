@@ -43,16 +43,6 @@ const SubscriptionDetail = () => {
 
     const plans = [
         {
-            id: "price_one_time",
-            name: "Einmal",
-            price: "2,95€",
-            duration: "4 Tage voller Zugang",
-            details: "Mit dem „One Time“-Plan haben Sie vollen Zugriff auf exklusive Tools für vier Personen.",
-            label: null,
-            label_month: "", 
-
-        },
-        {
           id: "price_3_month",
           name: "3 Monate",
           price: "29,99€",
@@ -108,7 +98,7 @@ const SubscriptionDetail = () => {
                             
                             <h2 className={`${styles["subscription-h2"]} mt-2`}>Wähle deine Option:</h2>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-0 md:mt-10 lg:pt-0 pt-20">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-0 md:mt-10 lg:pt-0 pt-20">
                                 {plans.map((plan) => (
                                   <div
                                   key={plan.id}
@@ -198,12 +188,12 @@ const SubscriptionDetail = () => {
                         <p className={`${styles['review-p']} mt-2`}>„Mein Makler meinte wörtlich: “So eine strukturierte Bewerbung sieht man selten.”
 Mit dem QR-Code konnte ich vor Ort einfach alles zeigen er hat gescannt, hatte direkt alle Unterlagen und ich bin im Kopf geblieben. Genau diese Wohnung hab ich dann auch bekommen.“ </p>
 
-                        <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
+                        {/* <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
                           Mehr anzeigen  
                           <svg width="10" height="10" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0.244688 0.0499997H1.39469L3.81469 2.34L1.39469 4.64H0.244688L2.66469 2.34L0.244688 0.0499997Z" fill="#333333"/>
                           </svg>
-                        </button>
+                        </button> */}
                       </div>
 
                       {/* Card 2 */}
@@ -222,12 +212,7 @@ Mit dem QR-Code konnte ich vor Ort einfach alles zeigen er hat gescannt, hatte d
                         </div>
                         <p className={`${styles['review-p']} mt-2`}>„Ehrlich gesagt war ich unsicher, ob Vermieter sich sowas wirklich anschauen. Aber ich wurde mit genau dieser Mappe zu mehreren Besichtigungen eingeladen. Alles war sauber gegliedert und direkt online abrufbar kein Stress mit PDFs oder Ausdruck-Chaos. Das kam richtig gut an.“ </p>
 
-                        <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
-                          Mehr anzeigen  
-                          <svg width="10" height="10" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0.244688 0.0499997H1.39469L3.81469 2.34L1.39469 4.64H0.244688L2.66469 2.34L0.244688 0.0499997Z" fill="#333333"/>
-                          </svg>
-                        </button>
+                       
                       </div>
                       {/* Card 3 */}
                       <div className={`${styles['review']} p-4`}>
@@ -245,12 +230,12 @@ Mit dem QR-Code konnte ich vor Ort einfach alles zeigen er hat gescannt, hatte d
                         </div>
                         <p className={`${styles['review-p']} mt-2`}>„Ich habe zuerst gezögert, ob sich die Ausgabe lohnt im Nachhinein war es definitiv die richtige Entscheidung. Die Vorlage ist professionell aufgebaut und besonders die Bewerbungstipps haben mir enorm geholfen. Man merkt, dass da echte Erfahrung dahintersteckt.“ </p>
 
-                        <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
+                        {/* <button className={`${styles['btn-mehr']} mt-4 flex items-center gap-2 rounded-lg`}>
                           Mehr anzeigen  
                           <svg width="10" height="10" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0.244688 0.0499997H1.39469L3.81469 2.34L1.39469 4.64H0.244688L2.66469 2.34L0.244688 0.0499997Z" fill="#333333"/>
                           </svg>
-                        </button>
+                        </button> */}
                       </div>
                   </div>
                 </div>

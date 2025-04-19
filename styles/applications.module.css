@@ -133,10 +133,11 @@
     width: 100%;
   }
   .footerColOne {
-    width: 27%;
+    width: 30%;
   }
   .footerCol {
-    width: 33%;
+    width: 30%;
+    text-align: right;
   }
   .footerText,
   .footerTextOne {

@@ -1,13 +1,14 @@
 .body-background{
-    background-image: url(/images/login.png);
-    background-size: 100% 100%; /* Stretches to fit without cropping */
+    /* background-image: url(/images/login.png);
+    background-size: 100% 100%; 
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
+    background-color: #cfc9bd;
     width: 100vw;
     height: 100vh;
 }
 .login-form{
-    background-color: #F8F8F8;
+    background-color: #000;
     border-radius: 50px;
     padding: 20px;
     padding-bottom: 30px;
@@ -18,10 +19,12 @@
     font-size: 20px;
     font-weight: 500;
     line-height: 36px;
+    color: #ffff;
 }
 .heading-left{
     font-family: 'Poppins Medium';
     font-size: 16px;
+    color: #ffff;
 }
 .jetzt-btn{
     font-family: 'Poppins Medium';
