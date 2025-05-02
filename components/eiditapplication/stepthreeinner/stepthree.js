@@ -5,6 +5,8 @@ import usePdfToImages from "@/hooks/usePdfToImages"; // ✅ Import the PDF conve
 const StepThreeInner = ({
   personal, 
   setPersonal, 
+  idback,
+  setIdback,
   setCurrentStep,
 }) => {
   const { convertPdfToImages } = usePdfToImages(); // ✅ Use the hook for PDF conversion
@@ -12,9 +14,14 @@ const StepThreeInner = ({
   const [isTipModal, setisTipModal] = useState(false);
   const [openIndex, setOpenIndex] = useState(0);
   const [isConverting, setIsConverting] = useState(false); // ✅ Track conversion status
+  const [isidbackConverting, setIdbackIsConverting] = useState(false); // ✅ Track conversion status
   const fileInputRef = useRef(null);
+  const idbackRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null); // ✅ For preview display
   const [updatedImages, setUpdatedImages] = useState([]);
+  const [updatedidbackImages, setUpdatedIdbackImages] = useState([]);
+  const [idbackpreviewImage, setIdbackPreviewImage] = useState(null); // ✅ For preview display
+
 
 
 
@@ -44,12 +51,32 @@ useEffect(() => {
       setPreviewImage(personal[0]); // ✅ Show URL if stored images exist
     }
   }
-}, [personal]);
+  
+  if (idback && Array.isArray(idback) && idback.length > 0) {
+    // Check if the first item is a File object
+    if (idback[0] instanceof File) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setIdbackPreviewImage(reader.result); // ✅ Show file preview
+      };
+      reader.readAsDataURL(idback[0]);
+    } else {
+      setIdbackPreviewImage(idback[0]); // ✅ Show URL if stored images exist
+    }
+  }
+}, [personal,idback]);
 
 
   const handleFileChange = async (event) => {
-    setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];
+    const fieldName = event.target.name;
+
+    if (fieldName === "personal") {
+      setIsConverting(true); // ✅ Set conversion status
+    }
+    if (fieldName === "idback") {
+      setIdbackIsConverting(true); // ✅ Set conversion status 
+    }
 
     if (!file) return;
     let imagesArray = []; // ✅ Store processed images
@@ -62,23 +89,46 @@ useEffect(() => {
       console.log("Converted PDF to images:", images);
 
       imagesArray = images; // Store all images from the PDF
-      setPreviewImage(imagesArray[0]); // Show first page preview
+
+      if (fieldName === "personal") {
+          setPreviewImage(imagesArray[0]); // Show first page preview
+      }else if (fieldName === "idback") {
+        setIdbackPreviewImage(imagesArray[0]); 
+      }
+
     } else {
       // ✅ Directly add uploaded image
       imagesArray = [file];
       if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const result = reader.result;
-          setPreviewImage(result);
-        };
-        reader.readAsDataURL(file);
+        if (fieldName === "personal") {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const result = reader.result;
+            setPreviewImage(result);
+          };
+          reader.readAsDataURL(file);
+
+        }else if (fieldName === "idback") {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const result = reader.result;
+            setIdbackPreviewImage(result);
+          };
+          reader.readAsDataURL(file);
+        }
+
       }
       // setPreviewImage(file); // Show image preview
     }
-    setUpdatedImages(imagesArray);
-    // ✅ Ensure `personal` state is always an array (multiple PDF pages or single image)
-    setIsConverting(false); // ✅ Stop loading state
+    if (fieldName === "personal") {
+      setUpdatedImages(imagesArray);
+      // ✅ Ensure `personal` state is always an array (multiple PDF pages or single image)
+      setIsConverting(false); // ✅ Stop loading state
+
+    }else if (fieldName === "idback") {
+      setUpdatedIdbackImages(imagesArray);
+      setIdbackIsConverting(false);
+    }
   };
 
   const removeImage = () => {
@@ -89,6 +139,14 @@ useEffect(() => {
       fileInputRef.current.value = ""; // Reset input field
     }
   };
+  const removeidbackImage = () => {
+    setUpdatedIdbackImages([]);
+    setIdback([]);
+    setIdbackPreviewImage(null);
+    if (idbackRef.current) {
+      idbackRef.current.value = ""; // Reset input field
+    }
+  };
 
   const validateFields = () => {
     const newErrors = {};
@@ -96,6 +154,11 @@ useEffect(() => {
     if (updatedImages.length !== 0) {
       console.log("Updating imageswbs with new images from updatedImages");
       setPersonal(updatedImages);
+      // return true;
+    }
+    if (updatedidbackImages.length !== 0) {
+      console.log("Updating idback with new images from updatedidbackImages");
+      setIdback(updatedidbackImages);
       // return true;
     }
     // If imageswbs already contains images, no need to update
@@ -135,7 +198,7 @@ useEffect(() => {
             htmlFor="image-upload"
             className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
           >
-            <i className="fa fa-upload mr-2"></i> Upload Personalausweis
+            <i className="fa fa-upload mr-2"></i> Upload Vorderseite
           </label>
           <input
             type="file"
@@ -181,14 +244,65 @@ useEffect(() => {
           )}
         </div>
 
+        <div className="flex flex-col mt-10 items-center justify-center w-[80%] lg:w-[40%] mx-auto">
+        <label
+            htmlFor="idback-upload"
+            className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
+          >
+            <i className="fa fa-upload mr-2"></i> Upload Rückseite
+          </label>
+          <input
+            type="file"
+            id="idback-upload"
+            name="idback"
+            className="hidden"
+            accept="image/*, application/pdf"
+            ref={idbackRef}
+            onChange={handleFileChange}
+          />
+
+          {/* ✅ Show Spinner when Converting PDF */}
+          {isidbackConverting && (
+            <div className="flex justify-center mt-4">
+              <div className="loader"></div>
+            </div>
+          )}
+
+          {/* ✅ Image Preview */}
+          {idbackpreviewImage && !isidbackConverting && (
+            <div className="relative w-24 h-24 mt-4">
+
+            {typeof idbackpreviewImage === "string" && idbackpreviewImage.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(idbackpreviewImage) ? (
+
+                <img
+                  src={(idbackpreviewImage)}
+                  alt="Personalausweis Preview"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex justify-center items-center text-sm text-gray-500">
+                  <span>PDF</span>
+                </div>
+              )}
+              <button
+                type="button"
+                className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                onClick={removeidbackImage}
+              >
+                ×
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="flex justify-between mt-10">
-    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg" onClick={() => {setCurrentStep(15)} }>
+        <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg" onClick={() => {setCurrentStep(15)} }>
             Zurück
           </button>
-
+          <div className="col-span-2">
           <button
             type="button"
-            className={`bg-gray-500 text-white px-6 py-2 lg:py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`${styles["next-btn"]} bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
             onClick={() => {
               if(validateFields()){
                 setCurrentStep(17)}}
@@ -197,6 +311,7 @@ useEffect(() => {
           >
             {isConverting ? "Verarbeiten..." : "Weiter"}
           </button>
+          </div>
         </div>
       </div>
 

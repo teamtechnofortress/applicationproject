@@ -59,6 +59,7 @@ const application = () => {
   const [employcontract, setemploycontract] = useState(null);
   const [showemploycontract, setshowemploycontract] = useState("");
   const [personal, setPersonal] = useState("");
+  const [idback, setIdback] = useState("");
   const [showpersonal, setshowpersonal] = useState("");
   const [schufa, setSchufa] = useState("");
   const [showschufa, setshowschufa] = useState("");
@@ -138,8 +139,6 @@ const application = () => {
             setEmployment(response.employment);
             setemploycontract(response.employcontract);
             setSalarySlip1(response.salarySlip1);
-            console.log('salarySlip1',response.salarySlip1);
-            console.log('salarySlip2',response.salarySlip2);
             setSalarySlip2(response.salarySlip2);
             setSalarySlip3(response.salarySlip3);
             setPets(response.pets);
@@ -148,7 +147,6 @@ const application = () => {
             setprofession(response.profession);
             setApartment(response.apartment);
             if(response.inputfoto){
-              // setinputfoto(response.inputfoto);
               setshowinputfoto(response.inputfoto);
             }
             setCoverletter(response.coverletter);
@@ -156,6 +154,7 @@ const application = () => {
             setZimerzahl(response.zimerzahl);
             setImageswbs(response.imageswbs);
             setPersonal(response.personal);
+            setIdback(response.idback);
             setSchufa(response.schufa);
             setMietschuldenfreiheit(response.mietschuldenfreiheit);
             setMietverhaltnis(response.mietverhaltnis);
@@ -297,56 +296,10 @@ const application = () => {
         reader.readAsDataURL(files[0]);
       }
     }
-    
   
-    
-    // if(name === "bwaimages"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setBwaimages((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "incomeimages"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setincomeimages((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "arbeitsvertrag"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setarbeitsvertrag((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "imageswbs"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setImageswbs((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "personal"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setPersonal((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-
-    // if(name === "schufa"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setSchufa((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "mietschuldenfreiheitimg"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setMietschuldenfreiheitimg((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-
-
-   
     // console.log('Event triggered:', name, value, files);
     if (files && files.length > 0) {
-      // if(name === "salarySlip"){
-      //   // const files = Array.from(e.target.files);
-      //   // const imageUrls = files.map((file) => URL.createObjectURL(file));
-      //   // setsalarySlip((prevImages) => [...prevImages, ...imageUrls]);
-      //   setsalarySlip(Array.from(files));
-      // }
+     
       if (name === "photo") {
         setPhoto(files[0]);
         // console.log(photo);
@@ -562,11 +515,7 @@ const application = () => {
     formData.append("Ort", ort);
     formData.append("email", email);
     formData.append("inputfoto", inputfoto);
-    // formData.append("bwaimages", bwaimages);
-    // formData.append("einkommensbescheinigungimg", einkommensbescheinigungimg);
-    // formData.append("imageswbs", imageswbs);
-    // formData.append("personal", personal);
-    // formData.append("mietschuldenfreiheitimg", mietschuldenfreiheitimg);
+
     formData.append("phonenumber", phonenumber);
     formData.append("geburtsdatum", geburtsdatum);
     formData.append("ausgeubterBeruf", ausgeubterBeruf);
@@ -574,17 +523,13 @@ const application = () => {
     formData.append("income", income);
     formData.append("employment", employment);
     formData.append("profession", profession);
-    // formData.append("employcontract", employcontract);
+
     formData.append("pets", pets);
     formData.append("rentarea", rentarea);
     formData.append("proceedings", proceedings);
     formData.append("apartment", apartment);
     formData.append("coverletter", coverletter);
-    // formData.append("salarySlip", salarySlip);
-    // salarySlip.forEach((file) => formData.append("salarySlip", file));
-    // formData.append("schufa", schufa);
-    // console.log('schufa', schufa);
-    // formData.append("noofpeople", people);
+   
     formData.append("fläche", fläche);
     formData.append("zimerzahl", zimerzahl);
     formData.append("salarystatementlast", salarystatementlast);
@@ -600,8 +545,7 @@ const application = () => {
     formData.append('salarySlip1', salarySlip1);
     formData.append('mietschuldenfreiheit', mietschuldenfreiheit);
     formData.append('mietverhaltnis', mietverhaltnis);
-    // Convert Base64 images to File objects before appending
-    // console.log('imageswbs start',imageswbs);
+
 
     if (Array.isArray(imageswbs) && imageswbs.length > 0 && imageswbs.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
       if (imageswbs && imageswbs.length > 0) {
@@ -698,6 +642,37 @@ const application = () => {
   }
   else{
     formData.append("personal", personal);
+  }
+
+  if (Array.isArray(idback) && idback.length > 0 && idback.every(image => (typeof image === "string" && image.startsWith("data:image")) || image instanceof File)) {
+    if (idback && idback.length > 0) {
+        for (const [index, image] of idback.entries()) {
+          if (typeof image === "string") {
+            if (image.startsWith("data:image")) {
+              // Convert Base64 to File
+              const file = base64ToFile(image, `idback${index}.png`);
+              formData.append("idback", file);
+            } else if (image.startsWith("blob:")) {
+              // Convert Blob URL to File
+              const file = await blobToFile(image, `idback${index}.png`);
+              formData.append("idback", file);
+              console.log("idback blob:", file);
+            } else {
+              // Handle other cases (if necessary)
+              console.warn("Unexpected format for imageswbs:", image);
+            }
+          } else if (image instanceof File) {
+            // Append File object directly
+            formData.append("idback", image);
+            console.log("Appending file:", image);
+          } else {
+            console.warn("Unknown image format:", image);
+          }
+        }
+    }
+  }
+  else{
+    formData.append("idback", idback);
   }
   // console.log('personal end',personal);
   // return;
@@ -829,27 +804,6 @@ const application = () => {
     else{
       formData.append("bwaimages", bwaimages);
     }
-    // console.log('bwaimages end',bwaimages);
-    // console.log("salarySlip1", salarySlip1);
-    // console.log("salarySlip2", salarySlip2);
-    // console.log("salarySlip3", salarySlip3);
-
-    // return;
-    
-    // Check if salarySlip1 is not Base64 and not a File object, then reset it
-    // if (!(salarySlip1 && (typeof salarySlip1 === "string" && salarySlip1.startsWith("data:image")) || salarySlip1 instanceof File)) {
-    //   setSalarySlip1(null);
-    // }
-    
-    // Check if salarySlip2 is not Base64 and not a File object, then reset it
-    // if (!(salarySlip2 && (typeof salarySlip2 === "string" && salarySlip2.startsWith("data:image")) || salarySlip2 instanceof File)) {
-    //   setSalarySlip2(null);
-    // }
-    
-    // Check if salarySlip3 is not Base64 and not a File object, then reset it
-    // if (!(salarySlip3 && (typeof salarySlip3 === "string" && salarySlip3.startsWith("data:image")) || salarySlip3 instanceof File)) {
-    //   setSalarySlip3(null);
-    // }
     
     if (Array.isArray(salarySlip1) && salarySlip1.length > 0 && salarySlip1.every(image => typeof image === "string" && image.startsWith("data:image"))) {
       if (salarySlip1 && salarySlip1.length > 0) {
@@ -945,137 +899,6 @@ const application = () => {
       formData.append("salarySlip3", salarySlip3);
       // console.log("salarySlip3 condition false");
     }
-
-    // console.log("salarySlip1 FormData:", salarySlip1);
-    // console.log("Final FormData:", salarySlip2);
-    // console.log("Final FormData:", salarySlip3);
-    // return;
-
-    // if (salarySlip && salarySlip.length > 0) {
-    //   let allSalarySlipFiles = []; // ✅ Store all images in a nested array
-    
-    //   for (const [fileIndex, fileImages] of salarySlip.entries()) {
-    //     let fileGroup = []; // ✅ Store images for this file
-    
-    //     for (const [imageIndex, image] of fileImages.entries()) {
-    //       if (typeof image === "string") {
-    //         if (image.startsWith("data:image")) {
-    //           // ✅ Convert Base64 to File
-    //           const file = base64ToFile(image, `salarySlip_${fileIndex}_${imageIndex}.png`);
-    //           fileGroup.push(file);
-    //         } else if (image.startsWith("blob:")) {
-    //           // ✅ Convert Blob URL to File
-    //           const file = await blobToFile(image, `salarySlip_${fileIndex}_${imageIndex}.png`);
-    //           fileGroup.push(file);
-    //         } else {
-    //           console.warn("Unexpected format for salarySlip:", image);
-    //         }
-    //       } else if (image instanceof File) {
-    //         // ✅ Append File object directly
-    //         fileGroup.push(image);
-    //       } else {
-    //         console.warn("Unknown image format:", image);
-    //       }
-    //     }
-    
-    //     allSalarySlipFiles.push(fileGroup); // ✅ Push group of images to nested array
-    //   }
-    //   console.log("Final Nested SalarySlip Files:", allSalarySlipFiles);
-    
-    //   // ✅ Convert to JSON & Append to FormData
-    //   allSalarySlipFiles.forEach((fileGroup, groupIndex) => {
-    //     fileGroup.forEach((file, fileIndex) => {
-    //       formData.append(`salarySlip[${groupIndex}][${fileIndex}]`, file);
-    //     });
-    //   });
-    //   for (let pair of formData.entries()) {
-    //     console.log(pair[0], pair[1]);
-    //   }
-    
-    //   // ✅ Debugging to verify
-    // }
-    
-    
-    // for (const pair of formData.entries()) {
-    //   console.log(pair[0], pair[1]);
-    // }
-    
-    
-    // if (salarySlip1 && salarySlip1.length > 0) {
-    //   for (const [index, image] of salarySlip1.entries()) {
-    //     if (typeof image === "string") {
-    //       if (image.startsWith("data:image")) {
-    //         // Convert Base64 to File
-    //         const file = base64ToFile(image, `salarySlip1_${index}.png`);
-    //         formData.append("salarySlip1 am", file);
-    //       } else if (image.startsWith("blob:")) {
-    //         // Convert Blob URL to File
-    //         const file = await blobToFile(image, `salarySlip1_${index}.png`);
-    //         formData.append("salarySlip1 dfxc", file);
-    //         console.log("salarySlip1 blob fdss:", file);
-    //       } else {
-    //         // Handle other cases (if necessary)
-    //         console.warn("Unexpected format for salarySlip1:", image);
-    //       }
-    //     } else if (image instanceof File) {
-    //       // Append File object directly
-    //       formData.append("salarySlip1", image);
-    //       console.log("Appending file:", image);
-    //     } else {
-    //       console.warn("Unknown image format:", image);
-    //     }
-    //   }
-    // }
-    // if (salarySlip2 && salarySlip2.length > 0) {
-    //   for (const [index, image] of salarySlip2.entries()) {
-    //     if (typeof image === "string") {
-    //       if (image.startsWith("data:image")) {
-    //         // Convert Base64 to File
-    //         const file = base64ToFile(image, `salarySlip2_${index}.png`);
-    //         formData.append("salarySlip2", file);
-    //       } else if (image.startsWith("blob:")) {
-    //         // Convert Blob URL to File
-    //         const file = await blobToFile(image, `salarySlip2_${index}.png`);
-    //         formData.append("salarySlip2", file);
-    //         console.log("salarySlip2 blob:", file);
-    //       } else {
-    //         // Handle other cases (if necessary)
-    //         console.warn("Unexpected format for salarySlip2:", image);
-    //       }
-    //     } else if (image instanceof File) {
-    //       // Append File object directly
-    //       formData.append("salarySlip2", image);
-    //       console.log("Appending file:", image);
-    //     } else {
-    //       console.warn("Unknown image format:", image);
-    //     }
-    //   }
-    // }
-    // if (salarySlip3 && salarySlip3.length > 0) {
-    //   for (const [index, image] of salarySlip3.entries()) {
-    //     if (typeof image === "string") {
-    //       if (image.startsWith("data:image")) {
-    //         // Convert Base64 to File
-    //         const file = base64ToFile(image, `salarySlip3_${index}.png`);
-    //         formData.append("salarySlip3", file);
-    //       } else if (image.startsWith("blob:")) {
-    //         // Convert Blob URL to File
-    //         const file = await blobToFile(image, `salarySlip3_${index}.png`);
-    //         formData.append("salarySlip3", file);
-    //         console.log("salarySlip3 blob:", file);
-    //       } else {
-    //         // Handle other cases (if necessary)
-    //         console.warn("Unexpected format for salarySlip3:", image);
-    //       }
-    //     } else if (image instanceof File) {
-    //       // Append File object directly
-    //       formData.append("salarySlip3", image);
-    //       console.log("Appending file:", image);
-    //     } else {
-    //       console.warn("Unknown image format:", image);
-    //     }
-    //   }
-    // }
    
       const res = await fetch("/api/user/editapplication", {
         method: "POST",
@@ -1137,117 +960,7 @@ const application = () => {
      
    
           <div className="mt-7">
-            {/* <ul className="flex justify-around items-center max-w-7xl mx-auto p-10">
-                //  Step 1 
-                <li className="flex flex-col items-center">
-                  <div
-                    className={`${styles["color-border"]} rounded-full w-10 h-10 flex items-center justify-center ${
-                      components >= 1
-                        ? "border-2 border-yellow-500 p-1"
-                        : "bg-gray-300 border-2 border-gray-400 p-1"
-                    }`}
-                  >
-                    <div className={`${styles["color-circle"]} flex items-center justify-center`}>
-                      {components >= 1 ? (
-                        <span className="text-white font-bold">&#10003;</span> // Checkmark icon
-                      ) : (
-                        <span className="text-gray-500 font-bold">1</span>
-                      )}
-                    </div>
-                  </div>
-                  <p
-                  className={`mt-2 text-sm ${
-                    components >= 1 ?  "text-color" : "text-gray-500"
-                  }`}
-                  >
-                    Persönliches
-                  </p>
-                </li>
-
-                // Line Between Steps
-                <li className="flex-1">
-                  <div
-                    className={`h-[2px] mb-6 ${
-                      components >= 2 ? "border-color" : "bg-gray-300"
-                    }`}
-                  ></div>
-                </li>
-
-                //  Step 2
-                <li className="flex flex-col items-center">
-                <div
-                    className={`rounded-full w-10 h-10 flex items-center justify-center ${
-                      components >= 2
-                        ? "color-border border-2 border-yellow-500 p-1"
-                        : "p-1"
-                    }`}
-                  >
-
-                  <div
-                    className={`${
-                      components >= 2 ? "color-circle" : "color-circle-grey"
-                    } flex items-center justify-center`}
-                  >
-                    {components >= 2 ? (
-                      <span className="text-white font-bold">&#10003;</span> // Checkmark icon
-                    ) : (
-                      <span className="text-gray-500 font-bold"></span> // Fallback number
-                    )}
-                  </div>
-
-                  
-                  </div>
-                  <p
-                    className={`mt-2  text-sm ${
-                      components >= 2 ? "text-color" : "text-gray-500"
-                    }`}
-                  >
-                  Anschreiben
-                  </p>
-                </li>
-
-                //  Line Between Steps 
-                <li className="flex-1">
-                  <div
-                    className={`h-[2px] mb-6 ${
-                      components >= 3 ? "border-color" : "bg-gray-300"
-                    }`}
-                  ></div>
-                </li>
-
-                //  Step 3 
-                <li className="flex flex-col items-center">
-                <div
-                    className={`rounded-full w-10 h-10 flex items-center justify-center ${
-                      components >= 3
-                        ? "color-border border-2 border-yellow-500 p-1"
-                        : "p-1"
-                    }`}
-                  >
-
-                  <div
-                    className={`${
-                      components >= 3 ? "color-circle" : "color-circle-grey"
-                    } flex items-center justify-center`}
-                  >
-                    {components >= 3 ? (
-                      <span className="text-white font-bold">&#10003;</span> // Checkmark icon
-                    ) : (
-                      <span className="text-gray-500 font-bold"></span> // Fallback number
-                    )}
-                  </div>
-
-                  
-                  </div>
-                  <p
-                    className={`mt-2  text-sm ${
-                      components >= 3 ? "text-color" : "text-gray-500"
-                    }`}
-                  >
-                    Uploads
-                  </p>
-                </li>
-            </ul> */}
+           
             <ul className="flex justify-around items-center max-w-7xl mx-auto p-10">
                 {/* Step 1 */}
                 <li className="flex flex-col items-center">
@@ -1455,6 +1168,8 @@ const application = () => {
                   setImageswbs ={setImageswbs}
                   personal={personal}
                   setPersonal ={setPersonal}
+                  idback ={idback}
+                  setIdback ={setIdback}
                   schufa ={schufa}
                   setSchufa ={setSchufa}
                   zimerzahl={zimerzahl}
@@ -1469,7 +1184,6 @@ const application = () => {
                   pdfurltodownloud={pdfurltodownloud}
                 />
               )}
-             
             </form>
           </div>
           </div>

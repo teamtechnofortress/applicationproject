@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import router from 'next/router';
 import styles from '../styles/login.module.css';
-import { DateTime } from 'luxon';
 import { fetchSubscriptionStatus,canViewTipps } from '@/utils/user_sub_data.js';
 import UpgradePopup from '@/components/UpgradePopup';
+import LoadingSpinner from "@/components/loading";
 
 
 export const DashboardHeader = () => {
@@ -15,6 +15,7 @@ export const DashboardHeader = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [subscriptionData, setSubscriptionData] = useState(null);
   const [showPriceingPopup, setShowPriceingPopup] = useState(false);
+  const [isSubscriptionLoading, setIsSubscriptionLoading] = useState(true);
   
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -122,20 +123,22 @@ export const DashboardHeader = () => {
       }
     };
   
-    fetchUserData();
-    calculateProgress();
-  }, []);
-  
-  useEffect(() => {
     const init = async () => {
       const data = await fetchSubscriptionStatus();
       if (data) {
         setSubscriptionData(data);
       }
+      setIsSubscriptionLoading(false);
     };
   
+    fetchUserData();
+    calculateProgress();
     init();
   }, []);
+
+  useEffect(() => {
+  }, [subscriptionData]);
+  
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -156,6 +159,13 @@ export const DashboardHeader = () => {
   }, [isMenuVisible]);
   const strokeDashoffset = 251.2 - (251.2 * progress) / 100;
 
+  if (isSubscriptionLoading) {
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
+  }
   return (
     <div className="flex">
       <div className={`bg-white shadow-md w-64 p-5 z-[99999] h-full fixed left-0 top-0 transition-transform ${
@@ -190,10 +200,10 @@ export const DashboardHeader = () => {
             <Link href="/account/tipps" legacyBehavior>
               <button className={styles['btn-tip']}>Tipps</button>
             </Link>
-          ) : (
-            <button onClick={() => setShowPriceingPopup(true)} className={styles['btn-tip']}>
-              Tipps
-            </button>
+            ) : (
+              <button onClick={() => setShowPriceingPopup(true)} className={styles['btn-tip']}>
+                Tipps
+              </button>
           )}
         </div>
         <div className={`${styles['faq-sec']} absolute bottom-0 left-0 w-full pt-5 p-5`}>
@@ -215,9 +225,15 @@ export const DashboardHeader = () => {
                   <img className="h-6 rounded-full" src="/images/Shape.png" alt="" />
                   <span className={`${styles['bell-dot']} absolute top-0 right-0 h-2 w-2 rounded-full`}></span>
                 </div> */}
-                <Link href="/account/subscriptiondetail" legacyBehavior>
-                <button className={`${styles['btn-plan']}`}>Mein Plan</button>
-                </Link>
+                {subscriptionData !== null ? (
+                    <Link href="/account/subscriptiondetail" legacyBehavior>
+                      <button className={`${styles['btn-plan']}`}>Mein Plan</button>
+                    </Link>
+                  ) : (
+                    <Link href="/account/checkout?selectedPlan=price_one_time" legacyBehavior>
+                      <button className={`${styles['btn-plan']}`}>Mein Plan</button>
+                    </Link>
+                  )}
 
                 <div ref={menuRef}>
                   <button
@@ -274,7 +290,7 @@ export const DashboardHeader = () => {
           </div>
         </nav>
       </div>
-      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} />
+      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} subscriptionData={subscriptionData} />
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 
 
 async function verifyToken(token) {
@@ -57,53 +56,22 @@ export async function middleware(request) {
   
     if (userData) {
       // ✅ Now apply path-based rules here
-      if ((path === '/account/application' || path.startsWith('/account/editapplication') || path.startsWith('/account/tipps'))) {
-        if (userData.subpaymenttype === 'subscription') {
-          if (userData.substatus !== 'active') {
-            return NextResponse.redirect(new URL('/account/allapplications', request.url));
-          }
-        } else if (userData.substatus === null && path === '/account/tipps') {
-            return NextResponse.redirect(new URL('/account/allapplications', request.url));
-        } else if (userData.substatus === null && path === '/account/application' && userData.applicationcount >= 1) {
-            return NextResponse.redirect(new URL('/account/allapplications', request.url));
-        } else if (userData.subpaymenttype === 'one-time') {
-          const subCreatedAt = userData.subcreatedat ? new Date(userData.subcreatedat) : null;
-          const isOneTimeExpired =
-            userData.subpaymenttype === 'one-time' &&
-            subCreatedAt &&
-            new Date() - subCreatedAt > 4 * 24 * 60 * 60 * 1000;
-          if (
-            userData.substatus === null &&
-            userData.applicationcount >= 1 &&
-            (path === '/account/application' || path.startsWith('/account/editapplication'))
-          ) {
-            return NextResponse.redirect(new URL('/account/allapplications', request.url));
-          }
-
-          if (
-            userData.subpaymenttype === 'one-time' &&
-            (path.startsWith('/account/editapplication')) &&
-            userData.substatus === 'succeeded' &&
-            isOneTimeExpired 
-          ) {
-            return NextResponse.redirect(new URL('/account/allapplications', request.url));
-          }
-
-          if (
-            path === '/account/application' &&
-            userData.substatus === 'succeeded' &&
-            userData.applicationcount >= 1
-          ) {
-            return NextResponse.redirect(new URL('/account/allapplications', request.url));
-          }
-        } else {
-          if ((userData.substatus === null || userData.substatus !== "active" ) && path === '/account/tipps') {
-            return NextResponse.redirect(new URL('/account/allapplications', request.nextUrl));
-          }
-          if (userData.substatus === null && userData.applicationcount >= 1) {
-            return NextResponse.redirect(new URL('/account/allapplications', request.nextUrl));
-          }
+      if(path === '/account/application'){
+        if ((userData.subpaymentcurrentplan === null && userData.applicationcount < 1) || (userData.subpaymentcurrentplan !== null && userData.subpaymentcurrentplan !== "4 Tage" && userData.substatus === "active") || (userData.subpaymentcurrentplan === "4 Tage" && userData.substatus === "active" && userData.applicationcount < 1)) {
+          return NextResponse.next();
+        }else{
+          return NextResponse.redirect(new URL('/account/allapplications', request.url));
         }
+      }
+      if ((path.startsWith('/account/editapplication') || path.startsWith('/account/tipps'))) {
+        if (userData.subpaymentcurrentplan === null || userData.substatus !== 'active') {
+            return NextResponse.redirect(new URL('/account/allapplications', request.url));
+        } 
+      }
+      if (path.startsWith('/account/subscriptiondetail')) {
+        if (userData.subpaymentcurrentplan === null) {
+            return NextResponse.redirect(new URL('/account/allapplications', request.url));
+        } 
       }
     }
   }

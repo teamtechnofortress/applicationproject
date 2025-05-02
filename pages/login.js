@@ -16,6 +16,7 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [type, setType] = useState('password');
   const [icon, setIcon] = useState(eyeOff);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleToggle = () => {
       if (type==='password'){
@@ -38,36 +39,24 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
       e.preventDefault()
+      setIsLoading(true);
       const data = {email, password}
       
-      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-      let response = await res.json()
-
-      setEmail('')
-      setPassword('')
-      if(response.success) {
-
-      toast.success('Successfully Login!', {
-        position: "top-center",
-        autoClose: 1500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        });
-
-        router.push(`${process.env.NEXT_PUBLIC_HOST}/account/allapplications`)
-        
-      }else{
-        toast.error(response.error, {
+      try{
+        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+        let response = await res.json()
+  
+        setEmail('')
+        setPassword('')
+        if(response.success) {
+  
+        toast.success('Successfully Login!', {
           position: "top-center",
           autoClose: 1500,
           hideProgressBar: true,
@@ -77,6 +66,25 @@ const Login = () => {
           progress: undefined,
           theme: "light",
           });
+  
+          router.push(`${process.env.NEXT_PUBLIC_HOST}/account/allapplications`)
+          
+        }else{
+          toast.error(response.error, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      } catch (err) {
+        toast.error("Login failed. Please try again.");
+      } finally {
+        setIsLoading(false); // Stop loading
       }
   };
   return (
@@ -173,7 +181,18 @@ const Login = () => {
 
 
             <div className="mt-3 mb-6">
-               <button type="submit" className={`${styles['signIn-btn']} flex w-full leading-6 shadow-sm px-3 py-1.5 justify-center`} >LOGIN</button>
+            <button
+              type="submit"
+              className={`${styles['signIn-btn']} flex w-full leading-6 shadow-sm px-3 py-1.5 justify-center items-center`}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                'LOGIN'
+              )}
+            </button>
+
                <p className={`${styles['p-login']} mt-5`}>Indem du auf “Kostenlos registrieren” klickst, erklärst du, dass du die <a href="https://www.wohnungsmappe.de/contact/datenschutzerklarung"><span>Datenschutzerklärung</span></a>  und <a href="https://www.wohnungsmappe.de/contact/agb"><span>Allgemeinen Geschäftsbedingungen</span></a>  gelesen hast und akzeptierst.</p>
             </div>
           </form>

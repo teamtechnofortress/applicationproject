@@ -151,13 +151,15 @@ const StepFiveInner = ({
                           }}
                             > Zurück 
                     </button>
-                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 lg:py-3 rounded-lg"
+                    <div className="col-span-2">
+                    <button type="button" 
+                    className={`${styles["next-btn"]} text-gray-700 px-4 py-2 rounded-lg`}
                           onClick={() => {
                             if (validateFields()) {
                             setCurrentStep(8); // Correctly update the step state
                             }}}> Überspringen 
                     </button>
-                        
+                        </div>
                     </div>
                     </>
                    )}   
@@ -170,13 +172,15 @@ const StepFiveInner = ({
                           }}
                             > Zurück 
                     </button>
-                    <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
+                    <div className="col-span-2">
+                    <button type="button" 
+                    className={`${styles["next-btn"]} text-gray-700 px-4 py-2 rounded-lg`}
                           onClick={() => {
                             if (validateFields()) {
                             setCurrentStep(6); // Correctly update the step state
-                            }}}> Next
+                            }}}> Weiter
                     </button>
-                        
+                        </div>
                     </div>
                     </>
                    )}   

@@ -1,8 +1,14 @@
 const LoadingSpinner = () => {
     return (
-      <div className="flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-      </div>
+      <div className="flex justify-center items-center h-screen">
+      <div 
+        className="w-12 h-12 border-4 border-gray-300 border-t-blue-600 rounded-full animate-spin"
+        style={{
+          borderTopColor: '#e7fc41',
+          animationDuration: '0.5s'  
+        }}
+      ></div>
+    </div>
     );
   };
   

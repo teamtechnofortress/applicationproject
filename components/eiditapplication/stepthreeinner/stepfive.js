@@ -40,13 +40,20 @@ const StepFiveInner = ({
         </p>
         <button
               type="button" 
-              className={`${styles["tips"]} mx-auto`}
+              className={`${styles["tips"]} mx-auto mt-8 mb-8`}
               id="tip_btn"
               onClick={() => setisTipModal(true)}>
               <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
             </button>
-        <p className={`${styles["p-address"]} mt-10 lg:mt-20 mb-6 lg:mb-10 text-center w-[80%] lg:w-[40%] mx-auto`}>
-          Bestehen Mietrückstände aus bisherigen Mietverhältnissen?
+        <p className={`${styles["p-address"]} mb-6 lg:mb-5 text-center w-[90%] lg:w-[60%] mx-auto`}>
+        Diese kannst du auch später hochladen, solltest du sie gerade nicht zur Hand        
+        </p>
+        <p className={`${styles["p-address"]} mb-6 lg:mb-10 text-center w-[90%] lg:w-[60%] mx-auto`}>
+        Optional: Kannst du auch deine deine letzte Mietzahlung hochladen
+        </p>
+        
+        <p className={`${styles["p-address"]} mt-10 lg:mt-20 mb-6 lg:mb-10 text-center w-[80%] lg:w-[60%] mx-auto`}>
+        Hast du eine Mietschuldenfreiheitsbescheinigung vorliegen oder beantragt?
         </p>
         <div className="grid grid-cols-2 mt-0 lg:mt-5 gap-10 w-[80%] lg:w-[60%] mx-auto">
             <div className="col-span-1 flex items-center">

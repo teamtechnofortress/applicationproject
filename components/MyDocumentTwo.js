@@ -1,21 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
+import fs from 'fs';
+import path from 'path';
+
+const poppinsRegularPath = path.join(process.cwd(), 'public/Font/Poppins/Poppins-Regular.ttf');
+const poppinsBoldPath = path.join(process.cwd(), 'public/Font/Poppins/Poppins-Bold.ttf');
+const poppinsMediumPath = path.join(process.cwd(), 'public/Font/Poppins/Poppins-Medium.ttf');
+
+const poppinsRegularBuf = fs.readFileSync(poppinsRegularPath);
+const poppinsBoldBuf = fs.readFileSync(poppinsBoldPath);
+const poppinsMediumBuf = fs.readFileSync(poppinsMediumPath);
 
 // Register the Poppins font
 Font.register({
   family: 'Poppins',
   fonts: [
     {
-      src: `${process.env.NEXT_PUBLIC_HOST}/Font/Poppins/Poppins-Regular.ttf`,
+      src: poppinsRegularBuf,
       fontWeight: 'regular',
     },
     {
-      src: `${process.env.NEXT_PUBLIC_HOST}/Font/Poppins/Poppins-Bold.ttf`,
-      fontWeight: 'bold',
+      src: poppinsMediumBuf,
+      fontWeight: 'medium',
     },
     {
-      src: `${process.env.NEXT_PUBLIC_HOST}/Font/Poppins/Poppins-Medium.ttf`,
-      fontWeight: 'medium',
+      src: poppinsBoldBuf,
+      fontWeight: 'bold',
     },
   ],
 });
@@ -25,6 +35,10 @@ const styles = StyleSheet.create({
   page: {
     padding: 0,
     backgroundColor: '#f6f6f6',
+  },
+  pageid: {
+    padding: 0,
+    backgroundColor: '#fff',
   },
   banner: {
     width: "100%",
@@ -297,6 +311,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
     borderTopLeftRadius: 50,
   },
+  secondPageBodyid:{
+    backgroundColor: '#f6f6f6',
+    borderTopLeftRadius: 50,
+    borderBottomLeftRadius: 50,
+    padding: 10,
+  },
   pdfSection: {
     padding: 20,
     borderStyle: 'solid',
@@ -408,13 +428,20 @@ const styles = StyleSheet.create({
 // Create Document Component
 const MyDocumentTwo = ({ profileData }) => {
   const { parent, child } = profileData;
+  const logoPath = path.join(process.cwd(), 'public/images/logo.png');
+  const bannerPath = path.join(process.cwd(), 'public/images/pdfbanner.png');
+  const avatarPath = path.join(process.cwd(), 'public/images/sample-avatar.png');
+
+  const logoBuf = fs.readFileSync(logoPath);
+  const bannerBuf = fs.readFileSync(bannerPath);
+  const avatarBuf = fs.readFileSync(avatarPath);
  
   return (
     <Document>
       {/* page 1*/}
       <Page style={styles.page}>
-      <Image style={styles.banner} src={`${process.env.NEXT_PUBLIC_HOST}/images/pdfbanner.png`} alt="Description of the image" />
-      <Image style={styles.logo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
+      <Image style={styles.banner} src={bannerBuf} alt="Description of the image" />
+      <Image style={styles.logo} src={logoBuf} alt="Description of the image" />
       <View style={styles.section}>
          
           <Text style={styles.bannersmall}>Die</Text>
@@ -461,10 +488,10 @@ const MyDocumentTwo = ({ profileData }) => {
           <Text style={styles.headerPhone}>{parent.tel}</Text>
           <Text style={styles.headerEmail}>{parent.email}</Text>
         </View>
-        <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
+        <Image style={styles.headerLogo} src={logoBuf} alt="Description of the image" />
         <Image 
           style={styles.headerImage} 
-          src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+          src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
         />
 
       </View>
@@ -650,10 +677,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Description of the image" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
 
@@ -683,10 +710,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -718,10 +745,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -753,10 +780,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -788,10 +815,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -823,10 +850,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -858,10 +885,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -893,10 +920,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -918,41 +945,54 @@ const MyDocumentTwo = ({ profileData }) => {
           </Page>
         ))
       }
-      {parent.personal && parent.personal.length > 0 &&
-        parent.personal.map((image, index) => (
-          <Page key={index} style={styles.page}>
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.headerText}>
-                <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
-                <Text style={styles.headerPhone}>{parent.tel}</Text>
-                <Text style={styles.headerEmail}>{parent.email}</Text>
-              </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
-              <Image 
-                style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
-              />
-
+      {(
+        (Array.isArray(parent.personal) && parent.personal.length > 0) ||
+        (Array.isArray(parent.idback) && parent.idback.length > 0)
+      ) && (
+        <Page style={styles.pageid}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.headerText}>
+              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+              <Text style={styles.headerPhone}>{parent.tel}</Text>
+              <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
+            <Image style={styles.headerLogo} src={logoBuf} />
+            <Image 
+              style={styles.headerImage} 
+              src={parent.inputfoto || avatarBuf} 
+            />
+          </View>
 
-            {/* Body */}
-            <View style={styles.bodyWhite}>
-              <View style={styles.secondPageBody}>
-                <Text style={styles.titleBorder}>Ausweiskopie</Text>
-                <View style={styles.secondPagesection}>
-                  <View style={styles.greyCardBg}>
-                    <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
-                  </View>
-                </View>
+          {/* Body */}
+          <View style={styles.bodyWhite}>
+            <Text style={styles.titleBorder}>Ausweiskopie</Text>
+
+            {Array.isArray(parent.personal) && parent.personal.length > 0 && (
+              <View style={{ ...styles.secondPageBodyid, marginTop: 20 }}>
+                <Image 
+                  style={{ maxHeight: 240, objectFit: "contain" }} 
+                  src={parent.personal[0]} 
+                />
               </View>
-            </View>
+            )}
 
-            {/* Page Number */}
-            <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-          </Page>
-        ))
-      }
+            {Array.isArray(parent.idback) && parent.idback.length > 0 && (
+              <View style={{ ...styles.secondPageBodyid, marginTop: 20 }}>
+                <Image 
+                  style={{ maxHeight: 240, objectFit: "contain" }} 
+                  src={parent.idback[0]} 
+                />
+              </View>
+            )}
+          </View>
+
+          {/* Page Number */}
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+        </Page>
+      )}
+
+
       {parent.mietschuldenfreiheitimg && parent.mietschuldenfreiheitimg.length > 0 &&
         parent.mietschuldenfreiheitimg.map((image, index) => (
           <Page key={index} style={styles.page}>
@@ -963,10 +1003,10 @@ const MyDocumentTwo = ({ profileData }) => {
                 <Text style={styles.headerPhone}>{parent.tel}</Text>
                 <Text style={styles.headerEmail}>{parent.email}</Text>
               </View>
-              <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+              <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
               <Image 
                 style={styles.headerImage} 
-                src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
               />
 
             </View>
@@ -998,10 +1038,10 @@ const MyDocumentTwo = ({ profileData }) => {
                   <Text style={styles.headerPhone}>{parent.tel}</Text>
                   <Text style={styles.headerEmail}>{parent.email}</Text>
                 </View>
-                <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+                <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
                 <Image 
                   style={styles.headerImage} 
-                  src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+                  src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
                 />
 
               </View>
@@ -1033,10 +1073,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Description of the image" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Description of the image" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
 
@@ -1066,10 +1106,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1101,10 +1141,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1136,10 +1176,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1171,10 +1211,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1206,10 +1246,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1241,10 +1281,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1276,10 +1316,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1301,41 +1341,54 @@ const MyDocumentTwo = ({ profileData }) => {
         </Page>
       ))
     }
-    {child.personal && child.personal.length > 0 &&
-      child.personal.map((image, index) => (
-        <Page key={index} style={styles.page}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.headerText}>
-              <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
-              <Text style={styles.headerPhone}>{parent.tel}</Text>
-              <Text style={styles.headerEmail}>{parent.email}</Text>
-            </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
-            <Image 
-              style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
-            />
-
+    {(
+      (Array.isArray(child.personal) && child.personal.length > 0) ||
+      (Array.isArray(child.idback) && child.idback.length > 0)
+    ) && (
+      <Page style={styles.pageid}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerText}>
+            <Text style={styles.headerName}>{parent.vorname} {parent.nachname}</Text>
+            <Text style={styles.headerPhone}>{parent.tel}</Text>
+            <Text style={styles.headerEmail}>{parent.email}</Text>
           </View>
+          <Image style={styles.headerLogo} src={logoBuf} />
+          <Image 
+            style={styles.headerImage} 
+            src={parent.inputfoto || avatarBuf} 
+          />
+        </View>
 
-          {/* Body */}
-          <View style={styles.bodyWhite}>
-            <View style={styles.secondPageBody}>
-              <Text style={styles.titleBorder}>Ausweiskopie</Text>
-              <View style={styles.secondPagesection}>
-                <View style={styles.greyCardBg}>
-                  <Image style={{ maxHeight: "500px", objectFit: "contain" }} src={image} />
-                </View>
-              </View>
+        {/* Body */}
+        <View style={styles.bodyWhite}>
+          <Text style={styles.titleBorder}>Ausweiskopie</Text>
+
+          {Array.isArray(child.personal) && child.personal.length > 0 && (
+            <View style={{ ...styles.secondPageBodyid, marginTop: 20 }}>
+              <Image 
+                style={{ maxHeight: 240, objectFit: "contain" }} 
+                src={child.personal[0]} 
+              />
             </View>
-          </View>
+          )}
 
-          {/* Page Number */}
-          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
-        </Page>
-      ))
-    }
+          {Array.isArray(child.idback) && child.idback.length > 0 && (
+            <View style={{ ...styles.secondPageBodyid, marginTop: 20 }}>
+              <Image 
+                style={{ maxHeight: 240, objectFit: "contain" }} 
+                src={child.idback[0]} 
+              />
+            </View>
+          )}
+        </View>
+
+        {/* Page Number */}
+        <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => `${pageNumber}/${totalPages}`} fixed />
+      </Page>
+    )}
+
+
     {child.mietschuldenfreiheitimg && child.mietschuldenfreiheitimg.length > 0 &&
       child.mietschuldenfreiheitimg.map((image, index) => (
         <Page key={index} style={styles.page}>
@@ -1346,10 +1399,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>
@@ -1381,10 +1434,10 @@ const MyDocumentTwo = ({ profileData }) => {
               <Text style={styles.headerPhone}>{parent.tel}</Text>
               <Text style={styles.headerEmail}>{parent.email}</Text>
             </View>
-            <Image style={styles.headerLogo} src={`${process.env.NEXT_PUBLIC_HOST}/images/logo.png`} alt="Logo" />
+            <Image style={styles.headerLogo} src={logoBuf} alt="Logo" />
             <Image 
               style={styles.headerImage} 
-              src={parent.inputfoto ? parent.inputfoto : `${process.env.NEXT_PUBLIC_HOST}/images/sample-avatar.png`} 
+              src={parent.inputfoto ? parent.inputfoto : avatarBuf} 
             />
 
           </View>

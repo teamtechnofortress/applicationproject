@@ -187,10 +187,10 @@ useEffect(() => {
               <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => setCurrentStep(4)}>
                 Zurück
               </button>
-
+              <div className="col-span-2">
               <button
                 type="button"
-                className={`bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
+                className={`${styles["next-btn"]} bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? " opacity-50 cursor-not-allowed" : ""}`}
                 onClick={() => {
                   if (validateFields()) {
                     setCurrentStep(7);
@@ -200,6 +200,7 @@ useEffect(() => {
               >
                 {isConverting ? "Verarbeiten..." : "Weiter"}
               </button>
+              </div>
             </div>
           </div>
         </div>

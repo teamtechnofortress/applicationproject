@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import axios from 'axios';
-import Image from 'next/image';
 import SidebarHeader from '@/components/SidebarHeader';
 import styles from '../../styles/applications.module.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import { DateTime } from 'luxon';
-import { fetchSubscriptionStatus,isOneTimeValid } from '@/utils/user_sub_data.js';
+import { fetchSubscriptionStatus } from '@/utils/user_sub_data.js';
 import UpgradePopup from '@/components/UpgradePopup';
+import LoadingSpinner from "@/components/loading";
 
 const PDFDownloadLink = dynamic(
   () => import('@react-pdf/renderer').then(mod => mod.PDFDownloadLink),
@@ -20,7 +19,9 @@ const PDFDownloadLink = dynamic(
 const AllApplications = () => {
   const [cvdata, setCvdata] = useState([]);
   const [applicationCount, setApplicationCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isSubscriptionLoading, setIsSubscriptionLoading] = useState(true);  
   const [isEmpty, setIsEmpty] = useState(false);
   const [user, setUser] = useState({ firstname: '', lastname: '' });
   const [subscriptionData, setSubscriptionData] = useState(null);
@@ -62,7 +63,7 @@ const AllApplications = () => {
     setApplicationCount(0);
     setIsEmpty(true);
   } finally {
-    setLoading(false);
+    setIsProfileLoading(false);
   }
 };
 
@@ -82,6 +83,8 @@ const AllApplications = () => {
       }
     } catch (error) {
       toast.error('Failed to fetch user data');
+    }finally {
+      setIsUserLoading(false);
     }
   };
 
@@ -103,15 +106,17 @@ const AllApplications = () => {
       if (data) {
         setSubscriptionData(data);
       }
+      setIsSubscriptionLoading(false);
     };
     init();
   }, []);
 
-  // useEffect(() => {
-  //   fetchProfileData();
-  //   fetchUserData();
-  //   fetchSubscriptionStatus();
-  // }, []);
+
+  useEffect(() => {
+    console.log("subscriptionData",subscriptionData);
+    console.log("applicationCount",applicationCount);
+   
+  }, [subscriptionData,applicationCount]);
 
   // const isOneTimeValid = () => {
   //   if (subscriptionData?.paymentType === "one-time") {
@@ -122,12 +127,14 @@ const AllApplications = () => {
   // };
 
   const canAddApplication = () => {
-    if (!subscriptionData) return applicationCount === 0;
-    if (subscriptionData.paymentType === "subscription") {
+    if (!subscriptionData) {
+      return applicationCount === 0;
+    }
+    if (subscriptionData.currentplan && subscriptionData.currentplan != "4 Tage") {
       return subscriptionData.status === "active";
     }
-    if (subscriptionData.paymentType === "one-time") {
-      return applicationCount === 0 && isOneTimeValid();
+    if (subscriptionData.currentplan && subscriptionData.currentplan === "4 Tage") {
+      return applicationCount === 0 && subscriptionData.status === "active";
     }
     return false;
   };
@@ -136,11 +143,12 @@ const AllApplications = () => {
 
   const canEdit = () => {
     if (!subscriptionData) return false;
-    if (subscriptionData.paymentType === "subscription" &&  subscriptionData.status === "active") {
+
+    if (subscriptionData.currentplan && subscriptionData.currentplan != "4 Tage" && subscriptionData.status === "active") {
       return true;
     }
-    if (subscriptionData.paymentType === "one-time") {
-      return isOneTimeValid();
+    if (subscriptionData.currentplan && subscriptionData.currentplan === "4 Tage" && subscriptionData.status === "active") {
+      return true;
     }
     return false;
   };
@@ -152,13 +160,29 @@ const AllApplications = () => {
 
   const canAddChild = () => {
     if (!subscriptionData) return false;
-    return subscriptionData.paymentType === "subscription" && subscriptionData.status === "active";
+    if (subscriptionData.currentplan && subscriptionData.currentplan != "4 Tage" && subscriptionData.status === "active") {
+      return true;
+    }
+    if (subscriptionData.currentplan && subscriptionData.currentplan === "4 Tage" && subscriptionData.status === "active" && applicationCount === 0) {
+      return true;
+    }
+    return false;
   };
 
-  const showQrCode = () => {
-    return canEdit();
-  };
+  // const showQrCode = () => {
+  //   return canEdit();
+  // };
 
+  const isAllDataReady = !isProfileLoading && !isUserLoading && !isSubscriptionLoading;
+
+
+  if (isProfileLoading || isUserLoading || isSubscriptionLoading) {
+    return (
+      <div>
+      <LoadingSpinner/>
+      </div>
+    );
+  }
   return (
     <>
       <SidebarHeader />
@@ -173,7 +197,7 @@ const AllApplications = () => {
               <div className={`${styles['application-flex-div']}`}>
                 <h2 className={`${styles['application-h4']}`}>Deine Wohnungsbewerbungen</h2>
                 {/* Get applications where parent === 0 and check if there are 2 */}
-                {canAddApplication() ? (
+                {isAllDataReady && canAddApplication() ? (
                   <Link href="/account/application" legacyBehavior>
                     <button className={`${styles['or-button']} mt-10`}>
                       New <img className={`${styles['img-button']}`} src="/images/plus.svg" />
@@ -188,9 +212,8 @@ const AllApplications = () => {
                   </button>
                 )}
               </div>
-             
               <div className={`${styles['flex-sec']} gap-8`}>
-                {loading ? (
+                {isProfileLoading ? (
                   <div>Loading...</div>
                 ) : isEmpty ? (
                   <div>No data available</div>
@@ -199,7 +222,6 @@ const AllApplications = () => {
                     return (
                       <div key={profile._id} className={`${styles['pdf-sec']} relative`}>
                         <div className={`${styles['pdf-btn-grp']}`}>
-                       
                          {/* Hide "Person hinzufügen" if this application already has a child */}
                          {
                             !profile.childId && canAddChild() ? (
@@ -260,8 +282,7 @@ const AllApplications = () => {
                             </a>
                           )} */}
 
-                            {subscriptionData?.paymentType === "subscription" && subscriptionData?.status === "active" || 
-                            isOneTimeValid() ? (
+                            {canEdit() ? (
                               <a href={profile.pdfPath} download target="_blank" rel="noopener noreferrer">
                                 <button className={`${styles['pdf-btn']}`}>
                                   <img src="/images/view.svg" className={`${styles['img-pdf']}`} />
@@ -301,7 +322,7 @@ const AllApplications = () => {
                                 </p>
                               </div>
                               <div className={`${styles['footerColCenter']}`}>
-                              {showQrCode() && (
+                              {canEdit() && (
                                   <div className={`${styles['footerlogo']}`}>
                                     <img src={profile.qrCode} alt="Barcode" />
                                     <p className={`${styles['scanMe']}`}>Scan Me</p>
@@ -361,20 +382,16 @@ const AllApplications = () => {
                 setShowPopup(false);
               }}
             >
-    
-            Bewerbermappe von {selectedApplication.parentName} bearbeiten
+              Bewerbermappe von {selectedApplication.parentName} bearbeiten
             </button>
               {/* Edit Child */}
               <button
-              className={styles['popup-btn']}
-              onClick={() => {
-               
+                className={styles['popup-btn']}
+                onClick={() => {
                   router.push(`/account/editapplication?id=${selectedApplication.childId}`);
                   setShowPopup(false);
-              
-              }}
+                }}
             >
-      
               Bewerbermappe von {selectedApplication.childName} bearbeiten
             </button>
           </div>
@@ -382,7 +399,7 @@ const AllApplications = () => {
       </div>
       )}
       {/* <!-- Modal --> */}
-      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} />
+      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} subscriptionData={subscriptionData} />
     </>
   );
 };

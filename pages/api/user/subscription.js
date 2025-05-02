@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     const subscription = await Subscription.findOne({ userId }).sort({ createdAt: -1 });
 
     if (!subscription) {
-      return res.status(404).json({ message: "No active subscription found." });
+      return res.status(200).json({ message: "No active subscription found." });
     }
 
     // ✅ Return Customer ID

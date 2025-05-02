@@ -151,7 +151,7 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
     }
     return predefinedPdfUrl;
   } catch (error) {
-    console.error("Error generating/uploading PDF:", error);
+    console.error("Error generating/uploading in editapplication:", error);
     return null;
   }
 };
@@ -215,6 +215,7 @@ const handler = async (req, res) => {
       const coverletter = Array.isArray(fields.coverletter) ? fields.coverletter[0] : fields.coverletter;
       const zimerzahl = Array.isArray(fields.zimerzahl) ? fields.zimerzahl[0] : fields.zimerzahl;
       const personal = Array.isArray(fields.personal) ? fields.personal[0] : fields.personal;
+      const idback = Array.isArray(fields.idback) ? fields.idback[0] : fields.idback;
       const schufa = Array.isArray(fields.schufa) ? fields.schufa[0] : fields.schufa;
       const mietschuldenfreiheit = Array.isArray(fields.mietschuldenfreiheit) ? fields.mietschuldenfreiheit[0] : fields.mietschuldenfreiheit;
       const mietverhaltnis = Array.isArray(fields.mietverhaltnis) ? fields.mietverhaltnis[0] : fields.mietverhaltnis;
@@ -307,6 +308,20 @@ const handler = async (req, res) => {
           personalImagesData = await handleFileUpload(files.personal);
         } else {
           console.warn("No personalImages uploaded or incorrect format");
+        }
+      }
+      // idback Images
+      let idbackImagesData = [];
+      const idbackImages = files.idback;
+      
+
+      if(Array.isArray(fields.idback) && fields.idback[0] && fields.idback[0].startsWith(hetznerBaseUrl)){
+        // console.log("skip fields.idback", fields.idback);
+      }else{
+        if (idbackImages) {
+          idbackImagesData = await handleFileUpload(files.idback);
+        } else {
+          console.warn("No idbackImages uploaded or incorrect format");
         }
       }
 
@@ -653,6 +668,32 @@ const handler = async (req, res) => {
                 });
             }
             updateData.personal = [];
+          }
+        }
+        if (Array.isArray(idbackImagesData) && idbackImagesData.length > 0) {
+          if (Array.isArray(Applicationforblob.idback) && Applicationforblob.idback.length > 0) {
+              Applicationforblob.idback.forEach((fileUrl) => {
+                const filename = fileUrl.split("/uploads/")[1];
+                deletefile(filename);
+              });
+          }
+            updateData.idback = idbackImagesData;
+        }else{
+          const isidbackImagesInvalid =
+            !Array.isArray(fields.idback) ||
+            !fields.idback[0] ||
+            fields.idback[0] === 'null';
+
+          if (isidbackImagesInvalid && !idbackImages) {
+              // console.log('Enter to deete bolb and from db');
+            if (Array.isArray(Applicationforblob.idback) && Applicationforblob.idback.length > 0) {
+                // Run the loop to delete all files in the array
+                Applicationforblob.idback.forEach((fileUrl) => {
+                  const filename = fileUrl.split("/uploads/")[1];
+                  deletefile(filename);
+                });
+            }
+            updateData.idback = [];
           }
         }
         if (Array.isArray(schufaImagesData) && schufaImagesData.length > 0) {

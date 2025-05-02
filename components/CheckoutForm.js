@@ -44,13 +44,7 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
             setLoading(false);
             return;
         }
-        // const isOneTime = priceId === "price_1R3x3mIBEl0UnhG5T8lqLHvW";
-        // const isOneTime = priceId === PLAN_IDS.price_one_time;
 
-
-        // const endpoint = isOneTime 
-        // ? "/api/user/one-time-payment" // One-Time Payment API
-        // : "/api/user/create-subscription"; // Subscription API
         try {
             console.log('price id', priceId)
         const response = await fetch('/api/user/create-subscription', {
@@ -59,8 +53,7 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
             body: JSON.stringify({
                 paymentMethodId: paymentMethod.id,
                 customerEmail,
-                priceId, // ✅ Always include priceId
-                // oneTime: isOneTime, // ✅ Explicitly pass oneTime flag
+                priceId,
             }),
         });
 
@@ -72,9 +65,9 @@ const CheckoutForm = ({ priceId, customerEmail }) => {
         } else {
             toast.success("Zahlung erfolgreich!");
              // redirect after short delay
-            // setTimeout(() => {
-            //     router.push("/account/allapplications");
-            // }, 1500);
+             setTimeout(() => {
+                router.push("/account/allapplications");
+            }, 1500);
         }
 
         } catch (err) {

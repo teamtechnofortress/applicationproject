@@ -48,7 +48,7 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
     await uploadToHetzner(buffer, pdfFileURL, 'application/pdf');
     return predefinedPdfUrl;
   } catch (error) {
-    console.error("Error generating/uploading PDF:", error);
+    console.error("Error generating/uploading PDF in user/application:", error);
     return null;
   }
 };
@@ -128,6 +128,7 @@ const handler = async (req, res) => {
         const wbsImages = await handleFileUpload(files.imageswbs);
         const bwaImages = await handleFileUpload(files.bwaimages);
         const personalImages = await handleFileUpload(files.personal);
+        const idbackImages = await handleFileUpload(files.idback);
         const mietschuldenfreiheitImages = await handleFileUpload(files.mietschuldenfreiheitimg);
        
 
@@ -167,6 +168,7 @@ const handler = async (req, res) => {
             zimerzahl,
             imageswbs:wbsImages,
             personal: personalImages,
+            idback: idbackImages,
             schufa: schufaImages,
             mietschuldenfreiheit,
             mietschuldenfreiheitimg: mietschuldenfreiheitImages,

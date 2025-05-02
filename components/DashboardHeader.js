@@ -2,11 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import router from 'next/router';
 import styles from '../styles/login.module.css';
+import { fetchSubscriptionStatus } from '@/utils/user_sub_data.js';
+import LoadingSpinner from "@/components/loading";
 
 export const DashboardHeader = () => {
   const [isMenuVisible, setMenuVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const menuRef = useRef(null); // Reference for the dropdown menu
+  const menuRefDesktop = useRef(null);
+  const menuRefMobile = useRef(null);
+  const menuRef = useRef(null); 
+  const [isSubscriptionLoading, setIsSubscriptionLoading] = useState(true);
+  const [subscriptionData, setSubscriptionData] = useState(null);
+  
 
   const toggleMenu = () => {
     setMenuVisible(!isMenuVisible);
@@ -51,28 +58,49 @@ export const DashboardHeader = () => {
       }
     };
 
+    const init = async () => {
+      const data = await fetchSubscriptionStatus();
+      if (data) {
+        setSubscriptionData(data);
+      }
+      setIsSubscriptionLoading(false);
+    };
+      
     fetchUserData();
+    init();
   }, []);
 
+  useEffect(() => {
+
+  }, [subscriptionData]);
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        (menuRefDesktop.current && !menuRefDesktop.current.contains(event.target)) &&
+        (menuRefMobile.current && !menuRefMobile.current.contains(event.target))
+      ) {
         setMenuVisible(false);
       }
     };
-
+  
     if (isMenuVisible) {
       document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
     }
-
+  
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMenuVisible]);
 
+
+  if (isSubscriptionLoading) {
+    return (
+      <div>
+       <LoadingSpinner/>
+      </div>
+    );
+  }
   return (
     <div className="flex">
       <div className="hidden lg:block mt-2 px-4 sm:px-6 lg:px-8">
@@ -89,10 +117,15 @@ export const DashboardHeader = () => {
                   <img className="h-6 rounded-full" src="/images/Shape.png" alt="" />
                   <span className={`${styles['bell-dot']} absolute top-0 right-0 h-2 w-2 rounded-full`}></span>
                 </div> */}
-                <Link href="/account/subscriptiondetail" legacyBehavior>
-                <button className={`${styles['btn-plan']}`}>Mein Plan</button>
-                </Link>
-                
+                {subscriptionData !== null ? (
+                 <Link href="/account/subscriptiondetail" legacyBehavior>
+                   <button className={`${styles['btn-plan']}`}>Mein Plan</button>
+                 </Link>
+               ) : (
+                 <Link href="/account/checkout?selectedPlan=price_one_time" legacyBehavior>
+                   <button className={`${styles['btn-plan']}`}>Mein Plan</button>
+                 </Link>
+               )} 
 
                 <div ref={menuRef}>
                   <button
@@ -153,9 +186,15 @@ export const DashboardHeader = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div>
               <div className="flex h-16 items-center gap-4 relative ml-3 justify-between">
-                <Link href="/account/subscriptiondetail" legacyBehavior>
-                <button className={`${styles['btn-plan']}`}>Mein Plan</button>
-                </Link>
+              {subscriptionData !== null ? (
+                 <Link href="/account/subscriptiondetail" legacyBehavior>
+                   <button className={`${styles['btn-plan']}`}>Mein Plan</button>
+                 </Link>
+               ) : (
+                 <Link href="/account/checkout?selectedPlan=price_one_time" legacyBehavior>
+                   <button className={`${styles['btn-plan']}`}>Mein Plan</button>
+                 </Link>
+               )}           
                 
 
                 <div ref={menuRef}>

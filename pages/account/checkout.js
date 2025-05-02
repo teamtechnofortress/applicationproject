@@ -39,7 +39,7 @@ const Checkout = () => {
       try {
         const res = await fetch("/api/user/subscription");
         const data = await res.json();
-        if (res.ok && data.status === "active") {
+        if (res.ok && data?.data?.status === "active" && !data?.data?.cancelAtPeriodEnd) {
           setHasActiveSubscription(true);
         }
       } catch (err) {
@@ -56,6 +56,7 @@ const Checkout = () => {
     <>
       <SidebarHeader />
       <ToastContainer />
+      {console.log('s', )}
       <div className="flex">
         <div className="flex-1 ml-0 md:ml-64">
         <div className="bg-gray-100 py-8 p-5 lg:p-12">

@@ -28,6 +28,8 @@ const ThirdStep = ({
   schufa,
   personal,
   setPersonal,
+  idback,
+  setIdback,
   handleChange,
   pdfurltodownloud,
   currentStep,setCurrentStep }) => {
@@ -137,6 +139,8 @@ const ThirdStep = ({
         setComponents={setComponents}
         currentStep={currentStep}
         setPersonal ={setPersonal}
+        idback ={idback}
+        setIdback ={setIdback}
         setCurrentStep={setCurrentStep}
         handleChange={handleChange}
       />

@@ -19,10 +19,21 @@ const StepTenInner = ({
   const [errors, setErrors] = useState({});
   const [subscriptionData, setSubscriptionData] = useState(null);
   const [showPriceingPopup, setShowPriceingPopup] = useState(false);
+  const [isSubscriptionLoading, setIsSubscriptionLoading] = useState(true);  
+
+  useEffect(() => {
+    const init = async () => {
+      const data = await fetchSubscriptionStatus();
+      if (data) {
+        setSubscriptionData(data);
+      }
+      setIsSubscriptionLoading(false); 
+    };
+    init();
+  }, []);
 
   useEffect(()=>{
-    // console.log('pdfurltodownloud',pdfurltodownloud);
-  },[pdfurltodownloud]);
+  },[pdfurltodownloud, subscriptionData]);
 
   const validateFields = () => {
     const newErrors = {};
@@ -51,7 +62,7 @@ const StepTenInner = ({
       </p>
      
       
-      {canViewTipps(subscriptionData) ? (
+      {!isSubscriptionLoading && canViewTipps(subscriptionData) ? (
         <button
           type="button"
           className={`${styles["mappe-btn"]} mt-10 px-6 py-3 rounded-lg mx-auto block`}
@@ -80,7 +91,7 @@ const StepTenInner = ({
           Zum Dashboard
       </button>
       </div>
-      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} />
+      <UpgradePopup show={showPriceingPopup} setShow={setShowPriceingPopup} subscriptionData={subscriptionData} />
     </div>
   );
 };

@@ -57,6 +57,7 @@ const application = () => {
   const [employcontract, setemploycontract] = useState(null);
   const [showemploycontract, setshowemploycontract] = useState("");
   const [personal, setPersonal] = useState("");
+  const [idback, setIdback] = useState("");
   const [showpersonal, setshowpersonal] = useState("");
   const [schufa, setSchufa] = useState("");
   const [showschufa, setshowschufa] = useState("");
@@ -116,18 +117,6 @@ const application = () => {
     const { name, value, files } = e.target;
     const newErrors = {};
 
-    // if(name === "inputfoto"){
-    //   setinputfoto(files[0])
-    //   if (files[0]) {
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //       const result = reader.result;
-    //       setshowinputfoto(result);
-    //       console.log(selectedImg);
-    //     };
-    //     reader.readAsDataURL(files[0]);
-    //   }
-    // }
     if(name === "bwaimages"){
       setBwaimages(files[0])
       if (files[0]) {
@@ -214,53 +203,12 @@ const application = () => {
     
   
     
-    // if(name === "bwaimages"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setBwaimages((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "incomeimages"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setincomeimages((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "arbeitsvertrag"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setarbeitsvertrag((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "imageswbs"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setImageswbs((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "personal"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setPersonal((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-
-    // if(name === "schufa"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setSchufa((prevImages) => [...prevImages, ...imageUrls]);
-    // }
-    // if(name === "mietschuldenfreiheitimg"){
-    //   const files = Array.from(e.target.files);
-    //   const imageUrls = files.map((file) => URL.createObjectURL(file));
-    //   setMietschuldenfreiheitimg((prevImages) => [...prevImages, ...imageUrls]);
-    // }
 
 
    
     // console.log('Event triggered:', name, value, files);
     if (files && files.length > 0) {
-      // if(name === "salarySlip"){
-      //   // const files = Array.from(e.target.files);
-      //   // const imageUrls = files.map((file) => URL.createObjectURL(file));
-      //   // setsalarySlip((prevImages) => [...prevImages, ...imageUrls]);
-      //   setsalarySlip(Array.from(files));
-      // }
+     
       if (name === "photo") {
         setPhoto(files[0]);
         // console.log(photo);
@@ -438,33 +386,7 @@ const application = () => {
     const blob = await response.blob();
     return new File([blob], fileName, { type: blob.type });
   }
-  const processFilesForFormData = async (formData, fileList, fieldName) => {
-    if (!fileList || fileList.length === 0) return;
-  
-    for (const [index, file] of fileList.entries()) {
-      if (typeof file === "string") {
-        if (file.startsWith("data:image")) {
-          // Convert Base64 to File
-          const convertedFile = base64ToFile(file, `${fieldName}_${index}.png`);
-          formData.append(fieldName, convertedFile);
-        } else if (file.startsWith("blob:")) {
-          // Convert Blob URL to File
-          const convertedFile = await blobToFile(file, `${fieldName}_${index}.png`);
-          formData.append(fieldName, convertedFile);
-          console.log(`${fieldName} blob:`, convertedFile);
-        } else {
-          console.warn(`Unexpected format for ${fieldName}:`, file);
-        }
-      } else if (file instanceof File) {
-        // Append File object directly
-        formData.append(fieldName, file);
-        console.log(`Appending file to ${fieldName}:`, file);
-      } else {
-        console.warn(`Unknown format for ${fieldName}:`, file);
-      }
-    }
-  };
-  let salary1;
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -600,6 +522,31 @@ const application = () => {
         } else if (image instanceof File) {
           // Append File object directly
           formData.append("personal", image);
+          console.log("Appending file:", image);
+        } else {
+          console.warn("Unknown image format:", image);
+        }
+      }
+    }
+    if (idback && idback.length > 0) {
+      for (const [index, image] of idback.entries()) {
+        if (typeof image === "string") {
+          if (image.startsWith("data:image")) {
+            // Convert Base64 to File
+            const file = base64ToFile(image, `idback_${index}.png`);
+            formData.append("idback", file);
+          } else if (image.startsWith("blob:")) {
+            // Convert Blob URL to File
+            const file = await blobToFile(image, `idback_${index}.png`);
+            formData.append("idback", file);
+            console.log("idback blob:", file);
+          } else {
+            // Handle other cases (if necessary)
+            console.warn("Unexpected format for idback:", image);
+          }
+        } else if (image instanceof File) {
+          // Append File object directly
+          formData.append("idback", image);
           console.log("Appending file:", image);
         } else {
           console.warn("Unknown image format:", image);
@@ -1059,6 +1006,8 @@ const application = () => {
                   setImageswbs ={setImageswbs}
                   personal={personal}
                   setPersonal ={setPersonal}
+                  idback ={idback}
+                  setIdback ={setIdback}
                   schufa ={schufa}
                   setSchufa ={setSchufa}
                   zimerzahl={zimerzahl}

@@ -44,7 +44,7 @@ export const config = {
       console.log('predefinedPdfUrl', predefinedPdfUrl)
       return predefinedPdfUrl;
     } catch (error) {
-      console.error("Error generating/uploading PDF:", error);
+      console.error("Error generating/uploading PDF in childapplication:", error);
       return null;
     }
   };
@@ -113,6 +113,7 @@ const handler = async (req, res) => {
             const wbsImages = await handleFileUpload(files.imageswbs);
             const bwaImages = await handleFileUpload(files.bwaimages);
             const personalImages = await handleFileUpload(files.personal);
+            const idbackImages = await handleFileUpload(files.idback);
             const mietschuldenfreiheitImages = await handleFileUpload(files.mietschuldenfreiheitimg);
             if (!parentId) {
                 return res.status(400).json({ success: false, error: 'Parent ID is required' });
@@ -156,6 +157,7 @@ const handler = async (req, res) => {
                 zimerzahl,
                 imageswbs:wbsImages,
                 personal: personalImages,
+                idback: idbackImages,
                 schufa: schufaImages,
                 mietschuldenfreiheit,
                 mietschuldenfreiheitimg: mietschuldenfreiheitImages,

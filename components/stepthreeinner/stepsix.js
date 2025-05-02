@@ -87,9 +87,9 @@ const StepSixInner = ({
     <div className="flex items-center justify-center">
       <div className="w-full bg-white shadow-lg rounded-lg p-6">
         <p className={`${styles["main-heading"]} mt-10 text-center font-bold`}>Mietschuldenfreiheit</p>
-        <p className={`${styles["p-address"]} mb-10 text-center w-[90%] lg:w-[60%] mx-auto`}>
+        {/* <p className={`${styles["p-address"]} mb-10 text-center w-[90%] lg:w-[60%] mx-auto`}>
           Diese kannst du auch später hochladen, solltest du sie gerade nicht zur Hand haben.
-        </p>
+        </p> */}
 
         <button type="button" className={`${styles["tips"]} mx-auto`} onClick={() => setisTipModal(true)}>
           <img src="/images/tip.svg" alt="Tip Icon" /> <span>Tipps</span>
@@ -100,7 +100,7 @@ const StepSixInner = ({
             htmlFor="image-upload"
             className={`${styles["upload-btn"]} ${styles["form-input"]} w-full px-4 py-2 text-center text-black rounded-lg cursor-pointer`}
           >
-            <i className="fa fa-upload mr-2"></i> Upload Mietschuldenfreiheit
+            <i className="fa fa-upload mr-2"></i> Upload der Mitschuldenfreiheit
           </label>
           <input
             type="file"
@@ -152,19 +152,20 @@ const StepSixInner = ({
           <button type="button" className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" onClick={() => setCurrentStep(18)}>
             Zurück
           </button>
-
+          <div className="col-span-2">
           <button
-            type="button"
-            className={`bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
-            onClick={() => {
-              if (validateFields()) {
-                setCurrentStep(20);
-              }
-            }}
+           type="submit"
+            className={`${styles["next-btn"]} bg-gray-500 text-white px-6 py-3 rounded-lg ${isConverting ? "opacity-50 cursor-not-allowed" : ""}`}
+            // onClick={() => {
+            //   if (validateFields()) {
+            //     setCurrentStep(20);
+            //   }
+            // }}
             disabled={isConverting} // ✅ Disable while converting PDF
           >
             {isConverting ? "Verarbeiten..." : "Weiter"}
           </button>
+          </div>
         </div>
       </div>
 

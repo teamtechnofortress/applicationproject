@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-const UpgradePopup = ({ show, setShow }) => {
+const UpgradePopup = ({ show, setShow, subscriptionData }) => {
   const router = useRouter();
 
   if (!show) return null;
@@ -31,10 +31,14 @@ const UpgradePopup = ({ show, setShow }) => {
           <strong>Jetzt upgraden und alle Vorteile genießen.</strong>
         </p>
         <div className="flex justify-end gap-3">
-          <button
+         <button
             onClick={() => {
               setShow(false);
-              router.push('/account/checkout?selectedPlan=price_one_time');
+              if (subscriptionData !== null) {
+                router.push('/account/subscriptiondetail');
+              } else {
+                router.push('/account/checkout?selectedPlan=price_one_time');
+              }
             }}
             className="text-gray-900 font-semibold px-4 py-2 rounded hover:brightness-90 transition"
             style={{ backgroundColor: '#e7fc41' }}
