@@ -34,11 +34,42 @@ const StepTwoInner = ({
     }
   }, [imageswbs]);
   const handleFileChange = async (event) => {
-    setIsConverting(true);  // Show loading state
-
+    const maxSize = Number(process.env.NEXT_PUBLIC_SIZE_IN_MB || 2);
+    const allowedTypes = (process.env.NEXT_PUBLIC_ALLOWED_TYPES || "")
+      .split(",")
+      .map((type) => type.trim());
+    const readableTypes = allowedTypes
+      .map(type => {
+        if (type.includes("jpeg") || type.includes("jpg")) return "JPG";
+        if (type.includes("png")) return "PNG";
+        if (type.includes("pdf")) return "PDF";
+        return "";
+      })
+      .filter(Boolean)
+      .join(", ");
     const file = event.target.files[0];
-    if (!file) return; // Exit if no file is selected
-  
+    if (!file) return; 
+
+    if (file) {
+      const newErrors = {};
+      if (file) {
+        if (!allowedTypes.includes(file.type)) {
+            newErrors.imageswbs = `Nur ${readableTypes} Dateien sind erlaubt.`;
+        } else if (file.size / (1024 * 1024) > maxSize) {
+            newErrors.imageswbs = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+        }
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          ...newErrors,
+        }));
+        
+        if (Object.keys(newErrors).length > 0) {
+          return;
+        }
+      }
+    }
+
+    setIsConverting(true);  // Show loading state
     let updatedImages = []; // To store processed images
   
     if (file.type === "application/pdf") {
@@ -182,6 +213,9 @@ const StepTwoInner = ({
                   ×
                 </button>
               </div>
+            )}
+            {errors.imageswbs && (
+              <p className="text-red-500 text-sm">{errors.imageswbs}</p>
             )}
 
 

@@ -39,17 +39,42 @@ useEffect(() => {
   }
 }, [schufa]);
 
-
-
-
-
-
-
   const handleFileChange = async (event) => {
-    setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];
-
     if (!file) return;
+
+    const maxSize = Number(process.env.NEXT_PUBLIC_SIZE_IN_MB || 2);
+    const allowedTypes = (process.env.NEXT_PUBLIC_ALLOWED_TYPES || "")
+      .split(",")
+      .map((type) => type.trim());
+    const readableTypes = allowedTypes
+      .map(type => {
+        if (type.includes("jpeg") || type.includes("jpg")) return "JPG";
+        if (type.includes("png")) return "PNG";
+        if (type.includes("pdf")) return "PDF";
+        return "";
+      })
+      .filter(Boolean)
+      .join(", ");
+
+    const newErrors = {};
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+          newErrors.schufa = `Nur ${readableTypes} Dateien sind erlaubt.`;
+      } else if (file.size / (1024 * 1024) > maxSize) {
+          newErrors.schufa = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...newErrors,
+      }));
+      
+      if (Object.keys(newErrors).length > 0) {
+        return;
+      }
+    }
+
+    setIsConverting(true); // ✅ Start loading state
     let imagesArray = []; // ✅ Store processed images
 
 

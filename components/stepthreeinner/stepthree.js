@@ -57,6 +57,47 @@ const StepThreeInner = ({
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     const fieldName = event.target.name;
+
+
+    const maxSize = Number(process.env.NEXT_PUBLIC_SIZE_IN_MB || 2);
+    const allowedTypes = (process.env.NEXT_PUBLIC_ALLOWED_TYPES || "")
+      .split(",")
+      .map((type) => type.trim());
+    const readableTypes = allowedTypes
+      .map(type => {
+        if (type.includes("jpeg") || type.includes("jpg")) return "JPG";
+        if (type.includes("png")) return "PNG";
+        if (type.includes("pdf")) return "PDF";
+        return "";
+      })
+      .filter(Boolean)
+      .join(", ");
+
+      const newErrors = {};
+
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        if(fieldName === "personal"){
+          newErrors.personal = `Nur ${readableTypes} Dateien sind erlaubt.`;
+        }else{
+          newErrors.idback = `Nur ${readableTypes} Dateien sind erlaubt.`;
+        }
+      } else if (file.size / (1024 * 1024) > maxSize) {
+        if(fieldName === "personal"){
+          newErrors.personal = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+        }else{
+          newErrors.idback = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+        }
+      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...newErrors,
+      }));
+      
+      if (Object.keys(newErrors).length > 0) {
+        return;
+      }
+    }
     // console.log("fieldName:", fieldName);
     if (fieldName === "personal") {
       setIsConverting(true); // ✅ Set conversion status
@@ -204,6 +245,7 @@ const StepThreeInner = ({
               </button>
             </div>
           )}
+          {errors.personal && <p className="text-red-500 text-sm">{errors.personal}</p>}
         </div>
 
         <div className="flex flex-col mt-10 items-center justify-center w-[80%] lg:w-[40%] mx-auto">
@@ -235,7 +277,6 @@ const StepThreeInner = ({
             <div className="relative w-24 h-24 mt-4">
 
             {typeof idbackpreviewImage === "string" && idbackpreviewImage.startsWith('data:image') || /\.(png|jpe?g|gif|webp)$/i.test(idbackpreviewImage) ? (
-
                 <img
                   src={(idbackpreviewImage)}
                   alt="Personalausweis Preview"
@@ -255,6 +296,7 @@ const StepThreeInner = ({
               </button>
             </div>
           )}
+          {errors.idback && <p className="text-red-500 text-sm">{errors.idback}</p>}
         </div>
 
         <div className="flex justify-between mt-10">

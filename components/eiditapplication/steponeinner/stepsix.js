@@ -119,6 +119,48 @@ useEffect(() => {
 
  const handleFileChange = async (event, type) => {
   const files = Array.from(event.target.files);
+  const maxSize = Number(process.env.NEXT_PUBLIC_SIZE_IN_MB || 1);
+  const allowedTypes = (process.env.NEXT_PUBLIC_ALLOWED_TYPES || "")
+    .split(",")
+    .map((type) => type.trim());
+  const readableTypes = allowedTypes
+    .map(type => {
+      if (type.includes("jpeg") || type.includes("jpg")) return "JPG";
+      if (type.includes("png")) return "PNG";
+      if (type.includes("pdf")) return "PDF";
+      return "";
+    })
+    .filter(Boolean)
+    .join(", ");
+  if (files.length > 0) {
+    const newErrors = {};
+    const file = files[0];
+
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        if(type === "employcontract"){
+          newErrors.employcontract = `Nur ${readableTypes} Dateien sind erlaubt.`;
+        }else{
+          newErrors.salarySlip = `Nur ${readableTypes} Dateien sind erlaubt.`;
+        }
+      } else if (file.size / (1024 * 1024) > maxSize) {
+        if(type === "employcontract"){
+          newErrors.employcontract = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+        }else{
+          newErrors.salarySlip = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+        }
+      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...newErrors,
+      }));
+      
+      if (Object.keys(newErrors).length > 0) {
+        return;
+      }
+    }
+  }
+
   let imagesArray = []; // ✅ Store processed images
 
 
@@ -416,6 +458,8 @@ useEffect(() => {
               </button>
             </div>
           )}
+        {errors.employcontract && <p className="text-red-500 text-sm">{errors.employcontract}</p>}
+
         </div>
       )}
 

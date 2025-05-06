@@ -11,6 +11,7 @@ const StepThreeInner = ({
   setCurrentStep,
   handleChange,
 }) => {
+  
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null); // Add a ref for file input
    // ✅ Ensure preview persists when navigating back to this step
@@ -19,13 +20,40 @@ const StepThreeInner = ({
     setinputfoto(inputfoto[0]); // Show the first image or file
   }
 }, [inputfoto]);
-  const handleFileChange = (event) => {
-  
-    const file = event.target.files[0]; 
-    if (file) {
-      setinputfoto(file); 
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  const newErrors = {};
+  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
+  const readableTypes = allowedTypes
+    .map((type) => {
+      if (type.includes("jpeg") || type.includes("jpg")) return "JPG";
+      if (type.includes("png")) return "PNG";
+      return "";
+    })
+    .filter(Boolean)
+    .join(", ");
+
+  const maxSize = Number(process.env.NEXT_PUBLIC_SIZE_IN_MB || 1);
+
+  if (file) {
+    if (!allowedTypes.includes(file.type)) {
+      newErrors.inputfoto = `Only ${readableTypes} files are allowed.`;
+    } else if (file.size / (1024 * 1024) > maxSize) {
+      newErrors.inputfoto = `File is too large. Max size is ${maxSize} MB.`;
+    } else {
+      newErrors.inputfoto = null;
     }
-  };
+    setErrors(newErrors);
+
+    // ✅ Only block setinputfoto if there's an actual error
+    const hasError = Object.values(newErrors).some((val) => val);
+    if (!hasError) {
+      setinputfoto(file);
+    }
+  }
+};
+
   const removeImage = () => {
     setinputfoto(null);
     if (fileInputRef.current) {
@@ -35,7 +63,6 @@ const StepThreeInner = ({
  
   const validateFields = () => {
     const newErrors = {};
-    
 
     const safeTrim = (value) => (value && typeof value === "string" ? value.trim() : "");
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -50,10 +77,10 @@ const StepThreeInner = ({
     if (!safeTrim(phonenumber)) {
       newErrors.phonenumber = "PhoneNumber is required.";
     }
+    
     if (!inputfoto || inputfoto.length === 0) {
       newErrors.inputfoto = "Profilfoto ist erforderlich.";
     }
-  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Return true if no errors
   };

@@ -1,34 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Page, Text, View, Document, StyleSheet, Image, Font } from '@react-pdf/renderer';
 import fs from 'fs';
 import path from 'path';
 
+
+
+// Load Poppins font files
 const poppinsRegularPath = path.join(process.cwd(), 'public/Font/Poppins/Poppins-Regular.ttf');
-const poppinsBoldPath = path.join(process.cwd(), 'public/Font/Poppins/Poppins-Bold.ttf');
 const poppinsMediumPath = path.join(process.cwd(), 'public/Font/Poppins/Poppins-Medium.ttf');
+const poppinsBoldPath = path.join(process.cwd(), 'public/Font/Poppins/Poppins-Bold.ttf');
 
-const poppinsRegularBuf = fs.readFileSync(poppinsRegularPath);
-const poppinsBoldBuf = fs.readFileSync(poppinsBoldPath);
-const poppinsMediumBuf = fs.readFileSync(poppinsMediumPath);
+const getFontDataUrl = (filePath) => {
+  if (!fs.existsSync(filePath)) {
+    console.warn(`Font file not found: ${filePath}`);
+    return null;
+  }
 
-// Register the Poppins font
+  const buffer = fs.readFileSync(filePath);
+  const base64 = buffer.toString('base64');
+  return `data:font/ttf;base64,${base64}`;
+};
+
+const poppinsRegularUrl = getFontDataUrl(poppinsRegularPath);
+const poppinsMediumUrl = getFontDataUrl(poppinsMediumPath);
+const poppinsBoldUrl = getFontDataUrl(poppinsBoldPath);
+
 Font.register({
   family: 'Poppins',
   fonts: [
-    {
-      src: poppinsRegularBuf,
-      fontWeight: 'regular',
-    },
-    {
-      src: poppinsMediumBuf,
-      fontWeight: 'medium',
-    },
-    {
-      src: poppinsBoldBuf,
-      fontWeight: 'bold',
-    },
+    { src: poppinsRegularUrl || '', fontWeight: 'normal' },
+    { src: poppinsMediumUrl || '', fontWeight: 500 },
+    { src: poppinsBoldUrl || '', fontWeight: 'bold' },
   ],
 });
+
+
+// console.log('Regular Font URL:', poppinsRegularUrl);
+// console.log('Medium Font URL:', poppinsMediumUrl);
+// console.log('Bold Font URL:', poppinsBoldUrl);
+
+
+
 
 // Create styles
 const styles = StyleSheet.create({
@@ -418,8 +430,6 @@ const styles = StyleSheet.create({
     marginTop: 3,
   }
 });
-
-
 
 
 // Create Document Component

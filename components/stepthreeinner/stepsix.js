@@ -31,10 +31,41 @@ const StepSixInner = ({
 }, [mietschuldenfreiheitimg]);
 
   const handleFileChange = async (event) => {
-    setIsConverting(true); // ✅ Start loading state
     const file = event.target.files[0];
-
     if (!file) return;
+
+    const maxSize = Number(process.env.NEXT_PUBLIC_SIZE_IN_MB || 2);
+    const allowedTypes = (process.env.NEXT_PUBLIC_ALLOWED_TYPES || "")
+      .split(",")
+      .map((type) => type.trim());
+    const readableTypes = allowedTypes
+      .map(type => {
+        if (type.includes("jpeg") || type.includes("jpg")) return "JPG";
+        if (type.includes("png")) return "PNG";
+        if (type.includes("pdf")) return "PDF";
+        return "";
+      })
+      .filter(Boolean)
+      .join(", ");
+
+    const newErrors = {};
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+          newErrors.mietschuldenfreiheitimg = `Nur ${readableTypes} Dateien sind erlaubt.`;
+      } else if (file.size / (1024 * 1024) > maxSize) {
+          newErrors.mietschuldenfreiheitimg = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...newErrors,
+      }));
+      
+      if (Object.keys(newErrors).length > 0) {
+        return;
+      }
+    }
+
+    setIsConverting(true); // ✅ Start loading state
 
     let updatedImages = []; // ✅ Store processed images
 
@@ -176,7 +207,6 @@ const StepSixInner = ({
         className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 text-gray-900 dark:text-white"
         onClick={() => setisTipModal(false)} 
       >
-        
         <div
           className={`${styles["tip_bg"]} relative p-4 w-full max-w-2xl max-h-full bg-white rounded-lg shadow text-gray-900`}
           onClick={(e) => e.stopPropagation()}
@@ -193,9 +223,7 @@ const StepSixInner = ({
               <div className="flex gap-4 justify-center">
               <img className="" src="/images/tip.svg" alt="Tip Icon" /> Tipps zur Bewerbung
               </div>
-          
             </h3>
-          
           </div>
 
             <div className="p-4 space-y-4">

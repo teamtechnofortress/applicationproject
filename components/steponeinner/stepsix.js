@@ -3,6 +3,7 @@ import styles from "@/styles/latest.module.css";
 import usePdfToImages from "@/hooks/usePdfToImages";
 const StepSixInner = ({
   employment,
+  setPhoneNumber,
   salarySlip,
   employcontract,
   setemploycontract,
@@ -51,6 +52,50 @@ useEffect(() => {
 let employcontractupdatedFiles = [];
  const handleFileChange = async (event, type) => {
   const files = Array.from(event.target.files);
+
+  const maxSize = Number(process.env.NEXT_PUBLIC_SIZE_IN_MB || 1);
+  const allowedTypes = (process.env.NEXT_PUBLIC_ALLOWED_TYPES || "")
+    .split(",")
+    .map((type) => type.trim());
+  const readableTypes = allowedTypes
+    .map(type => {
+      if (type.includes("jpeg") || type.includes("jpg")) return "JPG";
+      if (type.includes("png")) return "PNG";
+      if (type.includes("pdf")) return "PDF";
+      return "";
+    })
+    .filter(Boolean)
+    .join(", ");
+  if (files.length > 0) {
+    const newErrors = {};
+    const file = files[0];
+
+    console.log("File Type:",type);
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        if(type === "employcontract"){
+          newErrors.employcontract = `Nur ${readableTypes} Dateien sind erlaubt.`;
+        }else{
+          newErrors.salarySlip = `Nur ${readableTypes} Dateien sind erlaubt.`;
+        }
+      } else if (file.size / (1024 * 1024) > maxSize) {
+        if(type === "employcontract"){
+          newErrors.employcontract = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+        }else{
+          newErrors.salarySlip = `Datei ist zu groß. Maximal erlaubt sind ${maxSize} MB.`;
+        }
+      }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        ...newErrors,
+      }));
+      
+      if (Object.keys(newErrors).length > 0) {
+        return;
+      }
+    }
+  }
+    
   if (type === "employcontract") {
     setIsConvertingEmploycontract(true);
     const file = files[0];
@@ -118,12 +163,13 @@ let employcontractupdatedFiles = [];
     if (fileInputRef.current) fileInputRef.current.value = ""; // Reset input
   };
   const validateFields = () => {
+  
     const newErrors = {};
     const totalFiles = salarySlip.length; // Count each uploaded file (PDF or image) as 1
     console.log("Total Salary Slip Files Uploaded:", totalFiles);
     if (totalFiles < 1 || totalFiles > 3) {
       newErrors.salarySlip = "Bitte laden Sie zwischen 1 und 3 Gehaltsnachweise hoch.";
-    }
+      }
     if (employcontractPreview) {
       setemploycontract(employcontractupdatedFilesstate);
       console.log("Validation passed, updated images assigned to state:", employcontract);
@@ -240,8 +286,9 @@ let employcontractupdatedFiles = [];
               </button>
             </div>
           )}
+        {errors.employcontract && <p className="text-red-500 text-sm">{errors.employcontract}</p>}
         </div>
-      )}
+       )}
       {/* :white_check_mark: Navigation Buttons */}
       <div className="flex justify-between mt-10">
         <button
