@@ -56,7 +56,6 @@ const Checkout = () => {
     <>
       <SidebarHeader />
       <ToastContainer />
-      {console.log('s', )}
       <div className="flex">
         <div className="flex-1 ml-0 md:ml-64">
         <div className="bg-gray-100 py-8 p-5 lg:p-12">
@@ -93,7 +92,6 @@ const Checkout = () => {
                   <div className="p-4 mt-4 rounded">
                     <Elements stripe={stripePromise}>
                         <div className="container mx-auto">
-                          {console.log('as',priceId)}
                           <CheckoutForm priceId={priceId} />
                         </div>
                     </Elements>
