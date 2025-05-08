@@ -54,7 +54,7 @@ export default async function handler(req, res) {
       invoice_settings: { default_payment_method: paymentMethodId },
     });
     const now = Math.floor(Date.now() / 1000);
-
+  
     const subscription = await stripe.subscriptions.create({
       customer: customer.id,
       items: [{ price: priceId }],
