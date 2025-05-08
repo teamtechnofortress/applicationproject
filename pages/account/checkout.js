@@ -93,7 +93,7 @@ const Checkout = () => {
                   <div className="p-4 mt-4 rounded">
                     <Elements stripe={stripePromise}>
                         <div className="container mx-auto">
-
+                          {console.log('as',priceId)}
                           <CheckoutForm priceId={priceId} />
                         </div>
                     </Elements>
