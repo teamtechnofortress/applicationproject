@@ -11,11 +11,5 @@ export const fetchSubscriptionStatus = async () => {
 
 export const canViewTipps = (subscriptionData) => {
   if (!subscriptionData) return false;
-  if (subscriptionData.currentplan !== "4 Tage") {
-    return subscriptionData.status === "active";
-  }
-  if (subscriptionData.currentplan === "4 Tage") {
-    return subscriptionData.status === "active";
-  }
-  return false;
+  return subscriptionData.status === "active";
 };
