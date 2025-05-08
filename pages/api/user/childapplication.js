@@ -49,7 +49,11 @@ export const config = {
     }
   };
  
-
+  const parseUrlList = (field) => {
+    if (!field) return [];
+    if (Array.isArray(field)) field = field[0]; // in case it's a 1-item array
+    return field.split(',').map(url => url.trim()).filter(Boolean);
+  };
 
 const handler = async (req, res) => {
     try {
@@ -102,19 +106,7 @@ const handler = async (req, res) => {
             const email2 = Array.isArray(fields.email2) ? fields.email2[0] : fields.email2;
             const fläche = Array.isArray(fields.fläche) ? fields.fläche[0] : fields.fläche;
             const parentId = Array.isArray(fields.parentId) ? fields.parentId[0] : fields.parentId;
-            const inputfotoImage = await handleFileUpload(files.inputfoto);
-            const inputfotoImg = inputfotoImage[0] || null;
-            const salarySlipImages1 = await handleFileUpload(files.salarySlip1);
-            const salarySlipImages2 = await handleFileUpload(files.salarySlip2);
-            const salarySlipImages3 = await handleFileUpload(files.salarySlip3);
-            const employcontractImages = await handleFileUpload(files.employcontract);
-            const einkommensbescheinigungImages = await handleFileUpload(files.einkommensbescheinigungimg);
-            const schufaImages = await handleFileUpload(files.schufa);
-            const wbsImages = await handleFileUpload(files.imageswbs);
-            const bwaImages = await handleFileUpload(files.bwaimages);
-            const personalImages = await handleFileUpload(files.personal);
-            const idbackImages = await handleFileUpload(files.idback);
-            const mietschuldenfreiheitImages = await handleFileUpload(files.mietschuldenfreiheitimg);
+           
             if (!parentId) {
                 return res.status(400).json({ success: false, error: 'Parent ID is required' });
             }
@@ -136,31 +128,32 @@ const handler = async (req, res) => {
                 Ort,
                 email,
                 phonenumber: phonenumber,
-                inputfoto:inputfotoImg,
+                inputfoto: Array.isArray(fields.inputfoto) ? fields.inputfoto[0] : fields.inputfoto || null,
                 profession,
                 ausgeubterBeruf,
                 arbeitgeber,
                 income,
                 bwaimages:bwaImages,
                 employment,
-                salarySlip1: salarySlipImages1,
-                salarySlip2: salarySlipImages2,
-                salarySlip3: salarySlipImages3,
-                employcontract:employcontractImages,
+                salarySlip1: parseUrlList(fields.salarySlip1),
+                salarySlip2: parseUrlList(fields.salarySlip2),
+                salarySlip3: parseUrlList(fields.salarySlip3),
+                employcontract: parseUrlList(fields.employcontract),
                 pets,
-                einkommensbescheinigungimg:einkommensbescheinigungImages,
+                einkommensbescheinigungimg: parseUrlList(fields.einkommensbescheinigungimg),
                 rentarea,
                 proceedings,
                 apartment,
                 coverletter,
                 fläche,
                 zimerzahl,
-                imageswbs:wbsImages,
-                personal: personalImages,
-                idback: idbackImages,
-                schufa: schufaImages,
+                bwaimages: parseUrlList(fields.bwaimages),
+                imageswbs: parseUrlList(fields.imageswbs),
+                personal: parseUrlList(fields.personal),
+                idback: parseUrlList(fields.idback),
+                schufa: parseUrlList(fields.schufa),
                 mietschuldenfreiheit,
-                mietschuldenfreiheitimg: mietschuldenfreiheitImages,
+                mietschuldenfreiheitimg: parseUrlList(fields.mietschuldenfreiheitimg),
                 mietverhaltnis,
                 firstname,
                 lastname,
