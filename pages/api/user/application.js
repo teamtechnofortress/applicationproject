@@ -217,6 +217,7 @@ const handler = async (req, res) => {
             coverletter,
             fläche,
             zimerzahl,
+            bwaImages: parseUrlList(fields.bwaImages),
             imageswbs: parseUrlList(fields.imageswbs),
             personal: parseUrlList(fields.personal),
             idback: parseUrlList(fields.idback),
