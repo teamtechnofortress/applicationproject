@@ -402,8 +402,11 @@ const application = () => {
     console.log("File uploaded successfully:", data.url);
     return data.url; 
   };
+  
   const processImagesField = async (fieldArray, fieldName, formData) => {
     if (!fieldArray || fieldArray.length === 0) return;
+  
+    const uploadedUrls = [];
   
     for (const [index, image] of fieldArray.entries()) {
       try {
@@ -414,6 +417,9 @@ const application = () => {
             file = base64ToFile(image, `${fieldName}_${index}.png`);
           } else if (image.startsWith("blob:")) {
             file = await blobToFile(image, `${fieldName}_${index}.png`);
+          } else if (image.startsWith("http")) {
+            uploadedUrls.push(image);
+            continue;
           } else {
             console.warn(`Unexpected format for ${fieldName}:`, image);
             continue;
@@ -426,10 +432,15 @@ const application = () => {
         }
   
         const uploadedUrl = await uploadfiletoaws(file);
-        formData.append(fieldName, uploadedUrl);
+        uploadedUrls.push(uploadedUrl);
       } catch (error) {
         console.error(`Error processing ${fieldName} image:`, image, error);
       }
+    }
+  
+    // Append all URLs as comma-separated string or individually
+    if (uploadedUrls.length > 0) {
+      formData.append(fieldName, uploadedUrls.join(', ')); // or loop append if needed
     }
   };
   
