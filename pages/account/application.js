@@ -402,11 +402,7 @@ const application = () => {
     formData.append("Ort", ort);
     formData.append("email", email);
     formData.append("inputfoto", inputfoto);
-    // formData.append("bwaimages", bwaimages);
-    // formData.append("einkommensbescheinigungimg", einkommensbescheinigungimg);
-    // formData.append("imageswbs", imageswbs);
-    // formData.append("personal", personal);
-    // formData.append("mietschuldenfreiheitimg", mietschuldenfreiheitimg);
+ 
     formData.append("phonenumber", phonenumber);
     formData.append("geburtsdatum", geburtsdatum);
     formData.append("ausgeubterBeruf", ausgeubterBeruf);
@@ -414,7 +410,7 @@ const application = () => {
     formData.append("income", income);
     formData.append("employment", employment);
     formData.append("profession", profession);
-    // formData.append("employcontract", employcontract);
+
     formData.append("pets", pets);
     formData.append("rentarea", rentarea);
     formData.append("proceedings", proceedings);
@@ -445,10 +441,6 @@ const application = () => {
     formData.append("identificationdocument", identificationdocument);
     formData.append("currentSchufareport", currentSchufareport);
     formData.append("rentalschoolfree", rentalschoolfree);
-    formData.append("signatureData", signatureData);
-    formData.append('componentImage', applicationimg);
-    formData.append('componentImage', applicationimg);
-    formData.append('salarySlip1', salarySlip1);
     formData.append("mietschuldenfreiheit", mietschuldenfreiheit);
     formData.append("mietverhaltnis", mietverhaltnis);
     
