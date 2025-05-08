@@ -7,7 +7,6 @@ import User from '@/models/User';
 import { v4 as uuidv4 } from 'uuid';
 import { pdf } from "@react-pdf/renderer";
 import MyDocument from "@/components/MyDocument";
-import MyDocumentTwo from "@/components/MyDocumentTwo";
 import QRCode from "qrcode";
 import { handleFileUpload, uploadToHetzner } from '@/utils/blob_storage_util';
 
@@ -53,12 +52,6 @@ const generateAndUploadPDF = async (profileData, predefinedPdfUrl) => {
     return null;
   }
 };
-const parseUrlList = (field) => {
-  if (!field) return [];
-  if (Array.isArray(field)) field = field[0]; // in case it's a 1-item array
-  return field.split(',').map(url => url.trim()).filter(Boolean);
-};
-
 
 
 const handler = async (req, res) => {
@@ -94,25 +87,6 @@ const handler = async (req, res) => {
           return res.status(500).json({ success: false, error: 'Error parsing the form' });
         }
 
-        // 👇 Log all payload data here
-        // console.log("📦 Incoming Form Fields:");
-        // for (const [key, value] of Object.entries(fields)) {
-        //   console.log(`${key}:`, Array.isArray(value) ? value.join(", ") : value);
-        // }
-
-        // console.log("\n📁 Uploaded Files:");
-        // for (const [key, file] of Object.entries(files)) {
-        //   if (Array.isArray(file)) {
-        //     file.forEach((f, i) => {
-        //       console.log(`${key}[${i}]: ${f.originalFilename}`);
-        //     });
-        //   } else {
-        //     console.log(`${key}: ${file.originalFilename}`);
-        //   }
-        // }
-
-
-
         const vorname = Array.isArray(fields.vorname) ? fields.vorname[0] : fields.vorname;
         const nachname = Array.isArray(fields.nachname) ? fields.nachname[0] : fields.nachname;
         const strabe = Array.isArray(fields.strabe) ? fields.strabe[0] : fields.strabe;
@@ -143,51 +117,25 @@ const handler = async (req, res) => {
         const parentId = Array.isArray(fields.parentId) ? fields.parentId[0] : fields.parentId;
 
 
-        // const imageswbsRaw = fields.imageswbs;
-        // const imageswbs = Array.isArray(imageswbsRaw)
-        //   ? imageswbsRaw
-        //   : imageswbsRaw
-        //   ? [imageswbsRaw]
-        //   : [];
-        
-        // console.log("imageswbs from fields:", imageswbs);
-        // return;
-        
-        // const [
-        //   inputfotoImage,
-        //   salarySlipImages1,
-        //   salarySlipImages2,
-        //   salarySlipImages3,
-        //   employcontractImages,
-        //   einkommensbescheinigungImages,
-        //   schufaImages,
-        //   wbsImages,
-        //   bwaImages,
-        //   personalImages,
-        //   idbackImages,
-        //   mietschuldenfreiheitImages,
-        // ] = await Promise.all([
-        //   handleFileUpload(files.inputfoto),
-        //   handleFileUpload(files.salarySlip1),
-        //   handleFileUpload(files.salarySlip2),
-        //   handleFileUpload(files.salarySlip3),
-        //   handleFileUpload(files.employcontract),
-        //   handleFileUpload(files.einkommensbescheinigungimg),
-        //   handleFileUpload(files.schufa),
-        //   handleFileUpload(files.imageswbs),
-        //   handleFileUpload(files.bwaimages),
-        //   handleFileUpload(files.personal),
-        //   handleFileUpload(files.idback),
-        //   handleFileUpload(files.mietschuldenfreiheitimg),
-        // ]);
-        
-        // ✅ Define this after Promise.all
-        // const inputfotoImg = inputfotoImage[0] || null;
-        
+        const inputfotoImage = await handleFileUpload(files.inputfoto);
+        const inputfotoImg = inputfotoImage[0] || null;
+        const salarySlipImages1 = await handleFileUpload(files.salarySlip1);
+        const salarySlipImages2 = await handleFileUpload(files.salarySlip2);
+        const salarySlipImages3 = await handleFileUpload(files.salarySlip3);
+        const employcontractImages = await handleFileUpload(files.employcontract);
+        const einkommensbescheinigungImages = await handleFileUpload(files.einkommensbescheinigungimg);
+        const schufaImages = await handleFileUpload(files.schufa);
+        const wbsImages = await handleFileUpload(files.imageswbs);
+        const bwaImages = await handleFileUpload(files.bwaimages);
+        const personalImages = await handleFileUpload(files.personal);
+        const idbackImages = await handleFileUpload(files.idback);
+        const mietschuldenfreiheitImages = await handleFileUpload(files.mietschuldenfreiheitimg);
        
 
         // new code for new images end
         try {
+    
+        
           const newForm = new ApplicationFile({
             userId: user._id,
             vorname,
@@ -198,31 +146,32 @@ const handler = async (req, res) => {
             hausnummer,
             Ort,
             email,
-            phonenumber,
-            inputfoto: Array.isArray(fields.inputfoto) ? fields.inputfoto[0] : fields.inputfoto || null,
+            phonenumber: phonenumber,
+            inputfoto:inputfotoImg,
             profession,
             ausgeubterBeruf,
             arbeitgeber,
             income,
+            bwaimages:bwaImages,
             employment,
-            salarySlip1: parseUrlList(fields.salarySlip1),
-            salarySlip2: parseUrlList(fields.salarySlip2),
-            salarySlip3: parseUrlList(fields.salarySlip3),
-            employcontract: parseUrlList(fields.employcontract),
+            salarySlip1: salarySlipImages1,
+            salarySlip2: salarySlipImages2,
+            salarySlip3: salarySlipImages3,
+            employcontract:employcontractImages,
             pets,
-            einkommensbescheinigungimg: parseUrlList(fields.einkommensbescheinigungimg),
+            einkommensbescheinigungimg:einkommensbescheinigungImages,
             rentarea,
             proceedings,
             apartment,
             coverletter,
             fläche,
             zimerzahl,
-            imageswbs: parseUrlList(fields.imageswbs),
-            personal: parseUrlList(fields.personal),
-            idback: parseUrlList(fields.idback),
-            schufa: parseUrlList(fields.schufa),
+            imageswbs:wbsImages,
+            personal: personalImages,
+            idback: idbackImages,
+            schufa: schufaImages,
             mietschuldenfreiheit,
-            mietschuldenfreiheitimg: parseUrlList(fields.mietschuldenfreiheitimg),
+            mietschuldenfreiheitimg: mietschuldenfreiheitImages,
             mietverhaltnis,
             firstname,
             lastname,
@@ -230,8 +179,7 @@ const handler = async (req, res) => {
             parent: "0",
           });
           
-          
-      // ✅ Step 2: Define Predefined PDF URL
+            // ✅ Step 2: Define Predefined PDF URL
       const pdfFileName = `${vorname}_${nachname}_${Date.now()}.pdf`;
       const predefinedPdfUrl = `${process.env.HETZNER_ENDPOINT}/${process.env.HETZNER_BUCKET}/uploads/${pdfFileName}`;
 
